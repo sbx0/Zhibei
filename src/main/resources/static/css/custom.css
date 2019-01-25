@@ -1,0 +1,4 @@
+/*用于屏蔽Vue.js那垃圾的'{{}}'*/
+[v-cloak] {
+    display: none;
+}
