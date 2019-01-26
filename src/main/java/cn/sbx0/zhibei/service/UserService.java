@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import java.util.Map;
@@ -89,8 +88,8 @@ public class UserService extends BaseService<User, Integer> {
      * @param user
      * @return
      */
-    private User encryptPassword(User user) {
-        user.setPassword(getHash(user.getPassword(), "MD5"));
+    public User encryptPassword(User user) {
+        user.setPassword(getHash(user.getPassword() + BaseService.KEY, "MD5"));
         return user;
     }
 

@@ -1,5 +1,8 @@
 package cn.sbx0.zhibei.entity;
 
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -8,6 +11,8 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name = "PERMISSIONS")
+@DynamicInsert
+@DynamicUpdate
 public class Permission implements Serializable {
     private static final long serialVersionUID = 8640097004258127319L;
     @Id
@@ -25,9 +30,8 @@ public class Permission implements Serializable {
      * action例子：role:create,role:update,role:delete,role:view
      */
     @Column(nullable = false)
-    private String permissionStr;
+    private String str;
     private Integer parentId; //父编号
-    private String parentIds; //父编号列表
     @Column(nullable = false)
     private Boolean available = Boolean.FALSE;
 
@@ -67,12 +71,12 @@ public class Permission implements Serializable {
         this.url = url;
     }
 
-    public String getPermissionStr() {
-        return permissionStr;
+    public String getStr() {
+        return str;
     }
 
-    public void setPermissionStr(String permissionStr) {
-        this.permissionStr = permissionStr;
+    public void setStr(String str) {
+        this.str = str;
     }
 
     public Integer getParentId() {
@@ -81,14 +85,6 @@ public class Permission implements Serializable {
 
     public void setParentId(Integer parentId) {
         this.parentId = parentId;
-    }
-
-    public String getParentIds() {
-        return parentIds;
-    }
-
-    public void setParentIds(String parentIds) {
-        this.parentIds = parentIds;
     }
 
     public Boolean getAvailable() {
@@ -106,11 +102,9 @@ public class Permission implements Serializable {
                 ", name='" + name + '\'' +
                 ", type='" + type + '\'' +
                 ", url='" + url + '\'' +
-                ", permissionStr='" + permissionStr + '\'' +
+                ", str='" + str + '\'' +
                 ", parentId=" + parentId +
-                ", parentIds='" + parentIds + '\'' +
                 ", available=" + available +
                 '}';
     }
-
 }

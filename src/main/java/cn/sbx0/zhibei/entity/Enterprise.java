@@ -1,7 +1,11 @@
 package cn.sbx0.zhibei.entity;
 
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 /**
@@ -9,6 +13,9 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "ENTERPRISES")
+@PrimaryKeyJoinColumn(name = "USER_ID")
+@DynamicInsert
+@DynamicUpdate
 public class Enterprise extends User {
     private static final long serialVersionUID = -3829087443787513351L;
     @Column(nullable = false, unique = true, length = 100)

@@ -1,12 +1,12 @@
 package cn.sbx0.zhibei.controller;
 
-import cn.sbx0.zhibei.entity.Role;
+import cn.sbx0.zhibei.entity.Specialist;
 import cn.sbx0.zhibei.entity.User;
 import cn.sbx0.zhibei.service.BaseService;
+import cn.sbx0.zhibei.service.SpecialistService;
 import cn.sbx0.zhibei.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,9 +16,8 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
+
 import java.util.Date;
-import java.util.List;
 
 /**
  * 基础用户 控制层
@@ -28,6 +27,47 @@ import java.util.List;
 public class UserController extends BaseController<User, Integer> {
     @Resource
     UserService userService;
+    @Resource
+    SpecialistService specialistService;
+
+    /**
+     * 升级为专家
+     *
+     * @param session
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @GetMapping("/upToSpecialist")
+    public ObjectNode upToSpecialist(HttpSession session, HttpServletRequest request) {
+        json = mapper.createObjectNode();
+        User user = userService.getUser(session, request);
+        if (user == null) {
+            json.put(STATUS_NAME, STATUS_CODE_NOT_LOGIN);
+        } else {
+            System.out.println(user.getId());
+            Specialist specialist = new Specialist(user);
+            if (userService.delete(user)) {
+                json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
+            } else {
+                json.put(STATUS_NAME, STATUS_CODE_FILED);
+                return json;
+            }
+            try {
+                specialist.setEmail("123");
+                specialist.setPhone("123");
+                if (specialistService.save(specialist)) {
+                    json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
+                } else {
+                    json.put(STATUS_NAME, STATUS_CODE_FILED);
+                }
+            } catch (Exception e) {
+                json.put("msg", e.getMessage());
+                json.put(STATUS_NAME, STATUS_CODE_EXCEPTION);
+            }
+        }
+        return json;
+    }
 
     /**
      * 查看当前登录用户基本信息
@@ -121,11 +161,6 @@ public class UserController extends BaseController<User, Integer> {
     public ObjectNode add(User user) {
         user.setBanned(false);
         user.setRegisterTime(new Date());
-        Role role = new Role();
-        role.setId(1);
-        List<Role> roleList = new ArrayList<>();
-        roleList.add(role);
-        user.setRoles(roleList);
         return super.add(user);
     }
 

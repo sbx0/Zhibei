@@ -1,15 +1,6 @@
 // i18N Configuration File - English
 var i18N = {
-    lib: lib,
-    nav_data: [
-        {id: 1, text: "Index", path: "../index.html", icon: "<i class=\"fas fa-home\"></i>"},
-    ],
-    alert: {
-        empty: "Empty",
-        illegal: "Illegal",
-        special_str: "SpecialStr",
-        error: 'Error',
-    },
+
     website_name: "Zhibei",
     admin_management_system: "AMS",
     logout: "Logout",
@@ -24,4 +15,26 @@ var i18N = {
     confirm: "Confirm",
     index: "Index",
     network: "Network",
+
+    lib: lib,
+    nav_data: [
+        {id: 1, text: "Index", path: "../index.html", icon: "<i class=\"fas fa-home\"></i>"},
+        {id: 2, text: "Login", path: "../login.html", icon: "<i class=\"fas fa-home\"></i>"},
+    ],
+    alert: {
+        empty: "Empty",
+        illegal: "Illegal",
+        special_str: "SpecialStr",
+        error: 'Error',
+    },
+    status: [
+        "Successful operation",
+        "operation failed",
+        "Error",
+        "Not logged in",
+        "Exceed the limit",
+        "Parameter is not legal",
+        "No permission",
+        "Repeat operation"
+    ],
 };

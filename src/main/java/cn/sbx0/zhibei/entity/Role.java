@@ -1,5 +1,8 @@
 package cn.sbx0.zhibei.entity;
 
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
@@ -9,6 +12,8 @@ import java.util.List;
  */
 @Entity
 @Table(name = "ROLES")
+@DynamicInsert
+@DynamicUpdate
 public class Role implements Serializable {
     private static final long serialVersionUID = -1252665744119242036L;
     @Id

@@ -1,5 +1,8 @@
 package cn.sbx0.zhibei.entity;
 
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -11,6 +14,8 @@ import java.util.List;
 @Entity
 @Table(name = "USERS")
 @Inheritance(strategy = InheritanceType.JOINED)
+@DynamicInsert
+@DynamicUpdate
 public class User implements Serializable {
     private static final long serialVersionUID = -7669301273984030395L;
     @Id

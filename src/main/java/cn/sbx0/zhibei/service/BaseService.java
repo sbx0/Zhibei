@@ -323,6 +323,7 @@ public abstract class BaseService<T, ID> {
             getDao().save(entity);
             return true;
         } catch (Exception e) {
+            e.printStackTrace();
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return false;
         }
@@ -434,6 +435,7 @@ public abstract class BaseService<T, ID> {
             getDao().delete(entity);
             return true;
         } catch (Exception e) {
+            e.printStackTrace();
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return false;
         }
