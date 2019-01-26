@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 基础用户 控制层
@@ -39,7 +41,9 @@ public class UserController extends BaseController<User, Integer> {
         user.setRegisterTime(new Date());
         Role role = new Role();
         role.setId(1);
-        user.setRole(role);
+        List<Role> roleList = new ArrayList<>();
+        roleList.add(role);
+        user.setRoles(roleList);
         return super.add(user);
     }
 

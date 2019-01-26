@@ -44,7 +44,7 @@
                 </div>
             </nav>
 
-            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+            <main roles="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
 
                 <div id="login_div" v-if="login_or_register">
                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
@@ -56,20 +56,19 @@
                                 {{i18N.login_title}}
                             </a>
                         </p>
-                        <form id="login_form">
+                        <form id="login_form" class="form-signin" method="post" action="/login">
                             <div class="mb-3">
                                 <label for="login_username">{{i18N.username}}</label>
-                                <input type="text" class="form-control" id="login_username" name="name">
+                                <input type="text" class="form-control" id="login_username" name="username">
                             </div>
                             <div class="mb-3">
                                 <label for="login_password">{{i18N.password}}</label>
                                 <input type="password" class="form-control" id="login_password" name="password">
                             </div>
-                            <button id="login_btn" class="btn btn-outline-dark btn-block" type="button"
-                                    v-on:click="login">
+                            <button id="login_btn" class="btn btn-outline-dark btn-block" type="submit">
                                 {{i18N.login}}
                             </button>
-                            <a href="javascript:history.go(-1);" class="btn btn-secondary btn-block" role="button">
+                            <a href="javascript:history.go(-1);" class="btn btn-secondary btn-block" roles="button">
                                 {{i18N.back}}
                             </a>
                         </form>
@@ -103,7 +102,7 @@
                                     v-on:click="register">
                                 {{i18N.register}}
                             </button>
-                            <a href="javascript:history.go(-1);" class="btn btn-secondary btn-block" role="button">
+                            <a href="javascript:history.go(-1);" class="btn btn-secondary btn-block" roles="button">
                                 {{i18N.back}}
                             </a>
                         </form>

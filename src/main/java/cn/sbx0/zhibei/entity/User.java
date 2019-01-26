@@ -3,6 +3,7 @@ package cn.sbx0.zhibei.entity;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 基础用户
@@ -17,7 +18,7 @@ public class User implements Serializable {
     private Integer id; // id
     @Column(nullable = false, unique = true, length = 15)
     private String name; // 用户名
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 100)
     private String password; // 密码
     @Column(length = 30)
     private String introduction;
@@ -25,8 +26,8 @@ public class User implements Serializable {
     private Date registerTime; // 注册时间
     @Column(nullable = false)
     private Boolean banned = Boolean.FALSE; // 封禁
-    @ManyToOne(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER, targetEntity = Role.class, optional = false)
-    private Role role; // 角色
+    @ManyToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER, targetEntity = Role.class)
+    private List<Role> roles; // 角色
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
@@ -80,12 +81,12 @@ public class User implements Serializable {
         this.banned = banned;
     }
 
-    public Role getRole() {
-        return role;
+    public List<Role> getRoles() {
+        return roles;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 
     @Override
@@ -97,7 +98,7 @@ public class User implements Serializable {
                 ", introduction='" + introduction + '\'' +
                 ", registerTime=" + registerTime +
                 ", banned=" + banned +
-                ", role=" + role +
+                ", roles=" + roles +
                 '}';
     }
 

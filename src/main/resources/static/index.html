@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link rel="stylesheet" href="css/lib/bootstrap_4_0_0.min.css">
+    <link rel="stylesheet" href="css/lib/bootstrap-4.0.0.min.css">
     <link rel="stylesheet" href="css/lib/dashboard.css">
     <link rel="stylesheet" href="css/custom.css">
 
@@ -23,7 +23,7 @@
                :aria-label="i18N.search">
         <ul class="navbar-nav px-3">
             <li class="nav-item text-nowrap">
-                <a class="nav-link" href="#">{{i18N.logout}}</a>
+                <a class="nav-link" href="/logout">{{i18N.logout}}</a>
             </li>
         </ul>
     </nav>
@@ -106,7 +106,7 @@
                 </div>
             </nav>
 
-            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+            <main roles="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
                 <div id="login_div">
                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
                         <h5>{{i18N.login}}</h5>
@@ -140,7 +140,7 @@
                             <button id="login_btn" class="btn btn-outline-dark btn-block" type="button">
                                 {{i18N.login}}
                             </button>
-                            <a href="javascript:history.go(-1);" class="btn btn-secondary btn-block" role="button">
+                            <a href="javascript:history.go(-1);" class="btn btn-secondary btn-block" roles="button">
                                 {{i18N.back}}
                             </a>
                         </form>
@@ -176,7 +176,7 @@
                                 {{i18N.register}}
                             </button>
                             <a href="javascript:history.go(-1);" class="btn btn-secondary btn-block"
-                               role="button">{{i18N.back}}</a>
+                               roles="button">{{i18N.back}}</a>
                         </form>
                     </div>
                 </div>
@@ -188,6 +188,6 @@
 </div>
 
 <script src="js/base/load.js"></script>
-<script src="js/index.js"></script>
+<script src="js/login.js"></script>
 </body>
 </html>
