@@ -3,6 +3,7 @@ var main = new Vue({
     data: {
         i18N: i18N,
         login_or_register: true, // 用于登陆与注册之间切换
+        not_login: true, // 用于登陆与注册之间切换
     },
     components: {},
     methods: {
@@ -28,9 +29,9 @@ var main = new Vue({
                 success: function (json) {
                     var status = json.status;
                     if (statusCodeToBool(status)) {
-
+                        location.href = "index.html"
                     } else {
-
+                        alert(statusCodeToAlert(status));
                     }
                 },
                 error: function () {
@@ -71,9 +72,9 @@ var main = new Vue({
                 success: function (json) {
                     var status = json.status;
                     if (statusCodeToBool(status)) {
-
+                        main.login_or_register = !main.login_or_register;
                     } else {
-
+                        alert(statusCodeToAlert(status));
                     }
                 },
                 error: function () {
@@ -82,7 +83,30 @@ var main = new Vue({
             });
         }
     },
+    create: function () {
+
+    }
 });
+
+// 检测登陆状态
+function get_info() {
+    $.ajax({
+        type: "get",
+        url: "../user/info",
+        dataType: "json",
+        success: function (json) {
+            var status = json.status;
+            if (statusCodeToBool(status)) {
+                main.not_login = false;
+            }
+        },
+        error: function () {
+            alert(i18N.network + i18N.alert.error);
+        }
+    });
+}
+
+get_info();
 
 // 登陆与注册之间界面切换
 function login_or_register() {

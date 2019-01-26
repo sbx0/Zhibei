@@ -6,14 +6,14 @@ import cn.sbx0.zhibei.service.BaseService;
 import cn.sbx0.zhibei.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
@@ -30,21 +30,27 @@ public class UserController extends BaseController<User, Integer> {
     UserService userService;
 
     /**
-     * 因为有几个属性需要初始化，所以重写了
+     * 查看当前登录用户基本信息
      *
-     * @param user
+     * @param session
+     * @param request
      * @return
      */
-    @Override
-    public ObjectNode add(User user) {
-        user.setBanned(false);
-        user.setRegisterTime(new Date());
-        Role role = new Role();
-        role.setId(1);
-        List<Role> roleList = new ArrayList<>();
-        roleList.add(role);
-        user.setRoles(roleList);
-        return super.add(user);
+    @ResponseBody
+    @GetMapping("/info")
+    public ObjectNode info(HttpSession session, HttpServletRequest request) {
+        json = mapper.createObjectNode();
+        User user = userService.getUser(session, request);
+        ObjectNode attr = mapper.createObjectNode();
+        if (user != null) {
+            attr.put("id", user.getId());
+            attr.put("name", user.getName());
+            json.set("user", attr);
+            json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
+        } else {
+            json.put(STATUS_NAME, STATUS_CODE_NOT_LOGIN);
+        }
+        return json;
     }
 
     /**
@@ -56,7 +62,7 @@ public class UserController extends BaseController<User, Integer> {
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    @PostMapping(value = "/login")
     public ObjectNode login(User user, HttpServletResponse response, HttpSession session) {
         json = mapper.createObjectNode();
         // 判断是否为空
@@ -84,6 +90,43 @@ public class UserController extends BaseController<User, Integer> {
         }
         // 返回json串
         return json;
+    }
+
+    /**
+     * 退出登陆
+     *
+     * @param response
+     * @return
+     */
+    @GetMapping(value = "/logout")
+    public String logout(HttpSession session, HttpServletResponse response) {
+        try {
+            // 清除session
+            session.removeAttribute("user");
+            // 清除Cookie
+            BaseService.removeCookies(response);
+            return "redirect:/login.html";
+        } catch (Exception e) {
+            return "/error";
+        }
+    }
+
+    /**
+     * 增加 因为有几个属性需要初始化，所以重写了
+     *
+     * @param user
+     * @return
+     */
+    @Override
+    public ObjectNode add(User user) {
+        user.setBanned(false);
+        user.setRegisterTime(new Date());
+        Role role = new Role();
+        role.setId(1);
+        List<Role> roleList = new ArrayList<>();
+        roleList.add(role);
+        user.setRoles(roleList);
+        return super.add(user);
     }
 
     @Override

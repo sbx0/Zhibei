@@ -1,22 +1,17 @@
 package cn.sbx0.zhibei.service;
 
 import cn.sbx0.zhibei.dao.UserDao;
-import cn.sbx0.zhibei.entity.Permission;
-import cn.sbx0.zhibei.entity.Role;
 import cn.sbx0.zhibei.entity.User;
 import org.springframework.data.repository.PagingAndSortingRepository;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
 /**
  * 基础用户 服务层
@@ -58,11 +53,11 @@ public class UserService extends BaseService<User, Integer> {
     /**
      * 根据用户名查找用户
      *
-     * @param username
+     * @param name
      * @return
      */
-    public User findByUsername(String username) {
-        return userDao.findByName(username);
+    public User findByName(String name) {
+        return userDao.findByName(name);
     }
 
     /**
@@ -95,9 +90,44 @@ public class UserService extends BaseService<User, Integer> {
      * @return
      */
     private User encryptPassword(User user) {
-        String password = user.getPassword();
-        password = new BCryptPasswordEncoder().encode(password);
-        user.setPassword(password);
+        user.setPassword(getHash(user.getPassword(), "MD5"));
+        return user;
+    }
+
+    /**
+     * 根据session或cookie查找User
+     */
+    public User getUser(HttpSession session, HttpServletRequest request) {
+        User user = (User) session.getAttribute("user");
+        if (user != null && user.getId() != null) {
+            return user;
+        }
+        // 查找是否存在cookie
+        Map<String, Cookie> cookies = BaseService.getCookiesByName(COOKIE_NAMES, request.getCookies());
+        if (cookies == null) return null;
+        if (cookies.size() == 0) return null;
+        // 为空
+        for (int i = 0; i < cookies.size(); i++) {
+            if (BaseService.checkNullStr(cookies.get(COOKIE_NAMES.get(i)).getValue()))
+                return null;
+        }
+        // Cookie中的ID
+        int id = Integer.parseInt(cookies.get("ID").getValue());
+        // Cookie中的KEY
+        String key = cookies.get("KEY").getValue();
+        // Cookie中的用户名
+        String name = cookies.get("NAME").getValue();
+        // 正确的KEY
+        String check = BaseService.getKey(id);
+        // 匹配KEY
+        if (!check.equals(key))
+            return null;
+        user = findById(id);
+        if (user == null)
+            return null;
+        if (!user.getName().equals(name))
+            return null;
+        session.setAttribute("user", user); // 不知道有没有用
         return user;
     }
 

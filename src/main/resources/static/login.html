@@ -18,11 +18,17 @@
         <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">
             {{i18N.website_name}}
         </a>
+        <input class="form-control form-control-dark w-100" type="text" :placeholder="i18N.search">
         <ul class="navbar-nav px-3">
             <li class="nav-item text-nowrap">
                 <select id="i18N_select" class="form-control-sm">
                     <option :value="option.name" v-for="option in i18N.lib">{{option.value}}</option>
                 </select>
+            </li>
+        </ul>
+        <ul class="navbar-nav px-3" v-if="!not_login">
+            <li class="nav-item text-nowrap">
+                <a class="nav-link" href="/user/logout">{{i18N.logout}}</a>
             </li>
         </ul>
     </nav>
@@ -44,9 +50,9 @@
                 </div>
             </nav>
 
-            <main roles="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
 
-                <div id="login_div" v-if="login_or_register">
+                <div id="login_div" v-if="login_or_register && not_login">
                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
                         <h6>{{i18N.login}}</h6>
                     </div>
@@ -56,26 +62,27 @@
                                 {{i18N.login_title}}
                             </a>
                         </p>
-                        <form id="login_form" class="form-signin" method="post" action="/login">
+                        <form id="login_form">
                             <div class="mb-3">
                                 <label for="login_username">{{i18N.username}}</label>
-                                <input type="text" class="form-control" id="login_username" name="username">
+                                <input type="text" class="form-control" id="login_username" name="name">
                             </div>
                             <div class="mb-3">
                                 <label for="login_password">{{i18N.password}}</label>
                                 <input type="password" class="form-control" id="login_password" name="password">
                             </div>
-                            <button id="login_btn" class="btn btn-outline-dark btn-block" type="submit">
+                            <button id="login_btn" class="btn btn-outline-dark btn-block" type="button"
+                                    v-on:click="login">
                                 {{i18N.login}}
                             </button>
-                            <a href="javascript:history.go(-1);" class="btn btn-secondary btn-block" roles="button">
+                            <a href="javascript:history.go(-1);" class="btn btn-secondary btn-block" role="button">
                                 {{i18N.back}}
                             </a>
                         </form>
                     </div>
                 </div>
 
-                <div id="register_div" v-else>
+                <div id="register_div" v-if="!login_or_register && not_login">
                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
                         <h6>{{i18N.register}}</h6>
                     </div>
@@ -102,11 +109,15 @@
                                     v-on:click="register">
                                 {{i18N.register}}
                             </button>
-                            <a href="javascript:history.go(-1);" class="btn btn-secondary btn-block" roles="button">
+                            <a href="javascript:history.go(-1);" class="btn btn-secondary btn-block" role="button">
                                 {{i18N.back}}
                             </a>
                         </form>
                     </div>
+                </div>
+
+                <div id="info_div" v-if="!not_login">
+                    <p>已经登陆</p>
                 </div>
 
             </main>
