@@ -1,6 +1,15 @@
 // i18N配置文件 - 繁體中文
 var i18N = {
     lib: lib,
+    nav_data: [
+        {id: 1, text: "首頁", path: "../index.html", icon: "<i class=\"fas fa-home\"></i>"},
+    ],
+    alert: {
+        empty: "为空",
+        illegal: "不合法",
+        special_str: "特殊字符",
+        error: '错误',
+    },
     website_name: "智貝",
     admin_management_system: "後台管理系統",
     logout: "退出登錄",

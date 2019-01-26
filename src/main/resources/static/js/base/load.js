@@ -8,6 +8,9 @@ document.write("<script src=\"js/lib/jquery-3.3.1.min.js\"></script>");
 document.write("<script src=\"js/lib/popper-1.12.9.min.js\"></script>");
 // bootstrap 4.0.0
 document.write("<script src=\"js/lib/bootstrap-4.0.0.min.js\"></script>");
+// 加载FontAwesome 5.0.0
+document.write("<script src=\"js/lib/fontawesome-5.0.0.js\"></script>");
+
 // 加载工具库
 document.write("<script src=\"js/base/tools.js\"></script>");
 // 加载i18N国际化文件

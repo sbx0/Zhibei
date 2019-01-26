@@ -6,6 +6,29 @@
 // var time = Format(getDate(TIME.toString()), "yyyy-MM-dd HH:mm:ss")
 // ------------------------------------------------------------------------------------------------------ //
 
+// 检测用户名是否违法
+function checkStrIsIllegal(str) {
+    str = str.trim();
+    // 为空
+    if (checkNullStr(str)) {
+        return i18N.alert.empty;
+    }
+    // 中间有空格
+    if (str.indexOf(" ") !== -1) {
+        return i18N.alert.illegal;
+    }
+    // 有特殊字符
+    if (checkSpecialStr(str)) {
+        return i18N.alert.special_str
+    }
+    return "";
+}
+
+// log输出
+function log(text) {
+    console.log(text);
+}
+
 // 刷新页面
 function refresh() {
     location.reload();
@@ -94,8 +117,6 @@ function checkNullStr(str) {
     if (str.length === 0) return true;
     if (str.trim() === "") return true;
     if (str.trim().length === 0) return true;
-    // wangEditor默认
-    if (str === "<p><br></p>") return true;
     return false;
 }
 

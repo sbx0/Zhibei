@@ -21,3 +21,4 @@ JavaScript框架:[Vue.js](https://cn.vuejs.org/index.html "Vue.js")
 ------------  
   
 **本项目使用的开源项目目录：**  
+[Font-Awesome](https://github.com/FortAwesome/Font-Awesome) 图标  

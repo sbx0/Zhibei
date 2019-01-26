@@ -34,7 +34,7 @@ import java.util.regex.Pattern;
  */
 public abstract class BaseService<T, ID> {
     private static String DOMAIN; // 域名
-    private static String KEY; // KEY
+    public static String KEY; // KEY
     public static List<String> COOKIE_NAMES = Arrays.asList("ID", "KEY", "NAME");
     public static final Integer PAGE_SIZE = 10;
     public static final String[] NOT_NULL_METHODS = {}; // 对象指定对象的get方法

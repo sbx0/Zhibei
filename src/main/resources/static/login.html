@@ -1,4 +1,4 @@
-<html lang="en">
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
 <head>
 
     <meta charset="utf-8">
@@ -20,7 +20,7 @@
         </a>
         <ul class="navbar-nav px-3">
             <li class="nav-item text-nowrap">
-                <select id="i18N_select">
+                <select id="i18N_select" class="form-control-sm">
                     <option :value="option.name" v-for="option in i18N.lib">{{option.value}}</option>
                 </select>
             </li>
@@ -34,8 +34,10 @@
                 <div class="sidebar-sticky">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link active" href="#">
-                                {{i18N.index}}
+                            <a class="nav-link active" :href="url.path" v-for="url in i18N.nav_data">
+                                <span v-html="url.icon"></span>
+                                &nbsp;
+                                {{url.text}}
                             </a>
                         </li>
                     </ul>
@@ -46,17 +48,7 @@
 
                 <div id="login_div" v-if="login_or_register">
                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-                        <h5>{{i18N.login}}</h5>
-                        <div class="btn-toolbar mb-2 mb-md-0" hidden>
-                            <div class="btn-group mr-2">
-                                <button class="btn btn-sm btn-outline-secondary">Share</button>
-                                <button class="btn btn-sm btn-outline-secondary">Export</button>
-                            </div>
-                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle">
-                                <span data-feather="calendar"></span>
-                                This week
-                            </button>
-                        </div>
+                        <h6>{{i18N.login}}</h6>
                     </div>
                     <div class="col-md-12 order-md-1 mt-3">
                         <p class="form-text text-muted">
@@ -67,14 +59,14 @@
                         <form id="login_form">
                             <div class="mb-3">
                                 <label for="login_username">{{i18N.username}}</label>
-                                <input type="text" class="form-control" id="login_username" name="name" required>
+                                <input type="text" class="form-control" id="login_username" name="name">
                             </div>
                             <div class="mb-3">
                                 <label for="login_password">{{i18N.password}}</label>
-                                <input type="password" class="form-control" id="login_password" name="password"
-                                       required>
+                                <input type="password" class="form-control" id="login_password" name="password">
                             </div>
-                            <button id="login_btn" class="btn btn-outline-dark btn-block" type="button">
+                            <button id="login_btn" class="btn btn-outline-dark btn-block" type="button"
+                                    v-on:click="login">
                                 {{i18N.login}}
                             </button>
                             <a href="javascript:history.go(-1);" class="btn btn-secondary btn-block" role="button">
@@ -86,7 +78,7 @@
 
                 <div id="register_div" v-else>
                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-                        <h5>{{i18N.register}}</h5>
+                        <h6>{{i18N.register}}</h6>
                     </div>
                     <div class="col-md-12 order-md-1 mt-3">
                         <p class="form-text text-muted">
@@ -96,24 +88,24 @@
                         </p>
                         <form id="register_form">
                             <div class="mb-3">
-                                <label for="login_username">{{i18N.username}}</label>
-                                <input type="text" class="form-control" id="register_username" name="name" required>
+                                <label for="register_username">{{i18N.username}}</label>
+                                <input type="text" class="form-control" id="register_username" name="name">
                             </div>
                             <div class="mb-3">
                                 <label for="register_password">{{i18N.password}}</label>
-                                <input type="password" class="form-control" id="register_password" name="password"
-                                       required>
+                                <input type="password" class="form-control" id="register_password" name="password">
                             </div>
                             <div class="mb-3">
                                 <label for="register_r_password">{{i18N.confirm}}{{i18N.password}}</label>
-                                <input type="password" class="form-control" id="register_r_password" name="password"
-                                       required>
+                                <input type="password" class="form-control" id="register_r_password">
                             </div>
-                            <button id="register_btn" class="btn btn-outline-dark btn-block" type="button">
+                            <button id="register_btn" class="btn btn-outline-dark btn-block" type="button"
+                                    v-on:click="register">
                                 {{i18N.register}}
                             </button>
-                            <a href="javascript:history.go(-1);" class="btn btn-secondary btn-block"
-                               role="button">{{i18N.back}}</a>
+                            <a href="javascript:history.go(-1);" class="btn btn-secondary btn-block" role="button">
+                                {{i18N.back}}
+                            </a>
                         </form>
                     </div>
                 </div>

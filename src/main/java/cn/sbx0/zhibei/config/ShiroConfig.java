@@ -1,4 +1,4 @@
-package cn.sbx0.zhibei.configuration;
+package cn.sbx0.zhibei.config;
 
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
@@ -15,7 +15,29 @@ import java.util.Map;
  * 用于权限验证
  */
 @Configuration
-public class ShiroConfiguration {
+public class ShiroConfig {
+
+    /**
+     * 加载 ShiroRealmConfig
+     *
+     * @return
+     */
+    @Bean
+    public ShiroRealmConfig shiroRealmConfiguration() {
+        return new ShiroRealmConfig();
+    }
+
+    /**
+     * 将 ShiroRealmConfig 注入到 SecurityManager 中
+     *
+     * @return
+     */
+    @Bean
+    public SecurityManager securityManager() {
+        DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
+        securityManager.setRealm(shiroRealmConfiguration());
+        return new DefaultWebSecurityManager();
+    }
 
     /**
      * ShiroFilterFactoryBean 处理拦截资源文件问题。
@@ -35,15 +57,17 @@ public class ShiroConfiguration {
         shiroFilterFactoryBean.setSecurityManager(securityManager);
 
         //拦截器.
-        Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
+        Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
 
         //配置退出过滤器,其中的具体的退出代码Shiro已经替我们实现了
         filterChainDefinitionMap.put("/logout", "logout");
 
-        //<!-- 过滤链定义，从上向下顺序执行，一般将 /**放在最为下边 -->:这是一个坑呢，一不小心代码就不好使了;
-        //<!-- authc:所有url都必须认证通过才可以访问; anon:所有url都都可以匿名访问-->
+        // 过滤链定义，从上向下顺序执行，一般将 /**放在最为下边 -->:这是一个坑呢，一不小心代码就不好使了
+        // authc:所有url都必须认证通过才可以访问; anon:所有url都都可以匿名访问
         filterChainDefinitionMap.put("/css/**", "anon");
         filterChainDefinitionMap.put("/js/**", "anon");
+        filterChainDefinitionMap.put("/user/login", "anon");
+        filterChainDefinitionMap.put("/user/add", "anon");
         filterChainDefinitionMap.put("/**", "authc");
 
         // 如果不设置默认会自动寻找Web工程根目录下的"/login.jsp"页面
@@ -51,15 +75,10 @@ public class ShiroConfiguration {
         // 登录成功后要跳转的链接
         shiroFilterFactoryBean.setSuccessUrl("/index.html");
         //未授权界面;
-        shiroFilterFactoryBean.setUnauthorizedUrl("/403");
+        shiroFilterFactoryBean.setUnauthorizedUrl("/login.html");
 
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;
-    }
-
-    @Bean
-    public SecurityManager securityManager() {
-        return new DefaultWebSecurityManager();
     }
 
 }
