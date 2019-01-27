@@ -31,9 +31,9 @@ public class Permission implements Serializable {
      */
     @Column(nullable = false)
     private String str;
-    private Integer parentId; //父编号
+    private Integer parentId; // 父编号
     @Column(nullable = false)
-    private Boolean available = Boolean.FALSE;
+    private Boolean available = Boolean.FALSE; // 是否可用
 
     public static long getSerialVersionUID() {
         return serialVersionUID;

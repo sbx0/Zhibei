@@ -1,9 +1,7 @@
 package cn.sbx0.zhibei.controller;
 
-import cn.sbx0.zhibei.entity.Specialist;
 import cn.sbx0.zhibei.entity.User;
 import cn.sbx0.zhibei.service.BaseService;
-import cn.sbx0.zhibei.service.SpecialistService;
 import cn.sbx0.zhibei.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -27,47 +25,6 @@ import java.util.Date;
 public class UserController extends BaseController<User, Integer> {
     @Resource
     UserService userService;
-    @Resource
-    SpecialistService specialistService;
-
-    /**
-     * 升级为专家
-     *
-     * @param session
-     * @param request
-     * @return
-     */
-    @ResponseBody
-    @GetMapping("/upToSpecialist")
-    public ObjectNode upToSpecialist(HttpSession session, HttpServletRequest request) {
-        json = mapper.createObjectNode();
-        User user = userService.getUser(session, request);
-        if (user == null) {
-            json.put(STATUS_NAME, STATUS_CODE_NOT_LOGIN);
-        } else {
-            System.out.println(user.getId());
-            Specialist specialist = new Specialist(user);
-            if (userService.delete(user)) {
-                json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
-            } else {
-                json.put(STATUS_NAME, STATUS_CODE_FILED);
-                return json;
-            }
-            try {
-                specialist.setEmail("123");
-                specialist.setPhone("123");
-                if (specialistService.save(specialist)) {
-                    json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
-                } else {
-                    json.put(STATUS_NAME, STATUS_CODE_FILED);
-                }
-            } catch (Exception e) {
-                json.put("msg", e.getMessage());
-                json.put(STATUS_NAME, STATUS_CODE_EXCEPTION);
-            }
-        }
-        return json;
-    }
 
     /**
      * 查看当前登录用户基本信息
