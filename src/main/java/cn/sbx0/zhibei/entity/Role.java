@@ -22,7 +22,7 @@ public class Role implements Serializable {
     @Column(nullable = false, unique = true, length = 15)
     private String name; // 名称
     @Column(length = 30)
-    private String introduction; // D
+    private String introduction; // 介绍
     @Column(nullable = false)
     private Boolean available = Boolean.FALSE; // 是否可用，若不可用则无法添加给用户
     // 角色 -- 权限关系：多对多关系;

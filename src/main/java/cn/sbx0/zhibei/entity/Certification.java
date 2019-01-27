@@ -20,7 +20,7 @@ public class Certification implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id; // id
     @Column(nullable = false, unique = true, length = 30)
-    private String desc; // 认证信息
+    private String info; // 认证信息
     @Column(columnDefinition = "enum('personal','enterprise','university','mechanism')")
     private String type; // 类型 [个人|企业|院校|机构]
     @Column(nullable = false)
@@ -28,7 +28,7 @@ public class Certification implements Serializable {
     private Date start_time; // 开始时间
     private Date end_time; // 结束时间
     @ManyToOne(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER, targetEntity = User.class, optional = false)
-    private User user_id;
+    private User user;
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
@@ -42,12 +42,12 @@ public class Certification implements Serializable {
         this.id = id;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getInfo() {
+        return info;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setInfo(String info) {
+        this.info = info;
     }
 
     public String getType() {
@@ -82,24 +82,24 @@ public class Certification implements Serializable {
         this.end_time = end_time;
     }
 
-    public User getUser_id() {
-        return user_id;
+    public User getUser() {
+        return user;
     }
 
-    public void setUser_id(User user_id) {
-        this.user_id = user_id;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override
     public String toString() {
         return "Certification{" +
                 "id=" + id +
-                ", desc='" + desc + '\'' +
+                ", info='" + info + '\'' +
                 ", type='" + type + '\'' +
                 ", passed=" + passed +
                 ", start_time=" + start_time +
                 ", end_time=" + end_time +
-                ", user_id=" + user_id +
+                ", user=" + user +
                 '}';
     }
 }

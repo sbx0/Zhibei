@@ -13,7 +13,6 @@ import java.util.List;
  */
 @Entity
 @Table(name = "USERS")
-@Inheritance(strategy = InheritanceType.JOINED)
 @DynamicInsert
 @DynamicUpdate
 public class User implements Serializable {
