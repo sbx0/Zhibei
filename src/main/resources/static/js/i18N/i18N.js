@@ -13,4 +13,4 @@ if (i18N_config === "") {
 }
 
 // 加载i18N文件
-document.write("<script src=\"js/i18N/i18N_" + i18N_config + ".js\"></script>");
+document.write("<script src=\"/js/i18N/i18N_" + i18N_config + ".js\"></script>");

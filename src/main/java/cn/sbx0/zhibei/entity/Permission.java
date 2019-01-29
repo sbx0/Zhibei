@@ -20,20 +20,30 @@ public class Permission implements Serializable {
     private Integer id;
     @Column(nullable = false, unique = true, length = 15)
     private String name; // 名称
+    @Column(length = 30)
+    private String introduction; // 介绍
     @Column(columnDefinition = "enum('page','action')")
     private String type; // 类型 [page页面|action操作]
+    /**
+     * 资源路径
+     * 例子
+     * /user/*
+     * /*
+     * /user/add
+     */
     @Column(nullable = false)
     private String url; // 路径
     /**
      * 权限字符串
-     * page例子：role:index，
-     * action例子：role:create,role:update,role:delete,role:view
+     * page例子：0 或 1
+     * action例子: 0000 或 0001 或 0011 或 0111 或 1111 或 * 删 > 改 > 增 > 查
      */
     @Column(nullable = false)
-    private String str;
-    private Integer parentId; // 父编号
+    private String str; // 权限字符串
     @Column(nullable = false)
     private Boolean available = Boolean.FALSE; // 是否可用
+    @ManyToOne(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER, targetEntity = Permission.class)
+    private Permission father; // 父亲
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
@@ -53,6 +63,14 @@ public class Permission implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getIntroduction() {
+        return introduction;
+    }
+
+    public void setIntroduction(String introduction) {
+        this.introduction = introduction;
     }
 
     public String getType() {
@@ -79,14 +97,6 @@ public class Permission implements Serializable {
         this.str = str;
     }
 
-    public Integer getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(Integer parentId) {
-        this.parentId = parentId;
-    }
-
     public Boolean getAvailable() {
         return available;
     }
@@ -95,16 +105,25 @@ public class Permission implements Serializable {
         this.available = available;
     }
 
+    public Permission getFather() {
+        return father;
+    }
+
+    public void setFather(Permission father) {
+        this.father = father;
+    }
+
     @Override
     public String toString() {
         return "Permission{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", introduction='" + introduction + '\'' +
                 ", type='" + type + '\'' +
                 ", url='" + url + '\'' +
                 ", str='" + str + '\'' +
-                ", parentId=" + parentId +
                 ", available=" + available +
+                ", father=" + father +
                 '}';
     }
 }

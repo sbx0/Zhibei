@@ -27,6 +27,23 @@ public class UserController extends BaseController<User, Integer> {
     UserService userService;
 
     /**
+     * 进入后台
+     *
+     * @param session
+     * @return
+     */
+    @GetMapping("/admin")
+    public String admin(HttpSession session, HttpServletRequest request) {
+        User user = userService.getUser(session, request);
+        if (user != null) {
+            if (userService.checkPermission(request, user)) {
+                return "admin";
+            }
+        }
+        return "error";
+    }
+
+    /**
      * 查看当前登录用户基本信息
      *
      * @param session
@@ -104,7 +121,7 @@ public class UserController extends BaseController<User, Integer> {
             BaseService.removeCookies(response);
             return "redirect:/login.html";
         } catch (Exception e) {
-            return "/error";
+            return "error";
         }
     }
 

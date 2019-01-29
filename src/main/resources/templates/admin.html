@@ -1,20 +1,20 @@
-<html lang="en">
+<html lang="en" xmlns:th="http://www.springframework.org/schema/data/jaxb">
 <head>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link rel="stylesheet" href="css/lib/bootstrap-4.0.0.min.css">
-    <link rel="stylesheet" href="css/lib/dashboard.css">
-    <link rel="stylesheet" href="css/custom.css">
+    <link rel="stylesheet" th:href="@{/css/lib/bootstrap-4.0.0.min.css}">
+    <link rel="stylesheet" th:href="@{/css/lib/dashboard.css}">
+    <link rel="stylesheet" th:href="@{/css/custom.css}">
 
-    <title>首页</title>
+    <title>后台管理</title>
 
 </head>
 <body>
 <div id="main" v-cloak>
 
-    <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+    <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
         <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">
             {{i18N.website_name}}
         </a>
@@ -33,7 +33,7 @@
         </ul>
     </nav>
 
-    <div class="container-fluid">
+    <div class="container">
         <div class="row">
 
             <nav class="col-md-2 d-none d-md-block bg-light sidebar">
@@ -52,14 +52,15 @@
 
             <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-                    <h6>This is index</h6>
+                    <h6>This is admin page</h6>
                 </div>
             </main>
         </div>
     </div>
+
 </div>
 
-<script src="js/base/load.js"></script>
-<script src="js/index.js"></script>
+<script th:src="@{/js/base/load.js}"></script>
+<script th:src="@{/js/admin.js}"></script>
 </body>
 </html>

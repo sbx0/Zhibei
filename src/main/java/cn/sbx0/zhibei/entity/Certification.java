@@ -29,6 +29,8 @@ public class Certification implements Serializable {
     private Date end_time; // 结束时间
     @ManyToOne(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER, targetEntity = User.class, optional = false)
     private User user;
+    private String license; // 营业执照 或 机构名称
+    private String img; // 申请文件
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
@@ -90,6 +92,22 @@ public class Certification implements Serializable {
         this.user = user;
     }
 
+    public String getLicense() {
+        return license;
+    }
+
+    public void setLicense(String license) {
+        this.license = license;
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
+    }
+
     @Override
     public String toString() {
         return "Certification{" +
@@ -100,6 +118,8 @@ public class Certification implements Serializable {
                 ", start_time=" + start_time +
                 ", end_time=" + end_time +
                 ", user=" + user +
+                ", license='" + license + '\'' +
+                ", img='" + img + '\'' +
                 '}';
     }
 }

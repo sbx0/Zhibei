@@ -6,7 +6,6 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 /**
  * 基础用户
@@ -30,8 +29,12 @@ public class User implements Serializable {
     private Date registerTime; // 注册时间
     @Column(nullable = false)
     private Boolean banned = Boolean.FALSE; // 封禁
-    @ManyToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER, targetEntity = Role.class)
-    private List<Role> roles; // 角色
+    @Column(length = 30)
+    private String phone; // 手机
+    @Column(length = 50)
+    private String email; // 邮箱
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Role.class)
+    private Role role; // 角色
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
@@ -85,12 +88,28 @@ public class User implements Serializable {
         this.banned = banned;
     }
 
-    public List<Role> getRoles() {
-        return roles;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setRoles(List<Role> roles) {
-        this.roles = roles;
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     @Override
@@ -102,8 +121,9 @@ public class User implements Serializable {
                 ", introduction='" + introduction + '\'' +
                 ", registerTime=" + registerTime +
                 ", banned=" + banned +
-                ", roles=" + roles +
+                ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
+                ", role=" + role +
                 '}';
     }
-
 }

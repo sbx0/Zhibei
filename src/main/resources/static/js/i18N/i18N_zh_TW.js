@@ -1,6 +1,5 @@
 // i18N配置文件 - 繁體中文
 var i18N = {
-
     website_name: "智貝",
     admin_management_system: "後台管理系統",
     logout: "退出登錄",
@@ -15,11 +14,17 @@ var i18N = {
     confirm: "確認",
     index: "首頁",
     network: "網絡",
+    submit: "提交",
+    certification: "認證",
+    apply: "申請",
+    close: "關閉",
+    error_message: "頁面發生錯誤",
 
     lib: lib,
     nav_data: [
         {id: 1, text: "首頁", path: "../index.html", icon: "<i class=\"fas fa-home\"></i>"},
         {id: 2, text: "登陸", path: "../login.html", icon: "<i class=\"fas fa-home\"></i>"},
+        {id: 3, text: "後台", path: "../admin", icon: "<i class=\"fas fa-home\"></i>"},
     ],
     alert: {
         empty: "為空",

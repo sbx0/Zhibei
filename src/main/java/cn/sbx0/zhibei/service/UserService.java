@@ -1,6 +1,7 @@
 package cn.sbx0.zhibei.service;
 
 import cn.sbx0.zhibei.dao.UserDao;
+import cn.sbx0.zhibei.entity.Permission;
 import cn.sbx0.zhibei.entity.User;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,6 +25,60 @@ public class UserService extends BaseService<User, Integer> {
     @Override
     public PagingAndSortingRepository<User, Integer> getDao() {
         return userDao;
+    }
+
+    /**
+     * 将增删查改转换成二进制
+     *
+     * @param methodType
+     * @return
+     */
+    public String methodTypeToBinary(String methodType) {
+        switch (methodType) {
+            case "add":
+                return "0010";
+            case "update":
+                return "0100";
+            case "delete":
+                return "1000";
+            default:
+                return "0001";
+        }
+    }
+
+    /**
+     * 检测用户权限
+     *
+     * @param request
+     * @param user
+     * @return
+     */
+    public boolean checkPermission(HttpServletRequest request, User user) {
+        String method = request.getServletPath(); // 运行的方法
+        if (method == null) return true;
+        if (user.getRole() == null) return false;
+        List<Permission> permissions = user.getRole().getPermissions();
+        if (permissions == null) return false;
+        for (Permission permission : permissions) {
+            if (permission.getUrl().equals(method)) {
+                if (permission.getStr().equals("0")) {
+                    return false;
+                } else if (permission.getStr().equals("1")) {
+                    return true;
+                } else {
+                    method = method.substring(1);
+                    String methodType = method.split("/")[1];
+                    char[] methodBinary = methodTypeToBinary(methodType).toCharArray();
+                    char[] permissionStr = permission.getStr().toCharArray();
+                    for (int i = 0; i < 4; i++) {
+                        if (methodBinary[i] == permissionStr[i]) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     /**

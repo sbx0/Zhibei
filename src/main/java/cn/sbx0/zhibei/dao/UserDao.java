@@ -34,6 +34,6 @@ public interface UserDao extends PagingAndSortingRepository<User, Integer> {
      *
      * @return 用户列表
      */
-    @Query(value = "FROM User", nativeQuery = true)
+    @Query(value = "FROM User")
     List<User> findAll();
 }

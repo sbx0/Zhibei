@@ -24,8 +24,9 @@ public class Role implements Serializable {
     @Column(length = 30)
     private String introduction; // 介绍
     @Column(nullable = false)
-    private Boolean available = Boolean.FALSE; // 是否可用，若不可用则无法添加给用户
-    // 角色 -- 权限关系：多对多关系;
+    private Boolean available = Boolean.FALSE; // 是否可用
+    @ManyToOne(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER, targetEntity = Role.class)
+    private Role father; //  父亲
     @ManyToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER, targetEntity = Permission.class)
     private List<Permission> permissions; // 权限
 
@@ -65,6 +66,14 @@ public class Role implements Serializable {
         this.available = available;
     }
 
+    public Role getFather() {
+        return father;
+    }
+
+    public void setFather(Role father) {
+        this.father = father;
+    }
+
     public List<Permission> getPermissions() {
         return permissions;
     }
@@ -80,8 +89,8 @@ public class Role implements Serializable {
                 ", name='" + name + '\'' +
                 ", introduction='" + introduction + '\'' +
                 ", available=" + available +
+                ", father=" + father +
                 ", permissions=" + permissions +
                 '}';
     }
-
 }

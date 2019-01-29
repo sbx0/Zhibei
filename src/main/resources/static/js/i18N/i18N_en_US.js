@@ -1,6 +1,5 @@
 // i18N Configuration File - English
 var i18N = {
-
     website_name: "Zhibei",
     admin_management_system: "AMS",
     logout: "Logout",
@@ -15,11 +14,17 @@ var i18N = {
     confirm: "Confirm",
     index: "Index",
     network: "Network",
+    submit: "Submit",
+    certification: "Certification",
+    apply: "Apply",
+    close: "Close",
+    error_message: "This is error page",
 
     lib: lib,
     nav_data: [
         {id: 1, text: "Index", path: "../index.html", icon: "<i class=\"fas fa-home\"></i>"},
         {id: 2, text: "Login", path: "../login.html", icon: "<i class=\"fas fa-home\"></i>"},
+        {id: 3, text: "Admin", path: "../admin", icon: "<i class=\"fas fa-home\"></i>"}
     ],
     alert: {
         empty: "Empty",
