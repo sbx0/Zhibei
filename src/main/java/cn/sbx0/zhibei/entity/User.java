@@ -1,5 +1,7 @@
 package cn.sbx0.zhibei.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -16,25 +18,48 @@ import java.util.Date;
 @DynamicUpdate
 public class User implements Serializable {
     private static final long serialVersionUID = -7669301273984030395L;
+    @JsonView(Normal.class)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id; // id
+    @JsonView(Normal.class)
     @Column(nullable = false, unique = true, length = 15)
     private String name; // 用户名
+    @JsonView(Admin.class)
     @Column(nullable = false, length = 100)
     private String password; // 密码
+    @JsonView(Normal.class)
     @Column(length = 30)
     private String introduction;
+    @JsonView(Admin.class)
     @Column(nullable = false)
     private Date registerTime; // 注册时间
+    @JsonView(Admin.class)
     @Column(nullable = false)
     private Boolean banned = Boolean.FALSE; // 封禁
+    @JsonView(Admin.class)
     @Column(length = 30)
     private String phone; // 手机
+    @JsonView(Admin.class)
     @Column(length = 50)
     private String email; // 邮箱
+    @JsonView(Admin.class)
     @ManyToOne(fetch = FetchType.EAGER, targetEntity = Role.class)
     private Role role; // 角色
+
+    /**
+     * 正常情况下需要转换成Json的属性
+     */
+    public interface Normal {
+
+    }
+
+    /**
+     * 我全都要
+     */
+    public interface Admin extends Normal {
+
+    }
 
     public static long getSerialVersionUID() {
         return serialVersionUID;

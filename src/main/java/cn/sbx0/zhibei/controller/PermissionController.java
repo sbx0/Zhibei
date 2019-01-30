@@ -3,6 +3,8 @@ package cn.sbx0.zhibei.controller;
 import cn.sbx0.zhibei.entity.Permission;
 import cn.sbx0.zhibei.service.BaseService;
 import cn.sbx0.zhibei.service.PermissionService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -20,5 +22,10 @@ public class PermissionController extends BaseController<Permission, Integer> {
     @Override
     public BaseService<Permission, Integer> getService() {
         return permissionService;
+    }
+
+    @Autowired
+    public PermissionController(ObjectMapper mapper) {
+        this.mapper = mapper;
     }
 }

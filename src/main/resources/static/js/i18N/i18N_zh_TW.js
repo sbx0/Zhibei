@@ -19,6 +19,12 @@ var i18N = {
     apply: "申請",
     close: "關閉",
     error_message: "頁面發生錯誤",
+    admin_message: "這裡是管理員界面",
+    login_message: "已登錄",
+    loading: "加載中",
+    result: "結果",
+    is: "為",
+    null: "空",
 
     lib: lib,
     nav_data: [
@@ -26,6 +32,12 @@ var i18N = {
         {id: 2, text: "登陸", path: "../login.html", icon: "<i class=\"fas fa-home\"></i>"},
         {id: 3, text: "後台", path: "../admin", icon: "<i class=\"fas fa-home\"></i>"},
     ],
+    table: {
+        user: "用戶表",
+        role: "角色表",
+        permission: "權限表",
+        certification: "申請表",
+    },
     alert: {
         empty: "為空",
         illegal: "不合法",

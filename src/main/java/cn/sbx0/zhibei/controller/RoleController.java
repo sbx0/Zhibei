@@ -3,6 +3,8 @@ package cn.sbx0.zhibei.controller;
 import cn.sbx0.zhibei.entity.Role;
 import cn.sbx0.zhibei.service.BaseService;
 import cn.sbx0.zhibei.service.RoleService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -20,5 +22,10 @@ public class RoleController extends BaseController<Role, Integer> {
     @Override
     public BaseService<Role, Integer> getService() {
         return roleService;
+    }
+
+    @Autowired
+    public RoleController(ObjectMapper mapper) {
+        this.mapper = mapper;
     }
 }

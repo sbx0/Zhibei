@@ -22,8 +22,6 @@ public class Permission implements Serializable {
     private String name; // 名称
     @Column(length = 30)
     private String introduction; // 介绍
-    @Column(columnDefinition = "enum('page','action')")
-    private String type; // 类型 [page页面|action操作]
     /**
      * 资源路径
      * 例子
@@ -73,14 +71,6 @@ public class Permission implements Serializable {
         this.introduction = introduction;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
     public String getUrl() {
         return url;
     }
@@ -119,7 +109,6 @@ public class Permission implements Serializable {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", introduction='" + introduction + '\'' +
-                ", type='" + type + '\'' +
                 ", url='" + url + '\'' +
                 ", str='" + str + '\'' +
                 ", available=" + available +

@@ -19,16 +19,9 @@
             {{i18N.website_name}}
         </a>
         <input class="form-control form-control-dark w-100" type="text" :placeholder="i18N.search">
-        <ul class="navbar-nav px-3">
-            <li class="nav-item text-nowrap">
-                <select id="i18N_select" class="form-control-sm">
-                    <option :value="option.name" v-for="option in i18N.lib">{{option.value}}</option>
-                </select>
-            </li>
-        </ul>
     </nav>
 
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
 
             <nav class="col-md-2 d-none d-md-block bg-light sidebar">
@@ -40,6 +33,11 @@
                                 &nbsp;
                                 {{url.text}}
                             </a>
+                            <div class="ml-3 mt-3">
+                                <select id="i18N_select" class="form-control-sm">
+                                    <option :value="option.name" v-for="option in i18N.lib">{{option.value}}</option>
+                                </select>
+                            </div>
                         </li>
                     </ul>
                 </div>
@@ -47,7 +45,7 @@
 
             <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-                    <h6>This is error page</h6>
+                    <h6>{{i18N.error_message}}</h6>
                 </div>
             </main>
         </div>
@@ -78,7 +76,7 @@
 
     // 切换语言时title也会切换
     $(function () {
-        document.title = main.i18N.index;
+        document.title = main.i18N.error_message;
     });
 </script>
 </body>

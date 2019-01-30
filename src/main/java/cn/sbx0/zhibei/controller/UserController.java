@@ -2,7 +2,7 @@ package cn.sbx0.zhibei.controller;
 
 import cn.sbx0.zhibei.entity.User;
 import cn.sbx0.zhibei.service.BaseService;
-import cn.sbx0.zhibei.service.UserService;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -23,8 +22,22 @@ import java.util.Date;
 @Controller
 @RequestMapping("/user")
 public class UserController extends BaseController<User, Integer> {
-    @Resource
-    UserService userService;
+
+    @Override
+    public BaseService<User, Integer> getService() {
+        return userService;
+    }
+
+    @Autowired
+    public UserController(ObjectMapper mapper) {
+        this.mapper = mapper;
+    }
+
+    @JsonView(User.Admin.class)
+    @Override
+    public ObjectNode list(Integer page, Integer size, HttpSession session, HttpServletRequest request) {
+        return super.list(page, size, session, request);
+    }
 
     /**
      * 进入后台
@@ -50,15 +63,14 @@ public class UserController extends BaseController<User, Integer> {
      * @param request
      * @return
      */
+    @JsonView(User.Normal.class)
     @ResponseBody
     @GetMapping("/info")
     public ObjectNode info(HttpSession session, HttpServletRequest request) {
         json = mapper.createObjectNode();
         User user = userService.getUser(session, request);
-        ObjectNode attr = mapper.createObjectNode();
         if (user != null) {
-            attr.put("id", user.getId());
-            attr.put("name", user.getName());
+            ObjectNode attr = mapper.convertValue(user, ObjectNode.class);
             json.set("user", attr);
             json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
         } else {
@@ -126,26 +138,29 @@ public class UserController extends BaseController<User, Integer> {
     }
 
     /**
-     * 增加 因为有几个属性需要初始化，所以重写了
+     * 注册
      *
-     * @param user
+     * @param u
      * @return
      */
-    @Override
-    public ObjectNode add(User user) {
-        user.setBanned(false);
-        user.setRegisterTime(new Date());
-        return super.add(user);
-    }
+    @ResponseBody
+    @PostMapping("/register")
+    public ObjectNode register(User u) {
+        u.setBanned(false);
+        u.setRegisterTime(new Date());
+        json = mapper.createObjectNode();
+        try {
 
-    @Override
-    public BaseService<User, Integer> getService() {
-        return userService;
-    }
-
-    @Autowired
-    public UserController(ObjectMapper mapper) {
-        this.mapper = mapper;
+            if (userService.save(u)) {
+                json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
+            } else {
+                json.put(STATUS_NAME, STATUS_CODE_FILED);
+            }
+        } catch (Exception e) {
+            json.put(STATUS_NAME, STATUS_CODE_EXCEPTION);
+            json.put("msg", e.getMessage());
+        }
+        return json;
     }
 
 }

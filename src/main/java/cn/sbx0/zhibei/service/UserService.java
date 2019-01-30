@@ -35,6 +35,8 @@ public class UserService extends BaseService<User, Integer> {
      */
     public String methodTypeToBinary(String methodType) {
         switch (methodType) {
+            case "list":
+                return "0001";
             case "add":
                 return "0010";
             case "update":
@@ -42,7 +44,7 @@ public class UserService extends BaseService<User, Integer> {
             case "delete":
                 return "1000";
             default:
-                return "0001";
+                return "0000";
         }
     }
 
@@ -60,7 +62,9 @@ public class UserService extends BaseService<User, Integer> {
         List<Permission> permissions = user.getRole().getPermissions();
         if (permissions == null) return false;
         for (Permission permission : permissions) {
+            if (permission.getUrl().equals("*")) return true;
             if (permission.getUrl().equals(method)) {
+                if (permission.getStr().equals("*")) return true;
                 if (permission.getStr().equals("0")) {
                     return false;
                 } else if (permission.getStr().equals("1")) {

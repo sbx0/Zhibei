@@ -3,10 +3,29 @@ var main = new Vue({
     data: {
         i18N: i18N,
         not_login: true,
-        user: {
-            id: "-1",
-            name: "未登录",
+        table_data: {
+            user: {
+                name: i18N.table.user,
+                value: "user",
+                data: {},
+            },
+            role: {
+                name: i18N.table.role,
+                value: "role",
+                data: {},
+            },
+            permission: {
+                name: i18N.table.permission,
+                value: "permission",
+                data: {},
+            },
+            certification: {
+                name: i18N.table.certification,
+                value: "certification",
+                data: {},
+            },
         },
+        query_data: {}
     },
     components: {},
     methods: {},
@@ -15,19 +34,29 @@ var main = new Vue({
     }
 });
 
-// 检测登陆状态
-function get_info() {
+// 初始化查询
+query();
+
+// 切换表
+$("#table_select").change(function () {
+    query();
+});
+
+// 查询表
+function query() {
     $.ajax({
         type: "get",
-        url: "../user/info",
+        url: "../" + $("#table_select").val() + "/list",
         dataType: "json",
         success: function (json) {
             var status = json.status;
             if (statusCodeToBool(status)) {
-                main.user = json.user;
-                main.not_login = false;
+                main.query_data = json.objects;
+                if (json.objects == null) {
+                    alert(i18N.result + i18N.is + i18N.null);
+                }
             } else {
-                main.not_login = true;
+                alert(statusCodeToAlert(status))
             }
         },
         error: function () {
@@ -35,8 +64,6 @@ function get_info() {
         }
     });
 }
-
-get_info();
 
 // 登陆与注册之间界面切换
 function login_or_register() {
@@ -57,5 +84,5 @@ $("#i18N_select").change(function () {
 
 // 切换语言时title也会切换
 $(function () {
-    document.title = main.i18N.index;
+    document.title = main.i18N.admin_message;
 });

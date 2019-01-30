@@ -19,13 +19,6 @@
             {{i18N.website_name}}
         </a>
         <input class="form-control form-control-dark w-100" type="text" :placeholder="i18N.search">
-        <ul class="navbar-nav px-3">
-            <li class="nav-item text-nowrap">
-                <select id="i18N_select" class="form-control-sm">
-                    <option :value="option.name" v-for="option in i18N.lib">{{option.value}}</option>
-                </select>
-            </li>
-        </ul>
         <ul class="navbar-nav px-3" v-if="!not_login">
             <li class="nav-item text-nowrap">
                 <a class="nav-link" href="/user/logout">{{i18N.logout}}</a>
@@ -45,6 +38,11 @@
                                 &nbsp;
                                 {{url.text}}
                             </a>
+                            <div class="ml-3 mt-3">
+                                <select id="i18N_select" class="form-control-sm">
+                                    <option :value="option.name" v-for="option in i18N.lib">{{option.value}}</option>
+                                </select>
+                            </div>
                         </li>
                     </ul>
                 </div>
@@ -117,7 +115,10 @@
                 </div>
 
                 <div id="info_div" v-if="!not_login">
-                    <p>已经登陆</p>
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+                        <h6>{{i18N.login_message}}</h6>
+                    </div>
+                    <p v-for="(value,key) in user">{{key}}:{{value}}</p>
                 </div>
 
             </main>

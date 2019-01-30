@@ -1,19 +1,24 @@
 package cn.sbx0.zhibei.controller;
 
+import cn.sbx0.zhibei.entity.User;
 import cn.sbx0.zhibei.service.BaseService;
+import cn.sbx0.zhibei.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 公用基础 控制层
@@ -37,6 +42,9 @@ public abstract class BaseController<T, ID> {
     ObjectMapper mapper;
     protected ObjectNode json;
 
+    @Resource
+    UserService userService;
+
     /**
      * 获取服务层 子类必须重写
      *
@@ -45,15 +53,68 @@ public abstract class BaseController<T, ID> {
     public abstract BaseService<T, ID> getService();
 
     /**
+     * 分页查询列表
+     * 返回结果是json
+     *
+     * @param page
+     * @param size
+     * @param session
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @GetMapping("/list")
+    public ObjectNode list(Integer page, Integer size, HttpSession session, HttpServletRequest request) {
+        json = mapper.createObjectNode();
+        User user = userService.getUser(session, request);
+        if (user != null) {
+            if (userService.checkPermission(request, user)) {
+                Page<T> tPage = getService().findAll(BaseService.buildPageable(page, size, BaseService.buildSort("id", "ASC")));
+                List<T> tList = tPage.getContent();
+                if (tList != null && tList.size() > 0) {
+                    ArrayNode jsons = mapper.createArrayNode();
+                    for (T t : tList) {
+                        ObjectNode object = mapper.convertValue(t, ObjectNode.class);
+                        jsons.add(object);
+                    }
+//                    json.set(tList.get(0).getClass().getSimpleName().toLowerCase(), jsons);
+                    json.set("objects", jsons);
+                }
+                json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
+            } else {
+                json.put(STATUS_NAME, STATUS_CODE_NO_PERMISSION);
+            }
+        } else {
+            json.put(STATUS_NAME, STATUS_CODE_NOT_LOGIN);
+        }
+        return json;
+    }
+
+    /**
      * 根据ID查询实体
      *
      * @param id id
      * @return 实体
      */
     @ResponseBody
-    @GetMapping("/findById")
-    public T findById(ID id) {
-        return getService().findById(id);
+    @GetMapping("/{id}")
+    public ObjectNode one(@PathVariable("id") ID id, HttpSession session, HttpServletRequest request) {
+        json = mapper.createObjectNode();
+        User user = userService.getUser(session, request);
+        if (user != null) {
+            if (userService.checkPermission(request, user)) {
+                T t = getService().findById(id);
+                ObjectNode object = mapper.convertValue(t, ObjectNode.class);
+//                json.set(t.getClass().getSimpleName().toLowerCase(), object);
+                json.set("object", object);
+                json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
+            } else {
+                json.put(STATUS_NAME, STATUS_CODE_NO_PERMISSION);
+            }
+        } else {
+            json.put(STATUS_NAME, STATUS_CODE_NOT_LOGIN);
+        }
+        return json;
     }
 
     /**
@@ -64,13 +125,22 @@ public abstract class BaseController<T, ID> {
      */
     @ResponseBody
     @PostMapping("/add")
-    public ObjectNode add(T t) {
+    public ObjectNode add(T t, HttpSession session, HttpServletRequest request) {
         json = mapper.createObjectNode();
         try {
-            if (getService().save(t)) {
-                json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
+            User user = userService.getUser(session, request);
+            if (user != null) {
+                if (userService.checkPermission(request, user)) {
+                    if (getService().save(t)) {
+                        json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
+                    } else {
+                        json.put(STATUS_NAME, STATUS_CODE_FILED);
+                    }
+                } else {
+                    json.put(STATUS_NAME, STATUS_CODE_NO_PERMISSION);
+                }
             } else {
-                json.put(STATUS_NAME, STATUS_CODE_FILED);
+                json.put(STATUS_NAME, STATUS_CODE_NOT_LOGIN);
             }
         } catch (Exception e) {
             json.put(STATUS_NAME, STATUS_CODE_EXCEPTION);
@@ -87,13 +157,22 @@ public abstract class BaseController<T, ID> {
      */
     @ResponseBody
     @GetMapping("/delete")
-    public ObjectNode delete(ID id) {
+    public ObjectNode delete(ID id, HttpSession session, HttpServletRequest request) {
         json = mapper.createObjectNode();
         try {
-            if (getService().deleteById(id)) {
-                json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
+            User user = userService.getUser(session, request);
+            if (user != null) {
+                if (userService.checkPermission(request, user)) {
+                    if (getService().deleteById(id)) {
+                        json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
+                    } else {
+                        json.put(STATUS_NAME, STATUS_CODE_FILED);
+                    }
+                } else {
+                    json.put(STATUS_NAME, STATUS_CODE_NO_PERMISSION);
+                }
             } else {
-                json.put(STATUS_NAME, STATUS_CODE_FILED);
+                json.put(STATUS_NAME, STATUS_CODE_NOT_LOGIN);
             }
         } catch (Exception e) {
             json.put(STATUS_NAME, STATUS_CODE_EXCEPTION);

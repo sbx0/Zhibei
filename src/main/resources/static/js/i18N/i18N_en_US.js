@@ -19,6 +19,12 @@ var i18N = {
     apply: "Apply",
     close: "Close",
     error_message: "This is error page",
+    admin_message: "This is admin page",
+    login_message: "Already login",
+    loading: "Loading",
+    result: "Result",
+    is: "Is",
+    null: "Null",
 
     lib: lib,
     nav_data: [
@@ -26,6 +32,12 @@ var i18N = {
         {id: 2, text: "Login", path: "../login.html", icon: "<i class=\"fas fa-home\"></i>"},
         {id: 3, text: "Admin", path: "../admin", icon: "<i class=\"fas fa-home\"></i>"}
     ],
+    table: {
+        user: "User Table",
+        role: "Role Table",
+        permission: "Permission Table",
+        certification: "Certification Table",
+    },
     alert: {
         empty: "Empty",
         illegal: "Illegal",

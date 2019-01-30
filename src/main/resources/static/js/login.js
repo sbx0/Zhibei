@@ -2,6 +2,9 @@ var main = new Vue({
     el: '#main',
     data: {
         i18N: i18N,
+        user: {
+            name: i18N.loading,
+        },
         login_or_register: true, // 用于登陆与注册之间切换
         not_login: true, // 用于登陆与注册之间切换
     },
@@ -66,15 +69,14 @@ var main = new Vue({
             }
             $.ajax({
                 type: "post",
-                url: "../user/add",
+                url: "../user/register",
                 data: $("#register_form").serialize(),
                 dataType: "json",
                 success: function (json) {
                     var status = json.status;
+                    alert(statusCodeToAlert(status));
                     if (statusCodeToBool(status)) {
                         main.login_or_register = !main.login_or_register;
-                    } else {
-                        alert(statusCodeToAlert(status));
                     }
                 },
                 error: function () {
@@ -98,6 +100,7 @@ function get_info() {
             var status = json.status;
             if (statusCodeToBool(status)) {
                 main.not_login = false;
+                main.user = json.user;
             }
         },
         error: function () {
