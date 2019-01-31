@@ -1,0 +1,147 @@
+<html lang="en">
+<head>
+
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+
+    <link rel="stylesheet" href="../css/lib/bootstrap.css">
+    <link rel="stylesheet" href="../css/lib/common.css">
+    <link rel="stylesheet" href="../css/lib/link.css">
+    <link rel="stylesheet" href="../css/lib/mobile.css">
+    <link rel="stylesheet" href="../css/custom.css">
+
+    <title>首页</title>
+
+</head>
+<body>
+<div id="main" v-cloak>
+    <!-- header -->
+    <div class="header">
+        <a class="logo" href="/m/index.html">
+            <img src="../img/logo.png" alt="" width="52"></a>
+        <span class="pull-right">
+            <a href="http://wenda.wecenter.com/m/login/" class="btn btn-mini btn-primary btn-normal">登录</a>
+            <a href="http://wenda.wecenter.com/m/register/" class="btn btn-mini btn-success btn-normal">注册</a>
+        </span>
+    </div>
+    <!-- end header -->
+    <!--分类-->
+    <div class="top-category">
+        <ul>
+            <li v-for="url in i18N.category_data">
+                <a :href="url.path">
+                    <span v-html="url.icon"></span>
+                    {{url.text}}
+                </a>
+            </li>
+        </ul>
+    </div>
+    <!--end 分类-->
+    <!--内容-->
+    <div class="container">
+        <div class="aw-question-list">
+            <div class="mod-body">
+                <ul id="load_explore_list">
+                    <!--问题列表-->
+                    <li v-for="question in question_data">
+                        <div class="mod-body">
+                            <h2>
+                                <a :href="question.id">
+                                    {{question.title}}
+                                </a>
+                            </h2>
+                        </div>
+                        <div class="mod-footer">
+                            <a :href="question.id" rel="nofollow">
+                                <img class="img"
+                                     src="../img/avatar-min-img.png" alt=""
+                                     width="20">
+                            </a>
+                            <a :href="question.user.id">
+                                {{question.user.name}}
+                            </a>
+                            {{i18N.post}}{{i18N.question}}
+                            <span class="pull-right color-999">
+                                {{question.time}}
+                            </span>
+                        </div>
+                    </li>
+                    <!--end 问题列表-->
+                    <!--文章列表-->
+                    <li v-for="article in article_data">
+                        <div class="mod-body">
+                            <h2>
+                                <a :href="article.id">{{article.title}}</a>
+                            </h2>
+                        </div>
+                        <div class="mod-footer">
+                            <a :href="article.user.id">
+                                {{article.user.name}}
+                            </a>
+                            {{i18N.post}}{{i18N.article}}
+                            <span class="pull-right color-999">
+                                {{article.time}}
+                            </span>
+                        </div>
+                    </li>
+                    <!--end 文章列表-->
+                </ul>
+            </div>
+            <div class="mod-footer">
+                <a id="load_explore" class="aw-load-more" auto-load="false" data-page="2">
+                    <i class="icon icon-loading icon-spin"></i>
+                    <span>{{i18N.more}}</span>
+                </a>
+            </div>
+            <div class="aw-explore-hot-topic">
+                <div class="mod-head">
+                    <h3>{{i18N.hot}}{{i18N.topic}}</h3>
+                </div>
+                <div class="mod-body">
+                    <ul>
+                        <li v-for="topic in hot_topic_data">
+                            <a class="pull-left" :href="topic.id">
+                                <img :src="topic.img" alt="" width="50">
+                            </a>
+                            <div class="content pull-left">
+                                <span class="topic-tag clearfix">
+                                    <a class="text" :href="topic.id">{{topic.name}}</a>
+                                </span>
+                                <p class="color-999">
+                                    <span class="text-color-999">
+                                        <b>{{topic.question}}</b> {{i18N.question}}
+                                        •
+                                        <b>{{topic.watch}}</b> {{i18N.watch}}
+                                    </span>
+                                </p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--end内容-->
+    <footer class="text-center text-color-999 mb-50">
+        <span v-html="i18N.foot_html"></span>
+        <p>
+            <a href="../index.html">访问桌面版网站</a>
+        </p>
+    </footer>
+    <div class="nav">
+        <ul>
+            <li v-for="url in i18N.m_nav_data">
+                <a :href="url.path">
+                    <div v-html="url.icon"></div>
+                    {{url.text}}
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<script src="../js/base/load.js"></script>
+<script src="../js/lib/bootstrap-3.4.0.min.js"></script>
+<script src="../js/index.js"></script>
+</body>
+</html>
