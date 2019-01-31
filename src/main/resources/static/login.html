@@ -2,132 +2,141 @@
 <head>
 
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
 
-    <link rel="stylesheet" href="css/lib/bootstrap-4.0.0.min.css">
-    <link rel="stylesheet" href="css/lib/dashboard.css">
+    <link rel="stylesheet" href="css/lib/bootstrap.css">
+    <link rel="stylesheet" href="css/lib/common.css">
+    <link rel="stylesheet" href="css/lib/link.css">
+    <link rel="stylesheet" href="css/lib/style.css">
+    <link rel="stylesheet" href="css/lib/register.css">
     <link rel="stylesheet" href="css/custom.css">
 
-    <title>登陆</title>
+    <title>登陆 / 注册</title>
 
 </head>
 <body>
 <div id="main" v-cloak>
 
-    <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
-        <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">
-            {{i18N.website_name}}
-        </a>
-        <input class="form-control form-control-dark w-100" type="text" :placeholder="i18N.search">
-        <ul class="navbar-nav px-3" v-if="!not_login">
-            <li class="nav-item text-nowrap">
-                <a class="nav-link" href="/user/logout">{{i18N.logout}}</a>
-            </li>
-        </ul>
-    </nav>
-
-    <div class="container-fluid">
-        <div class="row">
-
-            <nav class="col-md-2 d-none d-md-block bg-light sidebar">
-                <div class="sidebar-sticky">
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link active" :href="url.path" v-for="url in i18N.nav_data">
-                                <span v-html="url.icon"></span>
-                                &nbsp;
-                                {{url.text}}
-                            </a>
-                            <div class="ml-3 mt-3">
-                                <select id="i18N_select" class="form-control-sm">
-                                    <option :value="option.name" v-for="option in i18N.lib">{{option.value}}</option>
-                                </select>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-
-            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
-
-                <div id="login_div" v-if="login_or_register && not_login">
-                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-                        <h6>{{i18N.login}}</h6>
-                    </div>
-                    <div class="col-md-12 order-md-1 mt-3">
-                        <p class="form-text text-muted">
-                            <a href="javascript:login_or_register();">
-                                {{i18N.login_title}}
-                            </a>
-                        </p>
-                        <form id="login_form">
-                            <div class="mb-3">
-                                <label for="login_username">{{i18N.username}}</label>
-                                <input type="text" class="form-control" id="login_username" name="name">
-                            </div>
-                            <div class="mb-3">
-                                <label for="login_password">{{i18N.password}}</label>
-                                <input type="password" class="form-control" id="login_password" name="password">
-                            </div>
-                            <button id="login_btn" class="btn btn-outline-dark btn-block" type="button"
-                                    v-on:click="login">
-                                {{i18N.login}}
-                            </button>
-                            <a href="javascript:history.go(-1);" class="btn btn-secondary btn-block" role="button">
-                                {{i18N.back}}
-                            </a>
-                        </form>
-                    </div>
-                </div>
-
-                <div id="register_div" v-if="!login_or_register && not_login">
-                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-                        <h6>{{i18N.register}}</h6>
-                    </div>
-                    <div class="col-md-12 order-md-1 mt-3">
-                        <p class="form-text text-muted">
-                            <a href="javascript:login_or_register();">
-                                {{i18N.register_title}}
-                            </a>
-                        </p>
-                        <form id="register_form">
-                            <div class="mb-3">
-                                <label for="register_username">{{i18N.username}}</label>
-                                <input type="text" class="form-control" id="register_username" name="name">
-                            </div>
-                            <div class="mb-3">
-                                <label for="register_password">{{i18N.password}}</label>
-                                <input type="password" class="form-control" id="register_password" name="password">
-                            </div>
-                            <div class="mb-3">
-                                <label for="register_r_password">{{i18N.confirm}}{{i18N.password}}</label>
-                                <input type="password" class="form-control" id="register_r_password">
-                            </div>
-                            <button id="register_btn" class="btn btn-outline-dark btn-block" type="button"
-                                    v-on:click="register">
-                                {{i18N.register}}
-                            </button>
-                            <a href="javascript:history.go(-1);" class="btn btn-secondary btn-block" role="button">
-                                {{i18N.back}}
-                            </a>
-                        </form>
-                    </div>
-                </div>
-
-                <div id="info_div" v-if="!not_login">
-                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-                        <h6>{{i18N.login_message}}</h6>
-                    </div>
-                    <p v-for="(value,key) in user">{{key}}:{{value}}</p>
-                </div>
-
-            </main>
+    <div id="login_div" v-if="login_or_register && not_login" class="aw-register-box">
+        <div class="mod-head">
+            <a href="">
+                <img src="img/logo.png" alt=""/></a>
+            <h1>{{i18N.login}}</h1>
         </div>
+        <div class="mod-body">
+            <form class="aw-register-form" id="login_form">
+                <ul>
+                    <li>
+                        <input
+                                type="text"
+                                class="form-control"
+                                id="login_username"
+                                name="name"
+                                :placeholder="i18N.username"
+                        >
+                    </li>
+                    <li>
+                        <input
+                                type="password"
+                                class="form-control"
+                                id="login_password"
+                                name="password"
+                                :placeholder="i18N.password"
+                        >
+                    </li>
+                    <li class="more-information collapse">
+                        <ul></ul>
+                    </li>
+                    <li hidden>
+                        <hr/>
+                        <a class="more-information-btn">{{i18N.more}}</a>
+                    </li>
+                    <li class="last">
+                        <a href="javascript:login_or_register();">{{i18N.login_title}}</a>
+                    </li>
+                    <li class="clearfix">
+                        <button id="login_btn"
+                                class="btn btn-large btn-blue btn-block"
+                                type="button"
+                                v-on:click="login">
+                            {{i18N.login}}
+                        </button>
+                        <a href="javascript:history.go(-1);" class="btn btn-sm btn-default btn-block" role="button">
+                            {{i18N.back}}
+                        </a>
+                    </li>
+                </ul>
+            </form>
+        </div>
+        <div class="mod-footer"></div>
+    </div>
+
+    <div id="register_div" v-if="!login_or_register && not_login" class="aw-register-box">
+        <div class="mod-head">
+            <a href=""><img src="img/logo.png" alt=""/></a>
+            <h1>{{i18N.register}}</h1>
+        </div>
+        <div class="mod-body">
+            <form class="aw-register-form" id="register_form">
+                <ul>
+                    <li>
+                        <input
+                                type="text"
+                                class="form-control"
+                                id="register_username"
+                                name="name"
+                                :placeholder="i18N.username"
+                        >
+                    </li>
+                    <li>
+                        <input
+                                type="password"
+                                class="form-control"
+                                id="register_password"
+                                name="password"
+                                :placeholder="i18N.password"
+                        >
+                    </li>
+
+                    <li>
+                        <input
+                                type="password"
+                                class="form-control"
+                                id="register_r_password"
+                                :placeholder="i18N.confirm+i18N.password"
+                        >
+                    </li>
+                    <li class="more-information collapse">
+                        <ul></ul>
+                    </li>
+                    <li hidden>
+                        <hr/>
+                        <a class="more-information-btn">{{i18N.more}}</a>
+                    </li>
+                    <li class="last">
+                        <a href="javascript:login_or_register();">{{i18N.register_title}}</a>
+                    </li>
+                    <li class="clearfix">
+                        <button id="register_btn"
+                                class="btn btn-large btn-blue btn-block"
+                                type="button"
+                                v-on:click="register">
+                            {{i18N.register}}
+                        </button>
+                        <a href="javascript:history.go(-1);" class="btn btn-sm btn-default btn-block" role="button">
+                            {{i18N.back}}
+                        </a>
+                    </li>
+                </ul>
+            </form>
+        </div>
+        <div class="mod-footer"></div>
     </div>
 
 </div>
 
 <script src="js/base/load.js"></script>
+<script src="js/lib/bootstrap-3.4.0.min.js"></script>
 <script src="js/login.js"></script>
 </body>
 </html>

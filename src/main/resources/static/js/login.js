@@ -2,9 +2,6 @@ var main = new Vue({
     el: '#main',
     data: {
         i18N: i18N,
-        user: {
-            name: i18N.loading,
-        },
         login_or_register: true, // 用于登陆与注册之间切换
         not_login: true, // 是否登陆
     },
@@ -100,7 +97,7 @@ function get_info() {
             var status = json.status;
             if (statusCodeToBool(status)) {
                 main.not_login = false;
-                main.user = json.user;
+                location.href = "/index.html"
             }
         },
         error: function () {
