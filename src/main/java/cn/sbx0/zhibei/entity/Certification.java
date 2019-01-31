@@ -27,7 +27,7 @@ public class Certification implements Serializable {
     private Boolean passed = Boolean.FALSE; // 是否通过
     private Date start_time; // 开始时间
     private Date end_time; // 结束时间
-    @ManyToOne(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER, targetEntity = User.class, optional = false)
+    @ManyToOne(cascade = {CascadeType.MERGE}, targetEntity = User.class, optional = false)
     private User user;
     private String license; // 营业执照 或 机构名称
     private String img; // 申请文件

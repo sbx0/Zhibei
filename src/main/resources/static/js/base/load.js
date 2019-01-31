@@ -1,7 +1,7 @@
 // 加载公用的js库
 // Vue.js 2.5.22
-// document.write("<script src=\"js/lib/vue_2_5_22.js\"></script>");
-document.write("<script src=\"/js/lib/vue_dev-2.5.22.js\"></script>");
+document.write("<script src=\"/js/lib/vue-2.5.22.js\"></script>");
+// document.write("<script src=\"/js/lib/vue_dev-2.5.22.js\"></script>");
 // jQuery 3.3.1
 document.write("<script src=\"/js/lib/jquery-3.3.1.min.js\"></script>");
 // popper 1.12.9

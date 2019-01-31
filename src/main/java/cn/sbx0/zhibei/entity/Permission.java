@@ -40,7 +40,7 @@ public class Permission implements Serializable {
     private String str; // 权限字符串
     @Column(nullable = false)
     private Boolean available = Boolean.FALSE; // 是否可用
-    @ManyToOne(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER, targetEntity = Permission.class)
+    @ManyToOne(cascade = {CascadeType.MERGE}, targetEntity = Permission.class)
     private Permission father; // 父亲
 
     public static long getSerialVersionUID() {

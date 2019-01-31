@@ -25,9 +25,9 @@ public class Role implements Serializable {
     private String introduction; // 介绍
     @Column(nullable = false)
     private Boolean available = Boolean.FALSE; // 是否可用
-    @ManyToOne(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER, targetEntity = Role.class)
+    @ManyToOne(cascade = {CascadeType.MERGE}, targetEntity = Role.class)
     private Role father; //  父亲
-    @ManyToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER, targetEntity = Permission.class)
+    @ManyToMany(cascade = {CascadeType.MERGE},fetch = FetchType.EAGER, targetEntity = Permission.class)
     private List<Permission> permissions; // 权限
 
     public static long getSerialVersionUID() {

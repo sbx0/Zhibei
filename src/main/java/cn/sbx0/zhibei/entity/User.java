@@ -44,7 +44,7 @@ public class User implements Serializable {
     @Column(length = 50)
     private String email; // 邮箱
     @JsonView(Admin.class)
-    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Role.class)
+    @ManyToOne(cascade = {CascadeType.MERGE}, targetEntity = Role.class)
     private Role role; // 角色
 
     /**

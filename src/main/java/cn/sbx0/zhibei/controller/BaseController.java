@@ -65,6 +65,8 @@ public abstract class BaseController<T, ID> {
     @ResponseBody
     @GetMapping("/list")
     public ObjectNode list(Integer page, Integer size, HttpSession session, HttpServletRequest request) {
+        if (page == null) page = 1;
+        if (size == null) size = 10;
         json = mapper.createObjectNode();
         User user = userService.getUser(session, request);
         if (user != null) {
@@ -79,6 +81,10 @@ public abstract class BaseController<T, ID> {
                     }
 //                    json.set(tList.get(0).getClass().getSimpleName().toLowerCase(), jsons);
                     json.set("objects", jsons);
+                    json.put("total_pages", tPage.getTotalPages());
+                    json.put("total_elements", tPage.getTotalElements());
+                    json.put("page", page);
+                    json.put("size", size);
                 }
                 json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
             } else {

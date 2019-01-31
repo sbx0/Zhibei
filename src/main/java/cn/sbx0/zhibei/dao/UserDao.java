@@ -1,6 +1,8 @@
 package cn.sbx0.zhibei.dao;
 
 import cn.sbx0.zhibei.entity.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
@@ -10,6 +12,15 @@ import java.util.List;
  * 基础用户 数据层
  */
 public interface UserDao extends PagingAndSortingRepository<User, Integer> {
+    /**
+     * 重写分页查询版查询全部
+     *
+     * @param pageable
+     * @return
+     */
+    @Query(value = "SELECT * FROM users", nativeQuery = true)
+    Page<User> findAll(Pageable pageable);
+
     /**
      * 查询某用户名是否存在
      *
