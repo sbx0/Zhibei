@@ -6,7 +6,7 @@ var main = new Vue({
             name: i18N.loading,
         },
         login_or_register: true, // 用于登陆与注册之间切换
-        not_login: true, // 用于登陆与注册之间切换
+        not_login: true, // 是否登陆
     },
     components: {},
     methods: {

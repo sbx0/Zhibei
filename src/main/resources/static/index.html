@@ -1,15 +1,16 @@
-<html lang="en">
+<html lang="en" xmlns:v-modal="http://www.w3.org/1999/xhtml">
 <head>
 
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
 
     <link rel="stylesheet" href="css/lib/bootstrap.css">
     <link rel="stylesheet" href="css/lib/common.css">
-    <link rel="stylesheet" href="css/lib/icon.css">
+    <link rel="stylesheet" href="css/lib/link.css">
+    <link rel="stylesheet" href="css/lib/style.css">
     <link rel="stylesheet" href="css/custom.css">
 
-    <title>首页测试</title>
+    <title>首页</title>
 
 </head>
 <body>
@@ -19,34 +20,60 @@
         <div class="container">
             <!-- logo -->
             <div class="aw-logo hidden-xs">
-                <a href="#"></a>
+                <a href="/index.html"></a>
             </div>
             <!-- end logo -->
             <!-- 搜索框 -->
             <div class="aw-search-box  hidden-xs hidden-sm">
-                <form class="navbar-search" action="search/" id="global_search_form" method="post">
-                    <label class="oldPwdTip aw-search-query-label" for="search_input">
-                        搜索问题、话题或人
-                    </label>
-                    <input id="search_input" class="form-control search-query" type="text"/>
-                    <span title="搜索" id="global_search_btns" onClick="$('#global_search_form').submit();">
-                    <i class="icon icon-search"></i>
-                </span>
-                    <div class="aw-dropdown">
+                <form class="navbar-search" action="" id="global_search_form" method="post">
+                    <input class="form-control search-query"
+                           type="text"
+                           id="search_input_nav_bar"
+                           v-model="search_keyword"
+                           :placeholder="i18N.search_message"/>
+                    <span :title="i18N.search" id="global_search_btns">
+                        <i class="fas fa-search"></i>
+                    </span>
+                    <div class="aw-dropdown" :style="{display:search_result_show}">
                         <div class="mod-body">
-                            <p class="title">输入关键字进行搜索</p>
-                            <ul class="aw-dropdown-list collapse"></ul>
-                            <p class="search">
-                                <span>搜索</span>
-                                <a onClick="$('#global_search_form').submit();">
-                                    test
-                                </a>
+                            <!--<p class="title">测试搜索标题</p>-->
+                            <ul class="aw-dropdown-list collapse" :style="{display:search_list_show}">
+                                <li class="user clearfix" v-for="user in search_user_data">
+                                    <a :href="'/user/'+user.id">
+                                        <img :src="user.img">
+                                        {{user.name}}
+                                        <span class="aw-hide-txt">{{user.desc}}</span>
+                                    </a>
+                                </li>
+                                <li class="topic clearfix" v-for="topic in search_topic_data">
+                                    <span class="topic-tag">
+                                        <a :href="topic.id" class="text">
+                                            {{topic.name}}
+                                        </a>
+                                    </span>
+                                    <span class="pull-right text-color-999">
+                                        {{topic.number}} {{i18N.comment}}
+                                    </span>
+                                </li>
+                                <li class="question clearfix" v-for="question in search_question_data">
+                                    <i class="icon icon-bestbg pull-left"></i>
+                                    <a class="aw-hide-txt pull-left" :href="question.id">
+                                        {{question.title}}
+                                    </a>
+                                    <span class="pull-right text-color-999">{{question.comment_number}} {{i18N.replay}}</span>
+                                </li>
+                            </ul>
+                            <p class="search" style="display: block;">
+                                <span>{{i18N.search}}:</span>
+                                <a>{{search_keyword}}</a>
                             </p>
                         </div>
                         <div class="mod-footer">
-                            <a href="#" onClick="$('#header_publish').click();"
-                               class="pull-right btn btn-mini btn-success publish">
-                                发起问题
+                            <a href="javascript:;"
+                               class="pull-right btn btn-mini btn-success publish"
+                               data-toggle="modal"
+                               data-target="#myModal">
+                                {{i18N.ask_question}}
                             </a>
                         </div>
                     </div>
@@ -64,51 +91,30 @@
                 </div>
                 <nav role="navigation" class="collapse navbar-collapse bs-navbar-collapse">
                     <ul class="nav navbar-nav">
-                        <li>
-                            <a href="/login.html">
-                                <i class="icon icon-column"></i>
-                                登陆
+                        <li v-for="url in i18N.nav_data">
+                            <a :href="url.path">
+                                <span v-html="url.icon"></span>
+                                {{url.text}}
                             </a>
                         </li>
                         <li>
-                            <a href="/admin">
-                                <i class="icon icon-column"></i>
-                                后台
+                            <a href="notifications">
+                                <i class="fas fa-bell"></i>
+                                {{i18N.notification}}
                             </a>
-                        </li>
-                        <li>
-                            <a href="column/">
-                                <i class="icon icon-column"></i>
-                                发现
-                            </a>
-                        </li>
-                        <li>
-                            <a href="column/">
-                                <i class="icon icon-column"></i>
-                                话题
-                            </a>
-                        </li>
-                        <li>
-                            <!--<a href="notifications/" class="active">-->
-                            <a href="notifications/">
-                                <i class="icon icon-bell"></i>
-                                通知
-                            </a>
-                            <span class="badge badge-important" style="display:none"
-                                  id="notifications_unread">
-                            213123
+                            <span class="badge badge-important" style="display:block" id="notifications_unread">
+                            999+
                         </span>
                             <div class="aw-dropdown pull-right hidden-xs">
                                 <div class="mod-body">
                                     <ul id="header_notification_list">
-                                        <li>123</li>
-                                        <li>123</li>
-                                        <li>123</li>
-                                        <li>123</li>
+                                        <li v-for="notification in notification_data">
+                                            <a :href="notification.id">{{notification.title}}</a>
+                                        </li>
                                     </ul>
                                 </div>
                                 <div class="mod-footer">
-                                    <a href="notifications/">查看全部</a>
+                                    <a href="notifications/">{{i18N.read_more}}</a>
                                 </div>
                             </div>
                         </li>
@@ -116,10 +122,10 @@
                             <a style="font-weight:bold;">· · ·</a>
                             <div class="dropdown-list pull-right">
                                 <ul id="extensions-nav-list">
-                                    <li>
-                                        <a href="ticket/" class="active">
-                                            <i class="icon icon-order"></i>
-                                            123
+                                    <li v-for="url in i18N.nav_more_data">
+                                        <a :href="url.path">
+                                            <span v-html="url.icon"></span>
+                                            {{url.text}}
                                         </a>
                                     </li>
                                 </ul>
@@ -132,52 +138,44 @@
             <!-- 用户栏 -->
             <div class="aw-user-nav">
                 <!-- 登陆&注册栏 -->
-                <a href="" class="aw-user-nav-dropdown">
-                    <img alt="" src="img/avatar-min-img.png"/>
-                    <span class="badge badge-important">123</span>
-                </a>
-                <div class="aw-dropdown dropdown-list pull-right">
-                    <ul class="aw-dropdown-list">
-                        <li><a href="inbox/"><i class="icon icon-inbox"></i>私信<span
-                                class="badge badge-important collapse"
-                                id="inbox_unread">0</span></a></li>
-                        <li class="hidden-xs"><a href="account/setting/profile/"><i class="icon icon-setting"></i>
-                            设置</a>
-                        </li>
-                        <li><a href="account/logout/"><i class="icon icon-logout"></i>退出</a></li>
-                    </ul>
+                <div v-show="!not_login">
+                    <a href="" class="aw-user-nav-dropdown">
+                        <img alt="" src="img/avatar-min-img.png"/>
+                        <span class="badge badge-important">999+</span>
+                    </a>
+                    <div class="aw-dropdown dropdown-list pull-right">
+                        <ul class="aw-dropdown-list">
+                            <li v-for="url in i18N.nav_user_data">
+                                <a :href="url.path">
+                                    <span v-html="url.icon"></span>
+                                    {{url.text}}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-                <!--<a class="login btn btn-normal btn-primary" href="account/login/">登录</a>-->
-                <!--<a class="register btn btn-normal btn-success" href="account/register/">注册</a>-->
+                <a v-show="not_login" class="login btn btn-normal btn-primary" href="/login.html">
+                    {{i18N.login}}
+                </a>
+                <a v-show="not_login" class="register btn btn-normal btn-success" href="/login.html">
+                    {{i18N.register}}
+                </a>
                 <!-- end 登陆&注册栏 -->
             </div>
             <!-- end 用户栏 -->
             <!-- 发起 -->
-            <div class="aw-publish-btn">
-                <a id="header_publish" class="btn-primary">
-                    <i class="icon icon-ask"></i>
-                    发起
+            <div v-show="!not_login" class="aw-publish-btn">
+                <a id="header_publish" class="btn-primary" data-toggle="modal" data-target="#myModal">
+                    <i class="fas fa-bullhorn"></i>
+                    {{i18N.post}}
                 </a>
                 <div class="dropdown-list pull-right">
                     <ul>
-                        <li>
-                            <form method="post" action="publish/">
-                                <input type="hidden" value="" name="topics[]"/>
-                                <a onclick="$(this).parents('form').submit();">问题</a>
-                            </form>
-                        </li>
-                        <li><a href="publish/category-reward">悬赏</a></li>
-                        <li>
-                            <form method="post" action="publish/article/">
-                                <input type="hidden" value="" name="topics[]"/>
-                                <a onclick="$(this).parents('form').submit();">文章</a>
-                            </form>
-                        </li>
-                        <li>
-                            <form method="post" action="publish/suggest/">
-                                <input type="hidden" value="" name="topics[]"/>
-                                <a onclick="$(this).parents('form').submit();">建议</a>
-                            </form>
+                        <li v-for="url in i18N.nav_post_data">
+                            <a :href="url.path">
+                                <span v-html="url.icon"></span>
+                                {{url.text}}
+                            </a>
                         </li>
                     </ul>
                 </div>
@@ -185,255 +183,320 @@
             <!-- end 发起 -->
         </div>
     </div>
-    <div class="aw-email-verify">
+
+    <div class="aw-email-verify" hidden>
         <div class="container text-center">
             <a onclick="">你的邮箱还未验证, 点击这里重新发送验证邮件</a>
         </div>
     </div>
 
     <div class="aw-container-wrap">
-        <div class="container">
+        <div class="container category">
             <div class="row">
-                <div class="aw-content-wrap clearfix">
-                    <div class="col-sm-12 col-md-9 aw-main-content">
-                        <!-- 新消息通知 -->
-                        <div class="aw-mod aw-notification-box collapse" id="index_notification">
-                            <div class="mod-head common-head">
-                                <h2>
-                                <span class="pull-right">
-                                    <a href="account/setting/privacy/#notifications" class="text-color-999">
-                                        <i class="icon icon-setting"></i>
-                                        通知设置
-                                    </a>
-                                </span>
-                                    <i class="icon icon-bell"></i>
-                                    新通知
-                                    <em class="badge badge-important" name="notification_unread_num">123</em>
-                                </h2>
-                            </div>
-                            <div class="mod-body">
-                                <ul id="notification_list"></ul>
-                            </div>
-                            <div class="mod-footer clearfix">
-                                <a href="javascript:;"
-                                   class="pull-left btn btn-mini btn-default">我知道了</a>
-                                <a href="notifications/"
-                                   class="pull-right btn btn-mini btn-success">查看所有</a>
-                            </div>
-                        </div>
-                        <!-- end 新消息通知 -->
-
-                        <a name="c_contents"></a>
-                        <div class="aw-mod clearfix">
-                            <div class="mod-head common-head">
-                                <h2 id="main_title" style="float: left;">最新动态</h2>
-                                <h4 id="main_profit"
-                                    style="float: right;line-height: 60px;display: none;">累计收益123</h4>
-                                <div style="clear: both;"></div>
-                            </div>
-
-                            <div class="mod-body aw-feed-list clearfix" id="main_contents"></div>
-
-                            <div class="mod-footer">
-                                <!-- 加载更多内容 -->
-                                <a id="bp_more" class="aw-load-more-content" data-page="0">
-                                    <span>更多</span>
-                                </a>
-                                <!-- end 加载更多内容 -->
-                            </div>
-                        </div>
-                    </div>
-                    <!-- 侧边栏 -->
-                    <div class="col-sm-12 col-md-3 aw-side-bar hidden-xs hidden-sm">
-                        <div class="aw-mod new-announce collapse" id="aw-site-announce">
-                            <div class="mod-head">
-                                <h3>
-                                    <a class="pull-right" href="javascript:;">
-                                        <i class="icon icon-delete text-color-999"></i>
-                                    </a>
-                                    公告
-                                </h3>
-                            </div>
-                            <div class="mod-body">
-                                site_announce
-                            </div>
-                        </div>
-
-                        <div class="aw-mod side-nav">
-                            <div class="mod-body">
-                                <ul>
-                                    <li>
-                                        <a href="home/#all" rel="all"><i class="icon icon-home"></i>
-                                            最新动态
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="home/#draft_list__draft" rel="draft_list__draft">
-                                            <i class="icon icon-draft"></i>
-                                            我的草稿
-                                            <span class="badge">123</span>
-                                        </a>
-                                    </li>
-                                    <li><a href="favorite/" class="active">
-                                        <i class="icon icon-favor"></i>
-                                        我的收藏</a>
-                                    </li>
-                                    <li>
-                                        <a href="home/#all__focus" rel="all__focus">
-                                            <i class="icon icon-check"></i>
-                                            我关注的问题
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="home/#focus_topic__focus" rel="focus_topic__focus">
-                                            <i class="icon icon-mytopic"></i>
-                                            我关注的话题
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="home/#focus_column__focus" rel="focus_column__focus">
-                                            <i class="icon icon-mytopic"></i>
-                                            我关注的专栏
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="home/#invite_list__invite" rel="invite_list__invite">
-                                            <i class="icon icon-invite"></i>
-                                            邀请我回复的问题
-                                            <span class="badge">
-                                            123
-                                        </span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="home/#initiated_consultation" rel="initiated_consultation">
-                                            <i class="icon icon-mytopic"></i>
-                                            我发起的咨询
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="home/#get_consultation" rel="get_consultation">
-                                            <i class="icon icon-mytopic"></i>
-                                            我收到的咨询
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div class="aw-mod side-nav">
-                            <div class="mod-body">
-                                <ul>
-                                    <li>
-                                        <a href="topic/">
-                                            <i class="icon icon-topic"></i>
-                                            所有话题
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="people/">
-                                            <i class="icon icon-user"></i>
-                                            所有用户
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="consult/piazza/"><i class="icon icon-cart"></i>
-                                            咨询广场
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="invitation/" class="active">
-                                            <i class="icon icon-inviteask"></i>
-                                            邀请好友加入
-                                            <em class="badge">123</em>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <!-- 可能感兴趣的人/或话题 -->
-                        <div class="aw-mod interest-user">
-                            <div class="mod-head">
-                                <h3>可能感兴趣的人或话题</h3>
-                            </div>
-                            <div class="mod-body">
-                                <dl>
-                                    <dt class="pull-left aw-border-radius-5">
-                                        <a href="">
-                                            <img alt="" src="img/avatar-min-img.png"/>
-                                        </a>
-                                    </dt>
-                                    <dd class="pull-left">
-                                    <span class="topic-tag">
-                                        <a href="topic/" class="text">
-                                            123
-                                        </a>
-                                    </span>
-                                        &nbsp;
-                                        <a class="icon-inverse follow tooltips icon icon-plus" data-placement="bottom"
-                                           title=""
-                                           data-toggle="tooltip" data-original-title="关注">
-                                        </a>
-                                        <p><?php if ($val['focus_users']['user_name']) { ?><a
-                                                href="people/<?php echo $val['focus_users']['url_token']; ?>"
-                                                class="aw-user-name"
-                                                data-id="<?php echo $val['focus_users']['uid']; ?>"><?php echo $val['focus_users']['user_name']; ?></a>
-                                            关注了该话题<?php } ?>
-                                        </p>
-                                    </dd>
-                                </dl>
-                                <dl>
-                                    <dt class="pull-left aw-border-radius-5">
-                                        <a href="people/"
-                                           data-id=""
-                                           class="aw-user-name">
-                                            <img alt="" src="img/avatar-min-img.png"/>
-                                        </a>
-                                    </dt>
-                                    <dd class="pull-left">
-                                        <a href="people/" class="aw-user-name">
-                                            <span>123</span>
-                                            <i class="icon-v i-ve"
-                                               title="企业认证 个人认证"></i>
-                                        </a>
-                                        <a class="icon-inverse follow tooltips icon icon-plus" data-placement="bottom"
-                                           title=""
-                                           data-toggle="tooltip" data-original-title="关注"
-                                           onclick=""></a>
-                                        <p class="signature"></p>
-                                        <p>
-                                            <a href="people/"
-                                               class="aw-user-name"
-                                               data-id="">123</a>
-                                            关注了 TA
-                                            <a>123</a>
-                                        </p>
-                                    </dd>
-                                </dl>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- end 侧边栏 -->
+                <div class="col-sm-12">
+                    <ul class="list">
+                        <li v-for="url in i18N.category_data">
+                            <a :href="url.path">
+                                <span v-html="url.icon"></span>
+                                {{url.text}}
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="aw-footer-wrap">
-        <div class="aw-footer">
-            智贝科技有限公司 2019</span>
-            <!--<div class="container">-->
-            <!--<div class="row">-->
-            <!--<p align="center">版本切换: <b>PC版</b> | <a href="m/ignore_ua_check-FALSE">手机版</a></p>-->
-            <!--</div>-->
-            <!--</div>-->
+    <div class="container">
+        <div class="row">
+            <div class="aw-content-wrap clearfix">
+                <div class="col-sm-12 col-md-9 aw-main-content">
+                    <!-- 新消息通知 -->
+                    <div class="aw-mod aw-notification-box collapse" id="index_notification" style="display: block;">
+                        <div class="mod-head common-head">
+                            <h2>
+                                <span class="pull-right">
+                                    <a href="#" class="text-color-999">
+                                        <i class="icon icon-setting"></i>
+                                        {{i18N.notification}}{{i18N.setting}}
+                                    </a>
+                                </span>
+                                <i class="fas fa-bell"></i>
+                                {{i18N.notification}}
+                                <em class="badge badge-important" name="notification_unread_num">1</em>
+                            </h2>
+                        </div>
+                        <div class="mod-body">
+                            <ul id="notification_list">
+                                <li>
+                                    <p>
+                                        这是测试版首页，除了登陆注册，和查看后台，其他都还没做。
+                                    </p>
+                                    <p>
+                                        你可以点击导航条的搜索栏，会显示出基本样式，也可以输入任何字符，页面会发生变化，但暂时只是本地变化。
+                                        你可以点击查看
+                                        <a href="/js/index.js">index.js</a>,
+                                        <a href="/js/i18N/i18N_zh_CN.js">i18N_zh_CN.js</a>
+                                        ，从而知道所有页面数据都写在js中，这为我们之后的动态页面改造打好基础。
+                                    </p>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="mod-footer clearfix">
+                            <a href="javascript:;" class="pull-left btn btn-mini btn-gray">
+                                {{i18N.i_know}}
+                            </a>
+                            <a href="#" class="pull-right btn btn-mini btn-success">
+                                {{i18N.read_more}}
+                            </a>
+                        </div>
+                    </div>
+                    <!-- end 新消息通知 -->
+                    <!-- tab切换 -->
+                    <ul class="nav nav-tabs aw-nav-tabs active hidden-xs">
+                        <li v-for="url in i18N.tab_data">
+                            <a :href="url.path">
+                                <span v-html="url.icon"></span>
+                                {{url.text}}
+                            </a>
+                        </li>
+                        <h2 class="hidden-xs">
+                            <i class="fas fa-question"></i>
+                            {{i18N.discover}}
+                        </h2>
+                    </ul>
+                    <!-- end tab切换 -->
+
+                    <div class="aw-mod aw-explore-list">
+                        <div class="mod-body">
+                            <div class="aw-common-list">
+                                <div class="aw-item active" v-for="question in question_data">
+                                    <a class="aw-user-name hidden-xs" href="#" rel="nofollow">
+                                        <img src="/img/avatar-min-img.png" alt=""/>
+                                    </a>
+                                    <div class="aw-question-content">
+                                        <h4>
+                                            <a href="#">
+                                                {{question.title}}
+                                            </a>
+                                        </h4>
+                                        <a href="#" class="pull-right text-color-999">
+                                            {{i18N.replay}}
+                                        </a>
+                                        <p>
+                                            <a class="aw-question-tags" :href="question.category.id">
+                                                {{question.category.name}}
+                                            </a>
+                                            •
+                                            <a :href="question.user.id" class="aw-user-name">
+                                                {{question.user.name}}
+                                            </a>
+                                            <span class="text-color-999">
+                                                {{i18N.post}}{{i18N.question}}
+                                                •
+                                                {{question.watch}}{{i18N.watch}}
+                                                •
+                                                {{question.replay}}{{i18N.replay}}
+                                                •
+                                                {{question.view}}{{i18N.view}}
+                                                •
+                                                {{question.time}}
+                                            </span>
+                                        </p>
+
+                                    </div>
+                                </div>
+                                <div class="aw-item article" v-for="article in article_data">
+                                    <a class="aw-user-name hidden-xs" href="#" rel="nofollow">
+                                        <img src="/img/avatar-min-img.png" alt=""/>
+                                    </a>
+                                    <div class="aw-question-content">
+                                        <h4>
+                                            <a :href="article.id">
+                                                {{article.title}}
+                                            </a>
+                                        </h4>
+
+                                        <p>
+                                            <a class="aw-question-tags" :href="article.category.id">
+                                                {{article.category.name}}
+                                            </a>
+                                            •
+                                            <a :href="article.user.id" class="aw-user-name">
+                                                {{article.user.name}}
+                                            </a>
+                                            <span class="text-color-999">
+                                                {{i18N.post}}{{i18N.article}}
+                                                •
+                                                {{article.watch}}{{i18N.watch}}
+                                                •
+                                                {{article.replay}}{{i18N.replay}}
+                                                •
+                                                {{article.view}}{{i18N.view}}
+                                                •
+                                                {{article.time}}
+                                            </span>
+                                        </p>
+
+                                        <!-- 文章内容调用 -->
+                                        <div class="markitup-box">
+                                            <img src="http://wenda.wecenter.com/uploads/article/20190130/b03c50852ae894fea0fb9e4b59aa0948.png"
+                                                 class="img-polaroid pull-left inline-img"
+                                                 title="微信截图_20190130161417.png" alt="微信截图_20190130161417.png">
+                                            <div class="img pull-right"></div>
+                                            {{article.content}}
+                                            <a class="more" href="#">{{i18N.read_more}}</a>
+                                        </div>
+                                        <!--<div class="collapse all-content"></div>-->
+                                        <!-- end 文章内容调用 -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mod-footer">
+                            <div class="page-control">
+                                <ul class="pagination pull-right">
+                                    <li class="active"><a href="javascript:;">1</a></li>
+                                    <li>
+                                        <a href="#">2</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">3</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">4</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">&gt;</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">&gt;&gt;</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 侧边栏 -->
+                <div class="col-sm-12 col-md-3 aw-side-bar hidden-xs hidden-sm">
+                    <div class="aw-mod aw-text-align-justify">
+                        <div class="mod-head">
+                            <a href="http://wenda.wecenter.com/topic/channel-hot" class="pull-right">
+                                {{i18N.more}}
+                                &gt;
+                            </a>
+                            <h3>
+                                {{i18N.hot}}{{i18N.topic}}
+                            </h3>
+                        </div>
+                        <div class="mod-body">
+                            <dl v-for="topic in hot_topic_data">
+                                <dt class="pull-left aw-border-radius-5">
+                                    <a href="#">
+                                        <img alt="" src="http://wenda.wecenter.com/static/common/topic-mid-img.png"/>
+                                    </a>
+                                </dt>
+                                <dd class="pull-left">
+                                    <p class="clearfix">
+                                        <span class="topic-tag">
+                                            <a href="#" class="text">
+                                                {{topic.name}}
+                                            </a>
+                                        </span>
+                                    </p>
+                                    <p>
+                                        <b>{{topic.question}}</b>
+                                        {{i18N.question}},
+                                        <b>{{topic.watch}}</b>
+                                        {{i18N.watch}}
+                                    </p>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                    <div class="aw-mod aw-text-align-justify">
+                        <div class="mod-head">
+                            <a href="#" class="pull-right">
+                                {{i18N.more}}
+                                &gt;
+                            </a>
+                            <h3>{{i18N.hot}}{{i18N.user}}</h3>
+                        </div>
+                        <div class="mod-body">
+                            <dl v-for="user in hot_user_data">
+                                <dt class="pull-left aw-border-radius-5">
+                                    <a href="#">
+                                        <img alt="" :src="user.img"/>
+                                    </a>
+                                </dt>
+                                <dd class="pull-left">
+                                    <a href="#" class="aw-user-name">
+                                        {{user.name}}
+                                    </a>
+                                    <p class="signature"></p>
+                                    <p>
+                                        <b>{{user.question}}</b>
+                                        {{i18N.question}},
+                                        <b>{{user.like}}</b>
+                                        {{i18N.watch}}
+                                    </p>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+                <!-- end 侧边栏 -->
+            </div>
         </div>
     </div>
 
+    <div class="aw-footer-wrap">
+        <div class="aw-footer" v-html="i18N.foot_html"></div>
+    </div>
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <a type="button" class="close icon icon-delete" data-dismiss="modal" aria-hidden="true"></a>
+                    <h4 class="modal-title" id="myModalLabel">{{i18N.post}}{{i18N.question}}</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Email address</label>
+                            <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Email">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Password</label>
+                            <input type="text" class="form-control" id="exampleInputPassword1"
+                                   placeholder="Password">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputFile">File input</label>
+                            <input type="file" id="exampleInputFile">
+                            <p class="help-block">Example block-level help text here.</p>
+                        </div>
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox"> Check me out
+                            </label>
+                        </div>
+                    </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
 </div>
 
 <script src="js/base/load.js"></script>
+<script src="js/lib/bootstrap-3.4.0.min.js"></script>
 <script src="js/index.js"></script>
 </body>
 </html>

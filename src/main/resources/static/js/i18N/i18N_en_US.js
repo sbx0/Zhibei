@@ -1,6 +1,6 @@
 // i18N Configuration File - English
 var i18N = {
-    website_name: "Zhibei",
+    website_name: "ZhiBei",
     admin_management_system: "AMS",
     logout: "Logout",
     search: "Search",
@@ -25,13 +25,58 @@ var i18N = {
     result: "Result",
     is: "Is",
     null: "Null",
+    comment: "Comment",
+    replay: "Replay",
+    ask_question: "Ask Question",
+    notification: "Notification",
+    read_more: "Read More",
+    message: "Message",
+    post: "Post",
+    i_know: "I know",
+    setting: "Setting",
+    discover: "Discover",
+    view: "View",
+    watch: "Watch",
+    article: "Article",
+    hot: "Hot",
+    more: "More",
+    topic: "Topic",
+    question: "Question",
 
     lib: lib,
     nav_data: [
         {id: 1, text: "Index", path: "../index.html", icon: "<i class=\"fas fa-home\"></i>"},
         {id: 2, text: "Login", path: "../login.html", icon: "<i class=\"fas fa-home\"></i>"},
-        {id: 3, text: "Admin", path: "../admin", icon: "<i class=\"fas fa-home\"></i>"}
+        {id: 3, text: "TestPage", path: "#", icon: "<i class=\"fas fa-sign-in-alt\"></i>"},
+        {id: 4, text: "TestPage", path: "#", icon: "<i class=\"fas fa-sign-in-alt\"></i>"},
     ],
+    nav_more_data: [
+        {id: 1, text: "Admin", path: "/admin", icon: "<i class=\"fas fa-lock\"></i>"},
+    ],
+    nav_user_data: [
+        {id: 1, text: "Message", path: "#", icon: "<i class=\"fas fa-comments\"></i>"},
+        {id: 2, text: "Setting", path: "#", icon: "<i class=\"fas fa-wrench\"></i>"},
+        {id: 3, text: "Logout", path: "/user/logout", icon: "<i class=\"fas fa-sign-out-alt\"></i>"},
+    ],
+    nav_post_data: [
+        {id: 1, text: "Question", path: "#", icon: "<i class=\"fas fa-question\"></i>"},
+        {id: 2, text: "Reward", path: "#", icon: "<i class=\"fas fa-award\"></i>"},
+        {id: 3, text: "Article", path: "#", icon: "<i class=\"far fa-newspaper\"></i>"},
+        {id: 4, text: "Advice", path: "#", icon: "<i class=\"fas fa-comment-medical\"></i>"},
+    ],
+    category_data: [
+        {id: 1, text: "All", path: "#", icon: "<i class=\"fas fa-question\"></i>"},
+        {id: 2, text: "Nice", path: "#", icon: "<i class=\"fas fa-award\"></i>"},
+        {id: 3, text: "Publish", path: "#", icon: "<i class=\"far fa-newspaper\"></i>"},
+        {id: 4, text: "Advice", path: "#", icon: "<i class=\"fas fa-comment-medical\"></i>"},
+    ],
+    tab_data: [
+        {id: 1, text: "Newest", path: "#", icon: "<i class=\"fas fa-question\"></i>"},
+        {id: 2, text: "Hottest", path: "#", icon: "<i class=\"fas fa-award\"></i>"},
+        {id: 3, text: "Reward", path: "#", icon: "<i class=\"fas fa-award\"></i>"},
+        {id: 4, text: "NoReplay", path: "#", icon: "<i class=\"far fa-newspaper\"></i>"},
+    ],
+    foot_html: "ZhiBei 2019",
     table: {
         user: "User Table",
         role: "Role Table",

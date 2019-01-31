@@ -21,17 +21,68 @@ var i18N = {
     error_message: "页面发生错误",
     admin_message: "这里是管理员界面",
     login_message: "已登录",
+    search_message: "输入关键字进行搜索",
     loading: "加载中",
     result: "结果",
     is: "为",
     null: "空",
+    comment: "评论",
+    replay: "回复",
+    ask_question: "发起问题",
+    notification: "通知",
+    read_more: "查看更多",
+    message: "私信",
+    post: "发布",
+    i_know: "我知道了",
+    setting: "设置",
+    discover: "发现",
+    view: "浏览",
+    watch: "关注",
+    article: "文章",
+    hot: "热门",
+    more: "更多",
+    topic: "话题",
+    question: "问题",
 
     lib: lib,
     nav_data: [
-        {id: 1, text: "首页", path: "../index.html", icon: "<i class=\"fas fa-home\"></i>"},
-        {id: 2, text: "登陆", path: "../login.html", icon: "<i class=\"fas fa-home\"></i>"},
-        {id: 3, text: "后台", path: "../admin", icon: "<i class=\"fas fa-home\"></i>"},
+        {id: 1, text: "首页", path: "/index.html", icon: "<i class=\"fas fa-home\"></i>"},
+        {id: 2, text: "登陆", path: "/login.html", icon: "<i class=\"fas fa-sign-in-alt\"></i>"},
+        {id: 3, text: "测试", path: "#", icon: "<i class=\"fas fa-sign-in-alt\"></i>"},
+        {id: 4, text: "测试", path: "#", icon: "<i class=\"fas fa-sign-in-alt\"></i>"},
     ],
+    nav_more_data: [
+        {id: 1, text: "后台", path: "/admin", icon: "<i class=\"fas fa-lock\"></i>"},
+    ],
+    nav_user_data: [
+        {id: 1, text: "私信", path: "#", icon: "<i class=\"fas fa-comments\"></i>"},
+        {id: 2, text: "设置", path: "#", icon: "<i class=\"fas fa-wrench\"></i>"},
+        {id: 3, text: "退出", path: "/user/logout", icon: "<i class=\"fas fa-sign-out-alt\"></i>"},
+    ],
+    nav_post_data: [
+        {id: 1, text: "问题", path: "#", icon: "<i class=\"fas fa-question\"></i>"},
+        {id: 2, text: "悬赏", path: "#", icon: "<i class=\"fas fa-award\"></i>"},
+        {id: 3, text: "文章", path: "#", icon: "<i class=\"far fa-newspaper\"></i>"},
+        {id: 4, text: "建议", path: "#", icon: "<i class=\"fas fa-comment-medical\"></i>"},
+    ],
+    category_data: [
+        {id: 1, text: "全部", path: "#", icon: "<i class=\"fas fa-question\"></i>"},
+        {id: 2, text: "精选", path: "#", icon: "<i class=\"fas fa-award\"></i>"},
+        {id: 3, text: "公告", path: "#", icon: "<i class=\"far fa-newspaper\"></i>"},
+        {id: 4, text: "建议", path: "#", icon: "<i class=\"fas fa-comment-medical\"></i>"},
+    ],
+    tab_data: [
+        {id: 1, text: "最新", path: "#", icon: "<i class=\"fas fa-question\"></i>"},
+        {id: 2, text: "热门", path: "#", icon: "<i class=\"fas fa-award\"></i>"},
+        {id: 3, text: "悬赏", path: "#", icon: "<i class=\"fas fa-award\"></i>"},
+        {id: 4, text: "等待回复", path: "#", icon: "<i class=\"far fa-newspaper\"></i>"},
+    ],
+    foot_html: "智贝科技有限公司 2019\n" +
+        "<!--<div class=\"container\">-->\n" +
+        "<!--<div class=\"row\">-->\n" +
+        "<!--<p align=\"center\">版本切换: <b>PC版</b> | <a href=\"m/ignore_ua_check-FALSE\">手机版</a></p>-->\n" +
+        "<!--</div>-->\n" +
+        "<!--</div>-->",
     table: {
         user: "用户表",
         role: "角色表",
