@@ -30,16 +30,16 @@ var main = new Vue({
                 value: "certification",
                 data: {},
             },
+            file: {
+                name: i18N.table.file,
+                value: "file",
+                data: {},
+            },
         },
         query_data: {}
     },
     components: {},
-    methods: {
-        page_control: function (event) {
-            alert(this.href);
-            return false;
-        }
-    },
+    methods: {},
     create: function () {
 
     }

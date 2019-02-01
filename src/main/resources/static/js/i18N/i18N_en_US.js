@@ -94,6 +94,7 @@ var i18N = {
         role: "Role Table",
         permission: "Permission Table",
         certification: "Certification Table",
+        file: "File Table",
     },
     alert: {
         empty: "Empty",

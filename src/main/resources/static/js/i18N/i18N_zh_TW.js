@@ -94,6 +94,7 @@ var i18N = {
         role: "角色表",
         permission: "權限表",
         certification: "申請表",
+        file: "文件表",
     },
     alert: {
         empty: "為空",

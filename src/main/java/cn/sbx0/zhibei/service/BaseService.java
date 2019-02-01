@@ -538,7 +538,7 @@ public abstract class BaseService<T, ID> {
      *
      * @param domain 域名 从配置文件中读取
      */
-    @Value("${sbx0.DOMAIN}")
+    @Value("${config.DOMAIN}")
     public void setDomain(String domain) {
         DOMAIN = domain;
     }
@@ -549,7 +549,7 @@ public abstract class BaseService<T, ID> {
      *
      * @param key 从配置文件中读取
      */
-    @Value("${sbx0.KEY}")
+    @Value("${config.KEY}")
     public void setKEY(String key) {
         KEY = key;
     }
