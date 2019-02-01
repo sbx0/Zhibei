@@ -33,11 +33,14 @@ var main = new Vue({
                     } else {
                         alert(statusCodeToAlert(status));
                     }
+                    return false;
                 },
                 error: function () {
                     alert(i18N.network + i18N.alert.error);
+                    return false;
                 }
             });
+            return false;
         },
         register: function () {
             var check_username = checkStrIsIllegal($("#register_username").val());
@@ -75,11 +78,14 @@ var main = new Vue({
                     if (statusCodeToBool(status)) {
                         main.login_or_register = !main.login_or_register;
                     }
+                    return false;
                 },
                 error: function () {
                     alert(i18N.network + i18N.alert.error);
+                    return false;
                 }
             });
+            return false;
         }
     },
     create: function () {

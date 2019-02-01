@@ -1,5 +1,6 @@
 // i18N配置文件 - 简体中文
 var i18N = {
+    user: "用户",
     website_name: "智贝",
     admin_management_system: "后台管理系统",
     logout: "退出登录",
@@ -43,6 +44,9 @@ var i18N = {
     more: "更多",
     topic: "话题",
     question: "问题",
+    page_number: "页数",
+    total_elements: "总条数",
+    page_size: "每页条数",
 
     lib: lib,
     m_nav_data: [
@@ -56,7 +60,6 @@ var i18N = {
         {id: 1, text: "首页", path: "/index.html", icon: "<i class=\"fas fa-home\"></i>"},
         {id: 2, text: "登陆", path: "/login.html", icon: "<i class=\"fas fa-sign-in-alt\"></i>"},
         {id: 3, text: "测试", path: "#", icon: "<i class=\"fas fa-sign-in-alt\"></i>"},
-        {id: 4, text: "测试", path: "#", icon: "<i class=\"fas fa-sign-in-alt\"></i>"},
     ],
     nav_more_data: [
         {id: 1, text: "后台", path: "/admin", icon: "<i class=\"fas fa-lock\"></i>"},
@@ -85,12 +88,7 @@ var i18N = {
         {id: 3, text: "悬赏", path: "#", icon: "<i class=\"fas fa-award\"></i>"},
         {id: 4, text: "等待回复", path: "#", icon: "<i class=\"far fa-newspaper\"></i>"},
     ],
-    foot_html: "智贝科技有限公司 2019\n" +
-        "<!--<div class=\"container\">-->\n" +
-        "<!--<div class=\"row\">-->\n" +
-        "<!--<p align=\"center\">版本切换: <b>PC版</b> | <a href=\"m/ignore_ua_check-FALSE\">手机版</a></p>-->\n" +
-        "<!--</div>-->\n" +
-        "<!--</div>-->",
+    foot_html: "智贝科技有限公司 2019",
     table: {
         user: "用户表",
         role: "角色表",

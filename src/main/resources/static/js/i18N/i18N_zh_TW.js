@@ -1,5 +1,6 @@
 // i18N配置文件 - 繁體中文
 var i18N = {
+    user: "用戶",
     website_name: "智貝",
     admin_management_system: "後台管理系統",
     logout: "退出登錄",
@@ -43,16 +44,26 @@ var i18N = {
     more: "更多",
     topic: "話題",
     question: "問題",
+    page_number: "頁數",
+    total_elements: "總條數",
+    page_size: "每頁條數",
 
     lib: lib,
-    nav_data: [
+    m_nav_data: [
         {id: 1, text: "首頁", path: "/index.html", icon: "<i class=\"fas fa-home\"></i>"},
         {id: 2, text: "登陸", path: "/login.html", icon: "<i class=\"fas fa-sign-in-alt\"></i>"},
         {id: 3, text: "測試", path: "#", icon: "<i class=\"fas fa-sign-in-alt\"></i>"},
         {id: 4, text: "測試", path: "#", icon: "<i class=\"fas fa-sign-in-alt\"></i>"},
+        {id: 5, text: "我", path: "#", icon: "<i class=\"fas fa-sign-in-alt\"></i>"},
+    ],
+    nav_data: [
+        {id: 1, text: "首頁", path: "/index.html", icon: "<i class=\"fas fa-home\"></i>"},
+        {id: 2, text: "登陸", path: "/login.html", icon: "<i class=\"fas fa-sign-in-alt\"></i>"},
+        {id: 3, text: "測試", path: "#", icon: "<i class=\"fas fa-sign-in-alt\"></i>"},
     ],
     nav_more_data: [
         {id: 1, text: "後台", path: "/admin", icon: "<i class=\"fas fa-lock\"></i>"},
+        {id: 2, text: "手機版", path: "/m/index.html", icon: "<i class=\"fas fa-lock\"></i>"},
     ],
     nav_user_data: [
         {id: 1, text: "私信", path: "#", icon: "<i class=\"fas fa-comments\"></i>"},
@@ -77,12 +88,7 @@ var i18N = {
         {id: 3, text: "懸賞", path: "#", icon: "<i class=\"fas fa-award\"></i>"},
         {id: 4, text: "等待回复", path: "#", icon: "<i class=\"far fa-newspaper\"></i>"},
     ],
-    foot_html: "智貝科技有限公司 2019\n" +
-        "<!--<div class=\"container\">-->\n" +
-        "<!--<div class=\"row\">-->\n" +
-        "<!--<p align=\"center\">版本切換: <b>PC版</b> | <a href=\"m/ignore_ua_check-FALSE\">手機版</a></ p>-->\n" +
-        "<!--</div>-->\n" +
-        "<!--</div>-->",
+    foot_html: "智貝科技有限公司 2019",
     table: {
         user: "用戶表",
         role: "角色表",

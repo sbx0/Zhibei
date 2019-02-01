@@ -1,5 +1,6 @@
 // i18N Configuration File - English
 var i18N = {
+    user: "User",
     website_name: "ZhiBei",
     admin_management_system: "AMS",
     logout: "Logout",
@@ -21,6 +22,7 @@ var i18N = {
     error_message: "This is error page",
     admin_message: "This is admin page",
     login_message: "Already login",
+    search_message: "Please Input Keywords To Search",
     loading: "Loading",
     result: "Result",
     is: "Is",
@@ -42,16 +44,26 @@ var i18N = {
     more: "More",
     topic: "Topic",
     question: "Question",
+    page_number: "PageNumber",
+    total_elements: "TotalElements",
+    page_size: "PageSize",
 
     lib: lib,
+    m_nav_data: [
+        {id: 1, text: "Index", path: "/index.html", icon: "<i class=\"fas fa-home\"></i>"},
+        {id: 2, text: "Login", path: "/login.html", icon: "<i class=\"fas fa-sign-in-alt\"></i>"},
+        {id: 3, text: "Test", path: "#", icon: "<i class=\"fas fa-sign-in-alt\"></i>"},
+        {id: 4, text: "Test", path: "#", icon: "<i class=\"fas fa-sign-in-alt\"></i>"},
+        {id: 5, text: "My", path: "#", icon: "<i class=\"fas fa-sign-in-alt\"></i>"},
+    ],
     nav_data: [
         {id: 1, text: "Index", path: "../index.html", icon: "<i class=\"fas fa-home\"></i>"},
         {id: 2, text: "Login", path: "../login.html", icon: "<i class=\"fas fa-home\"></i>"},
-        {id: 3, text: "TestPage", path: "#", icon: "<i class=\"fas fa-sign-in-alt\"></i>"},
-        {id: 4, text: "TestPage", path: "#", icon: "<i class=\"fas fa-sign-in-alt\"></i>"},
+        {id: 3, text: "Test", path: "#", icon: "<i class=\"fas fa-sign-in-alt\"></i>"},
     ],
     nav_more_data: [
         {id: 1, text: "Admin", path: "/admin", icon: "<i class=\"fas fa-lock\"></i>"},
+        {id: 2, text: "Mobile", path: "/m/index.html", icon: "<i class=\"fas fa-lock\"></i>"},
     ],
     nav_user_data: [
         {id: 1, text: "Message", path: "#", icon: "<i class=\"fas fa-comments\"></i>"},
@@ -90,13 +102,13 @@ var i18N = {
         error: 'Error',
     },
     status: [
-        "Successful operation",
-        "operation failed",
+        "Successful Operation",
+        "Operation Failed",
         "Error",
-        "Not logged in",
+        "Not Login",
         "Exceed the limit",
-        "Parameter is not legal",
-        "No permission",
-        "Repeat operation"
+        "Parameter Is Not Legal",
+        "No Permission",
+        "Repeat Operation"
     ],
 };

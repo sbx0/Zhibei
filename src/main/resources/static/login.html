@@ -57,8 +57,8 @@
                     <li class="clearfix">
                         <button id="login_btn"
                                 class="btn btn-large btn-blue btn-block"
-                                type="button"
-                                v-on:click="login">
+                                type="submit"
+                                v-on:click.prevent="login">
                             {{i18N.login}}
                         </button>
                         <a href="javascript:history.go(-1);" class="btn btn-sm btn-default btn-block" role="button">
@@ -119,8 +119,8 @@
                     <li class="clearfix">
                         <button id="register_btn"
                                 class="btn btn-large btn-blue btn-block"
-                                type="button"
-                                v-on:click="register">
+                                type="submit"
+                                v-on:click.prevent="register">
                             {{i18N.register}}
                         </button>
                         <a href="javascript:history.go(-1);" class="btn btn-sm btn-default btn-block" role="button">

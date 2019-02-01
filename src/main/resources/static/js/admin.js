@@ -3,6 +3,7 @@ var main = new Vue({
     data: {
         i18N: i18N,
         not_login: true,
+        table: "user",
         index: 1,
         page: 1,
         size: 10,
@@ -33,7 +34,12 @@ var main = new Vue({
         query_data: {}
     },
     components: {},
-    methods: {},
+    methods: {
+        page_control: function (event) {
+            alert(this.href);
+            return false;
+        }
+    },
     create: function () {
 
     }
@@ -42,6 +48,17 @@ var main = new Vue({
 // 从链接获取参数
 main.page = getQueryVariable("page");
 main.size = getQueryVariable("size");
+var table = getQueryVariable("table");
+if (table != null) {
+    $("#table_select").val(table);
+}
+// 初始化查询
+query();
+// 语言下拉栏选中
+var i18N_config = getCookie("i18N_config")
+if (i18N_config != "") {
+    $("#i18N_select").val(getCookie("i18N_config"));
+}
 
 // 页码选择修改
 $("#page_size_select").change(function () {
@@ -49,15 +66,16 @@ $("#page_size_select").change(function () {
     main.page = 1;
     query();
 });
-
-// 初始化查询
-query();
-
 // 切换表
 $("#table_select").change(function () {
     main.size = $("#page_size_select").val();
     main.page = 1;
     query();
+});
+// 语言切换
+$("#i18N_select").change(function () {
+    setCookie("i18N_config", $("#i18N_select").val(), 30);
+    refresh();
 });
 
 // 查询表
@@ -68,6 +86,7 @@ function query() {
     if (main.size == null) {
         main.size = 10;
     }
+    main.table = $("#table_select").val();
     $.ajax({
         type: "get",
         url: "../" + $("#table_select").val() + "/list?page=" + main.page + "&size=" + main.size,
@@ -92,23 +111,6 @@ function query() {
         }
     });
 }
-
-// 登陆与注册之间界面切换
-function login_or_register() {
-    main.login_or_register = !main.login_or_register;
-}
-
-// 语言下拉栏选中
-var i18N_config = getCookie("i18N_config")
-if (i18N_config != "") {
-    $("#i18N_select").val(getCookie("i18N_config"));
-}
-
-// 语言切换
-$("#i18N_select").change(function () {
-    setCookie("i18N_config", $("#i18N_select").val(), 30);
-    refresh();
-});
 
 // 切换语言时title也会切换
 $(function () {

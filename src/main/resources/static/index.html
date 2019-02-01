@@ -453,6 +453,11 @@
 
     <div class="aw-footer-wrap">
         <div class="aw-footer" v-html="i18N.foot_html"></div>
+        <div align="center" class="mb-50">
+            <select id="i18N_select">
+                <option :value="option.name" v-for="option in i18N.lib">{{option.value}}</option>
+            </select>
+        </div>
     </div>
 
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
