@@ -4,15 +4,11 @@ import cn.sbx0.zhibei.entity.UploadFile;
 import cn.sbx0.zhibei.entity.User;
 import cn.sbx0.zhibei.service.BaseService;
 import cn.sbx0.zhibei.service.UploadFileService;
-import cn.sbx0.zhibei.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -24,20 +20,20 @@ import java.util.Date;
 /**
  * 文件上传 服务层
  */
-@RequestMapping("/file")
 @Controller
+@RequestMapping("/file")
 public class UploadFileController extends BaseController<UploadFile, Integer> {
     @Resource
     private UploadFileService uploadFileService;
 
-    @Autowired
-    public UploadFileController(ObjectMapper mapper) {
-        this.mapper = mapper;
-    }
-
     @Override
     public BaseService<UploadFile, Integer> getService() {
         return uploadFileService;
+    }
+
+    @Autowired
+    public UploadFileController(ObjectMapper mapper) {
+        this.mapper = mapper;
     }
 
     /**
@@ -101,7 +97,7 @@ public class UploadFileController extends BaseController<UploadFile, Integer> {
         if (userService.checkPermission(request, user)) {
             UploadFile uploadFile = uploadFileService.md5Check(md5File);
             if (uploadFile != null) {
-                json.put(STATUS_NAME, STATUS_CODE_FILED);
+                json.put(STATUS_NAME, STATUS_CODE_REPEAT);
                 json.put("oName", uploadFile.getOriginalName());
                 json.put("name", uploadFile.getName());
                 json.put("type", uploadFile.getType());
@@ -134,7 +130,7 @@ public class UploadFileController extends BaseController<UploadFile, Integer> {
         // 未登录 直接否
         if (user == null) return false;
         // 无权限 直接否
-        if (userService.checkPermission(request, user)) return false;
+        if (!userService.checkPermission(request, user)) return false;
         Boolean exist = false;
         String path = uploadFileService.getPath() + "/temp/" + md5File + "/";//分片存放目录
         String chunkName = chunk + ".tmp";//分片名
@@ -167,7 +163,7 @@ public class UploadFileController extends BaseController<UploadFile, Integer> {
         // 未登录 直接否
         if (user == null) return false;
         // 无权限 直接否
-        if (userService.checkPermission(request, user)) return false;
+        if (!userService.checkPermission(request, user)) return false;
         String path = uploadFileService.getPath() + "/temp/" + md5File + "/";
         File dirFile = new File(path);
         if (!dirFile.exists()) { // 目录不存在，创建目录
@@ -210,7 +206,7 @@ public class UploadFileController extends BaseController<UploadFile, Integer> {
                             @RequestParam(value = "name") String name,
                             HttpSession session,
                             HttpServletRequest request) throws Exception {
-        ObjectNode json = mapper.createObjectNode();
+        json = mapper.createObjectNode();
         // 从cookie中获取登陆用户信息
         User user = userService.getUser(session, request);
         // 未登录
@@ -219,7 +215,7 @@ public class UploadFileController extends BaseController<UploadFile, Integer> {
             return json;
         }
         // 无权限
-        if (userService.checkPermission(request, user)) {
+        if (!userService.checkPermission(request, user)) {
             json.put(STATUS_NAME, STATUS_CODE_NO_PERMISSION);
             return json;
         }
@@ -275,6 +271,44 @@ public class UploadFileController extends BaseController<UploadFile, Integer> {
         File newFile = new File(uploadFileService.getPath() + filePath);
         uploadFile.setSize(newFile.length());
         uploadFileService.save(uploadFile);
+        return json;
+    }
+
+    /**
+     * 上传文件后将上传的文件设置为头像
+     *
+     * @param md5File
+     * @param session
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    @ResponseBody
+    @GetMapping("/avatar")
+    public ObjectNode avatar(
+            @RequestParam(value = "md5File") String md5File,
+            HttpSession session,
+            HttpServletRequest request) throws Exception {
+        json = mapper.createObjectNode();
+        User user = userService.getUser(session, request);
+        // 未登录
+        if (user == null) {
+            json.put(STATUS_NAME, STATUS_CODE_NOT_LOGIN);
+            return json;
+        }
+        // 无权限
+        if (!userService.checkPermission(request, user)) {
+            json.put(STATUS_NAME, STATUS_CODE_NO_PERMISSION);
+            return json;
+        }
+        UploadFile uploadFile = uploadFileService.md5Check(md5File);
+        if (uploadFile != null) {
+            user.setAvatar("/upload/" + uploadFile.getType() + "/" + uploadFile.getName());
+            userService.save(user);
+            json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
+        } else {
+            json.put(STATUS_NAME, STATUS_CODE_FILED);
+        }
         return json;
     }
 

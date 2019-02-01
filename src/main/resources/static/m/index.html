@@ -28,7 +28,7 @@
             <div v-show="!not_login">
                 <a href="#">
                     {{user.name}}
-                    <img src="../img/avatar-min-img.png" alt="" class="img" width="25">
+                    <img :src="user.avatar" alt="" class="img" width="25">
                 </a>
             </div>
         </span>

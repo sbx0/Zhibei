@@ -1,0 +1,321 @@
+<html lang="en">
+<head>
+
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+
+    <link rel="stylesheet" href="css/lib/bootstrap.css">
+    <link rel="stylesheet" href="css/lib/common.css">
+    <link rel="stylesheet" href="css/lib/link.css">
+    <link rel="stylesheet" href="css/lib/user-setting.css">
+    <link rel="stylesheet" href="css/lib/webuploader.css">
+    <link rel="stylesheet" href="css/custom.css">
+
+    <title>设置</title>
+
+</head>
+<body>
+<div id="main" v-cloak>
+
+    <div class="aw-top-menu-wrap">
+        <div class="container">
+            <!-- logo -->
+            <div class="aw-logo hidden-xs">
+                <a href="/index.html"></a>
+            </div>
+            <!-- end logo -->
+            <!-- 搜索框 -->
+            <div class="aw-search-box  hidden-xs hidden-sm">
+                <form class="navbar-search" action="" id="global_search_form" method="post">
+                    <input class="form-control search-query"
+                           type="text"
+                           id="search_input_nav_bar"
+                           v-model="search_keyword"
+                           :placeholder="i18N.search_message"/>
+                    <span :title="i18N.search" id="global_search_btns">
+                        <i class="fas fa-search"></i>
+                    </span>
+                    <div class="aw-dropdown" :style="{display:search_result_show}">
+                        <div class="mod-body">
+                            <!--<p class="title">测试搜索标题</p>-->
+                            <ul class="aw-dropdown-list collapse" :style="{display:search_list_show}">
+                                <li class="user clearfix" v-for="user in search_user_data">
+                                    <a :href="'/user/'+user.id">
+                                        <img :src="user.img">
+                                        {{user.name}}
+                                        <span class="aw-hide-txt">{{user.desc}}</span>
+                                    </a>
+                                </li>
+                                <li class="topic clearfix" v-for="topic in search_topic_data">
+                                    <span class="topic-tag">
+                                        <a :href="topic.id" class="text">
+                                            {{topic.name}}
+                                        </a>
+                                    </span>
+                                    <span class="pull-right text-color-999">
+                                        {{topic.number}} {{i18N.comment}}
+                                    </span>
+                                </li>
+                                <li class="question clearfix" v-for="question in search_question_data">
+                                    <i class="icon icon-bestbg pull-left"></i>
+                                    <a class="aw-hide-txt pull-left" :href="question.id">
+                                        {{question.title}}
+                                    </a>
+                                    <span class="pull-right text-color-999">{{question.comment_number}} {{i18N.replay}}</span>
+                                </li>
+                            </ul>
+                            <p class="search" style="display: block;">
+                                <span>{{i18N.search}}:</span>
+                                <a>{{search_keyword}}</a>
+                            </p>
+                        </div>
+                        <div class="mod-footer">
+                            <a href="javascript:void(0);"
+                               class="pull-right btn btn-mini btn-success publish"
+                               data-toggle="modal"
+                               data-target="#myModal">
+                                {{i18N.ask_question}}
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- end 搜索框 -->
+            <!-- 导航 -->
+            <div class="aw-top-nav navbar">
+                <div class="navbar-header">
+                    <button class="navbar-toggle pull-left">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <nav role="navigation" class="collapse navbar-collapse bs-navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li v-for="url in i18N.nav_data">
+                            <a :href="url.path">
+                                <span v-html="url.icon"></span>
+                                {{url.text}}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="notifications">
+                                <i class="fas fa-bell"></i>
+                                {{i18N.notification}}
+                            </a>
+                            <span class="badge badge-important" style="display:block" id="notifications_unread">
+                            999+
+                        </span>
+                            <div class="aw-dropdown pull-right hidden-xs">
+                                <div class="mod-body">
+                                    <ul id="header_notification_list">
+                                        <li v-for="notification in notification_data">
+                                            <a :href="notification.id">{{notification.title}}</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="mod-footer">
+                                    <a href="notifications/">{{i18N.read_more}}</a>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <a style="font-weight:bold;">· · ·</a>
+                            <div class="dropdown-list pull-right">
+                                <ul id="extensions-nav-list">
+                                    <li v-for="url in i18N.nav_more_data">
+                                        <a :href="url.path">
+                                            <span v-html="url.icon"></span>
+                                            {{url.text}}
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <!-- end 导航 -->
+            <!-- 用户栏 -->
+            <div class="aw-user-nav">
+                <!-- 登陆&注册栏 -->
+                <div v-show="!not_login">
+                    <a href="" class="aw-user-nav-dropdown">
+                        <img alt="" :src="user.avatar"/>
+                        <span class="badge badge-important">999+</span>
+                    </a>
+                    <div class="aw-dropdown dropdown-list pull-right">
+                        <ul class="aw-dropdown-list">
+                            <li v-for="url in i18N.nav_user_data">
+                                <a :href="url.path">
+                                    <span v-html="url.icon"></span>
+                                    {{url.text}}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <a v-show="not_login" class="login btn btn-normal btn-primary" href="/login.html">
+                    {{i18N.login}}
+                </a>
+                <a v-show="not_login" class="register btn btn-normal btn-success" href="/login.html">
+                    {{i18N.register}}
+                </a>
+                <!-- end 登陆&注册栏 -->
+            </div>
+            <!-- end 用户栏 -->
+            <!-- 发起 -->
+            <div v-show="!not_login" class="aw-publish-btn">
+                <a id="header_publish" class="btn-primary" data-toggle="modal" data-target="#myModal">
+                    <i class="fas fa-bullhorn"></i>
+                    {{i18N.post}}
+                </a>
+                <div class="dropdown-list pull-right">
+                    <ul>
+                        <li v-for="url in i18N.nav_post_data">
+                            <a :href="url.path">
+                                <span v-html="url.icon"></span>
+                                {{url.text}}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- end 发起 -->
+        </div>
+    </div>
+
+    <div class="aw-email-verify" hidden>
+        <div class="container text-center">
+            <a onclick="">你的邮箱还未验证, 点击这里重新发送验证邮件</a>
+        </div>
+    </div>
+
+    <div class="aw-container-wrap">
+        <div class="container">
+            <div class="row">
+                <div class="aw-content-wrap clearfix">
+                    <div class="aw-user-setting">
+                        <div class="tabbable">
+                            <ul class="nav nav-tabs aw-nav-tabs active">
+                                <li class="active">
+                                    <a href="#">{{i18N.personal}}{{i18N.information}}</a>
+                                </li>
+                                <h2>
+                                    <i class="fas fa-wrench"></i></i>
+                                    {{i18N.setting}}
+                                </h2>
+                            </ul>
+                        </div>
+
+                        <div class="tab-content clearfix">
+                            <!-- 个人资料 -->
+                            <div class="aw-mod">
+                                <div class="mod-body">
+                                    <div class="aw-mod mod-base">
+                                        <div class="mod-head">
+                                            <h3>{{i18N.information}}</h3>
+                                        </div>
+                                        <form id="setting_form" method="post" ction="">
+                                            <div class="mod-body">
+                                                <dl>
+                                                    <dt>{{i18N.username}}:</dt>
+                                                    <dd class="introduce">
+                                                        <input class="form-control" type="text" :value="user.name">
+                                                    </dd>
+                                                </dl>
+                                                <dl>
+                                                    <dt>{{i18N.email}}:</dt>
+                                                    <dd class="introduce">
+                                                        <input class="form-control" type="email" :value="user.email">
+                                                    </dd>
+                                                </dl>
+                                                <dl>
+                                                    <dt><label>{{i18N.introduction}}:</label></dt>
+                                                    <dd class="introduce">
+                                                        <input class="form-control" name="signature" maxlength="128" type="text" value="">
+                                                    </dd>
+                                                </dl>
+                                                <!-- 上传头像 -->
+                                                <div class="side-bar">
+                                                    <dl>
+                                                        <dt class="pull-left">
+                                                            <!--<img-->
+                                                                    <!--class="aw-border-radius-5"-->
+                                                                    <!--:src="user.avatar"-->
+                                                            <!--/>-->
+                                                        </dt>
+                                                        <dd class="pull-left">
+                                                            <h5>{{i18N.avatar}}{{i18N.setting}}</h5>
+                                                            <div id="uploader" class="wu-example mb-3">
+                                                                <!--用来存放文件信息-->
+                                                                <div id="thelist" class="uploader-list"></div>
+                                                                <div class="btns">
+                                                                    <div id="picker">{{i18N.upload}}{{i18N.avatar}}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </dd>
+                                                    </dl>
+                                                </div>
+                                                <!-- end 上传头像 -->
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <!-- end 基本信息 -->
+                                </div>
+                                <div class="mod-footer clearfix">
+                                    <a href="javascript:void(0);"
+                                       class="btn btn-large btn-success pull-right"
+                                    >
+                                        {{i18N.save}}
+                                    </a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="aw-footer-wrap">
+        <div class="aw-footer" v-html="i18N.foot_html"></div>
+        <div align="center" class="mb-50">
+            <select id="i18N_select">
+                <option :value="option.name" v-for="option in i18N.lib">{{option.value}}</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <a type="button" class="close icon icon-delete" data-dismiss="modal" aria-hidden="true"></a>
+                    <h4 class="modal-title" id="myModalLabel">{{i18N.post}}{{i18N.question}}</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+
+                    </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<script src="js/base/load.js"></script>
+<script src="js/lib/bootstrap-3.4.0.min.js"></script>
+<script src="js/lib/md5.js"></script>
+<script src="js/lib/webuploader.min.js"></script>
+<script src="js/setting.js"></script>
+</body>
+</html>

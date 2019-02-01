@@ -1,6 +1,5 @@
 package cn.sbx0.zhibei.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -43,6 +42,11 @@ public class User implements Serializable {
     @JsonView(Admin.class)
     @Column(length = 50)
     private String email; // 邮箱
+    @JsonView(Normal.class)
+    private String avatar; // 头像
+    @JsonView(Admin.class)
+    @Column(columnDefinition = "enum('male','female','none')")
+    private String sex; // 类型 [男|女|空]
     @JsonView(Admin.class)
     @ManyToOne(cascade = {CascadeType.MERGE}, targetEntity = Role.class)
     private Role role; // 角色
@@ -129,6 +133,22 @@ public class User implements Serializable {
         this.email = email;
     }
 
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
     public Role getRole() {
         return role;
     }
@@ -148,6 +168,8 @@ public class User implements Serializable {
                 ", banned=" + banned +
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", sex='" + sex + '\'' +
                 ", role=" + role +
                 '}';
     }

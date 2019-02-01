@@ -47,6 +47,14 @@ var i18N = {
     page_number: "PageNumber",
     total_elements: "TotalElements",
     page_size: "PageSize",
+    personal: "Personal",
+    information: "Information",
+    email: "Email",
+    introduction: "Introduction",
+    avatar: "Avatar",
+    upload: "Upload",
+    uploading: "Uploading",
+    save: "Save",
 
     lib: lib,
     m_nav_data: [
@@ -67,7 +75,7 @@ var i18N = {
     ],
     nav_user_data: [
         {id: 1, text: "Message", path: "#", icon: "<i class=\"fas fa-comments\"></i>"},
-        {id: 2, text: "Setting", path: "#", icon: "<i class=\"fas fa-wrench\"></i>"},
+        {id: 2, text: "Setting", path: "/setting.html", icon: "<i class=\"fas fa-wrench\"></i>"},
         {id: 3, text: "Logout", path: "/user/logout", icon: "<i class=\"fas fa-sign-out-alt\"></i>"},
     ],
     nav_post_data: [

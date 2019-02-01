@@ -125,7 +125,6 @@ public class UserService extends BaseService<User, Integer> {
      * @param user
      * @return
      */
-    @Transactional
     public User login(User user) {
         user.setName(BaseService.killHTML(user.getName()));
         // 密码加密

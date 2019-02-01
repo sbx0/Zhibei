@@ -28,11 +28,15 @@ public class UploadFileService extends BaseService<UploadFile, Integer> {
         return uploadFileDao;
     }
 
-    @Value("${config.UploadFileFolder}")
     public String path; // 上传路径
 
     public String getPath() {
         return path;
+    }
+
+    @Value("${config.UploadFileFolder}")
+    public void setPath(String path) {
+        this.path = path;
     }
 
     public boolean deleteFile(UploadFile uploadFile) {
@@ -210,6 +214,7 @@ public class UploadFileService extends BaseService<UploadFile, Integer> {
     public String checkType(String ext) {
         switch (ext) {
             case ".jpg":
+            case ".jpeg":
             case ".png":
             case ".gif":
             case ".bmp":

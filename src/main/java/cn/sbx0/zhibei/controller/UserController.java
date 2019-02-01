@@ -63,7 +63,7 @@ public class UserController extends BaseController<User, Integer> {
      * @param request
      * @return
      */
-    @JsonView(User.Normal.class)
+    @JsonView(User.Admin.class)
     @ResponseBody
     @GetMapping("/info")
     public ObjectNode info(HttpSession session, HttpServletRequest request) {
@@ -150,7 +150,6 @@ public class UserController extends BaseController<User, Integer> {
         u.setRegisterTime(new Date());
         json = mapper.createObjectNode();
         try {
-
             if (userService.save(u)) {
                 json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
             } else {

@@ -140,7 +140,7 @@
                 <!-- 登陆&注册栏 -->
                 <div v-show="!not_login">
                     <a href="" class="aw-user-nav-dropdown">
-                        <img alt="" src="img/avatar-min-img.png"/>
+                        <img alt="" :src="user.avatar"/>
                         <span class="badge badge-important">999+</span>
                     </a>
                     <div class="aw-dropdown dropdown-list pull-right">

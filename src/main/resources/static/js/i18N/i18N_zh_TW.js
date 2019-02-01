@@ -47,6 +47,14 @@ var i18N = {
     page_number: "頁數",
     total_elements: "總條數",
     page_size: "每頁條數",
+    personal: "個人",
+    information: "資料",
+    email: "郵箱",
+    introduction: "簡介",
+    avatar: "頭像",
+    upload: "上傳",
+    uploading: "上傳中",
+    save: "保存",
 
     lib: lib,
     m_nav_data: [
@@ -67,7 +75,7 @@ var i18N = {
     ],
     nav_user_data: [
         {id: 1, text: "私信", path: "#", icon: "<i class=\"fas fa-comments\"></i>"},
-        {id: 2, text: "設置", path: "#", icon: "<i class=\"fas fa-wrench\"></i>"},
+        {id: 2, text: "設置", path: "/setting.html", icon: "<i class=\"fas fa-wrench\"></i>"},
         {id: 3, text: "退出", path: "/user/logout", icon: "<i class=\"fas fa-sign-out-alt\"></i>"},
     ],
     nav_post_data: [
