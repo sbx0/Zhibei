@@ -55,6 +55,9 @@ var i18N = {
     upload: "上传",
     uploading: "上传中",
     save: "保存",
+    desktop: "桌面",
+    mobile: "手机",
+    version: "版本",
 
     lib: lib,
     m_nav_data: [
@@ -71,7 +74,7 @@ var i18N = {
     ],
     nav_more_data: [
         {id: 1, text: "后台", path: "/admin", icon: "<i class=\"fas fa-lock\"></i>"},
-        {id: 2, text: "手机版", path: "/m/index.html", icon: "<i class=\"fas fa-lock\"></i>"},
+        {id: 2, text: "手机版", path: "/m/index.html?no_redirect=true", icon: "<i class=\"fas fa-lock\"></i>"},
     ],
     nav_user_data: [
         {id: 1, text: "私信", path: "#", icon: "<i class=\"fas fa-comments\"></i>"},

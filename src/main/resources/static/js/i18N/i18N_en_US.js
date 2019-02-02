@@ -55,6 +55,9 @@ var i18N = {
     upload: "Upload",
     uploading: "Uploading",
     save: "Save",
+    desktop: "Desktop",
+    mobile: "Mobile",
+    version: "Version",
 
     lib: lib,
     m_nav_data: [
@@ -71,7 +74,7 @@ var i18N = {
     ],
     nav_more_data: [
         {id: 1, text: "Admin", path: "/admin", icon: "<i class=\"fas fa-lock\"></i>"},
-        {id: 2, text: "Mobile", path: "/m/index.html", icon: "<i class=\"fas fa-lock\"></i>"},
+        {id: 2, text: "Mobile", path: "/m/index.html?no_redirect=true", icon: "<i class=\"fas fa-lock\"></i>"},
     ],
     nav_user_data: [
         {id: 1, text: "Message", path: "#", icon: "<i class=\"fas fa-comments\"></i>"},

@@ -15,26 +15,12 @@
 </head>
 <body>
 <div id="main" v-cloak>
-    <!-- header -->
-    <div class="header">
-        <a class="logo" href="/m/index.html">
-            <img src="../img/logo.png" alt="" width="52">
-        </a>
-        <span class="pull-right">
-            <div v-show="not_login">
-                <a href="../login.html" class="btn btn-mini btn-primary btn-normal">{{i18N.login}}</a>
-                <a href="../login.html" class="btn btn-mini btn-success btn-normal">{{i18N.register}}</a>
-            </div>
-            <div v-show="!not_login">
-                <a href="#">
-                    {{user.name}}
-                    <img :src="user.avatar" alt="" class="img" width="25">
-                </a>
-            </div>
-        </span>
-    </div>
-    <!-- end header -->
-    <!--分类-->
+
+    <component-header
+            :not_login="not_login"
+            :user="user"
+    ></component-header>
+
     <div class="top-category">
         <ul>
             <li v-for="url in i18N.category_data">
@@ -131,31 +117,12 @@
         </div>
     </div>
     <!--end内容-->
-    <footer class="text-center text-color-999 mb-50">
-        <span v-html="i18N.foot_html"></span>
-        <p>
-            <a href="../index.html">访问桌面版网站</a>
-        </p>
-        <div align="center">
-            <select id="i18N_select">
-                <option :value="option.name" v-for="option in i18N.lib">{{option.value}}</option>
-            </select>
-        </div>
-    </footer>
-    <div class="nav">
-        <ul>
-            <li v-for="url in i18N.m_nav_data">
-                <a :href="url.path">
-                    <div v-html="url.icon"></div>
-                    {{url.text}}
-                </a>
-            </li>
-        </ul>
-    </div>
+    <component-footer></component-footer>
+    <component-menu></component-menu>
 </div>
 
 <script src="../js/base/load.js"></script>
 <script src="../js/lib/bootstrap-3.4.0.min.js"></script>
-<script src="../js/index.js"></script>
+<script src="../js/m/index.js"></script>
 </body>
 </html>

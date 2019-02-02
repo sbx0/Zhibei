@@ -53,7 +53,10 @@ var main = new Vue({
             {id: 5, name: "测试用户5", question: "11", like: "11", img: "../img/avatar-min-img.png"},
         ],
     },
-    components: {},
+    components: {
+        "component-nav-bar": component_nav_bar,
+        "component-footer": component_footer,
+    },
     methods: {},
     create: function () {
 

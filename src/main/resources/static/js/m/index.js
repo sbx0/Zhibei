@@ -1,7 +1,7 @@
-if (browser.versions.mobile) {
+if (!browser.versions.mobile) {
     var no_redirect = getQueryVariable("no_redirect");
     if (!no_redirect) {
-        location.href = "/m/index.html"
+        location.href = "/index.html"
     }
 }
 var main = new Vue({
@@ -112,17 +112,11 @@ var main = new Vue({
             {id: 4, name: "测试热门话题4", question: "11", watch: "11", img: "../img/topic-mid-img.png"},
             {id: 5, name: "测试热门话题5", question: "11", watch: "11", img: "../img/topic-mid-img.png"},
         ],
-        hot_user_data: [
-            {id: 1, name: "测试用户1", question: "11", like: "11", img: "../img/avatar-min-img.png"},
-            {id: 2, name: "测试用户2", question: "11", like: "11", img: "../img/avatar-min-img.png"},
-            {id: 3, name: "测试用户3", question: "11", like: "11", img: "../img/avatar-min-img.png"},
-            {id: 4, name: "测试用户4", question: "11", like: "11", img: "../img/avatar-min-img.png"},
-            {id: 5, name: "测试用户5", question: "11", like: "11", img: "../img/avatar-min-img.png"},
-        ],
     },
     components: {
-        "component-nav-bar": component_nav_bar,
+        "component-header": component_header,
         "component-footer": component_footer,
+        "component-menu": component_menu,
     },
     methods: {},
     create: function () {
