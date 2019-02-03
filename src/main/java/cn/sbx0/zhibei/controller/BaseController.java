@@ -1,5 +1,6 @@
 package cn.sbx0.zhibei.controller;
 
+import cn.sbx0.zhibei.annotation.LogRecord;
 import cn.sbx0.zhibei.entity.User;
 import cn.sbx0.zhibei.service.BaseService;
 import cn.sbx0.zhibei.service.UserService;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -58,17 +58,17 @@ public abstract class BaseController<T, ID> {
      *
      * @param page
      * @param size
-     * @param session
      * @param request
      * @return
      */
+    @LogRecord
     @ResponseBody
     @GetMapping("/list")
-    public ObjectNode list(Integer page, Integer size, HttpSession session, HttpServletRequest request) {
+    public ObjectNode list(Integer page, Integer size, HttpServletRequest request) {
         if (page == null) page = 1;
         if (size == null) size = 10;
         json = mapper.createObjectNode();
-        User user = userService.getUser(session, request);
+        User user = userService.getUser(request);
         if (user != null) {
             if (userService.checkPermission(request, user)) {
                 Page<T> tPage = getService().findAll(BaseService.buildPageable(page, size, BaseService.buildSort("id", "ASC")));
@@ -102,11 +102,12 @@ public abstract class BaseController<T, ID> {
      * @param id id
      * @return 实体
      */
+    @LogRecord
     @ResponseBody
     @GetMapping("/{id}")
-    public ObjectNode one(@PathVariable("id") ID id, HttpSession session, HttpServletRequest request) {
+    public ObjectNode one(@PathVariable("id") ID id, HttpServletRequest request) {
         json = mapper.createObjectNode();
-        User user = userService.getUser(session, request);
+        User user = userService.getUser(request);
         if (user != null) {
             if (userService.checkPermission(request, user)) {
                 T t = getService().findById(id);
@@ -129,12 +130,13 @@ public abstract class BaseController<T, ID> {
      * @param t 范类
      * @return json
      */
+    @LogRecord
     @ResponseBody
     @PostMapping("/add")
-    public ObjectNode add(T t, HttpSession session, HttpServletRequest request) {
+    public ObjectNode add(T t, HttpServletRequest request) {
         json = mapper.createObjectNode();
         try {
-            User user = userService.getUser(session, request);
+            User user = userService.getUser(request);
             if (user != null) {
                 if (userService.checkPermission(request, user)) {
                     if (getService().save(t)) {
@@ -161,12 +163,13 @@ public abstract class BaseController<T, ID> {
      * @param id id
      * @return json
      */
+    @LogRecord
     @ResponseBody
     @GetMapping("/delete")
-    public ObjectNode delete(ID id, HttpSession session, HttpServletRequest request) {
+    public ObjectNode delete(ID id, HttpServletRequest request) {
         json = mapper.createObjectNode();
         try {
-            User user = userService.getUser(session, request);
+            User user = userService.getUser(request);
             if (user != null) {
                 if (userService.checkPermission(request, user)) {
                     if (getService().deleteById(id)) {

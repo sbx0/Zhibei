@@ -3,6 +3,8 @@ package cn.sbx0.zhibei.service;
 import cn.sbx0.zhibei.dao.UserDao;
 import cn.sbx0.zhibei.entity.Permission;
 import cn.sbx0.zhibei.entity.User;
+import cn.sbx0.zhibei.tool.CookieTools;
+import cn.sbx0.zhibei.tool.StringTools;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +12,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Map;
 
@@ -126,7 +127,7 @@ public class UserService extends BaseService<User, Integer> {
      * @return
      */
     public User login(User user) {
-        user.setName(BaseService.killHTML(user.getName()));
+        user.setName(StringTools.killHTML(user.getName()));
         // 密码加密
         user = encryptPassword(user);
         // 用户不存在
@@ -147,26 +148,27 @@ public class UserService extends BaseService<User, Integer> {
      * @param user
      * @return
      */
-    public User encryptPassword(User user) {
-        user.setPassword(getHash(user.getPassword() + BaseService.KEY, "MD5"));
+    User encryptPassword(User user) {
+        user.setPassword(StringTools.encryptPassword(user.getPassword()));
         return user;
     }
 
     /**
      * 根据session或cookie查找User
      */
-    public User getUser(HttpSession session, HttpServletRequest request) {
+    public User getUser(HttpServletRequest request) {
+        HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
         if (user != null && user.getId() != null) {
             return user;
         }
         // 查找是否存在cookie
-        Map<String, Cookie> cookies = BaseService.getCookiesByName(COOKIE_NAMES, request.getCookies());
+        Map<String, Cookie> cookies = CookieTools.getCookiesByName(CookieTools.COOKIE_NAMES, request.getCookies());
         if (cookies == null) return null;
         if (cookies.size() == 0) return null;
         // 为空
         for (int i = 0; i < cookies.size(); i++) {
-            if (BaseService.checkNullStr(cookies.get(COOKIE_NAMES.get(i)).getValue()))
+            if (StringTools.checkNullStr(cookies.get(CookieTools.COOKIE_NAMES.get(i)).getValue()))
                 return null;
         }
         // Cookie中的ID
@@ -176,7 +178,7 @@ public class UserService extends BaseService<User, Integer> {
         // Cookie中的用户名
         String name = cookies.get("NAME").getValue();
         // 正确的KEY
-        String check = BaseService.getKey(id);
+        String check = StringTools.getKey(id);
         // 匹配KEY
         if (!check.equals(key))
             return null;

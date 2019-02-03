@@ -1,5 +1,6 @@
 package cn.sbx0.zhibei.controller;
 
+import cn.sbx0.zhibei.annotation.LogRecord;
 import cn.sbx0.zhibei.entity.UploadFile;
 import cn.sbx0.zhibei.entity.User;
 import cn.sbx0.zhibei.service.BaseService;
@@ -13,7 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.util.Date;
 
@@ -40,25 +40,24 @@ public class UploadFileController extends BaseController<UploadFile, Integer> {
      * 删除文件
      *
      * @param id      id
-     * @param session
      * @param request
      * @return
      */
     @Override
-    public ObjectNode delete(Integer id, HttpSession session, HttpServletRequest request) {
+    public ObjectNode delete(Integer id, HttpServletRequest request) {
         UploadFile uploadFile = uploadFileService.findById(id);
         if (uploadFile == null) {
             json.put(STATUS_NAME, STATUS_CODE_NOT_FOUND);
             return json;
         } else {
             // 从cookie中获取登陆用户信息
-            User user = userService.getUser(session, request);
+            User user = userService.getUser(request);
             if (user != null) {
                 // 检测权限
                 if (userService.checkPermission(request, user)) {
                     // 先删除真实文件，后删除数据库
                     if (uploadFileService.deleteFile(uploadFile)) {
-                        return super.delete(id, session, request);
+                        return super.delete(id, request);
                     } else {
                         json.put(STATUS_NAME, STATUS_CODE_FILED);
                     }
@@ -76,18 +75,17 @@ public class UploadFileController extends BaseController<UploadFile, Integer> {
      * 1.匹配md5检查文件存在与否
      *
      * @param md5File
-     * @param session
      * @param request
      * @return
      */
-    @PostMapping("/md5Check")
+    @LogRecord
     @ResponseBody
+    @PostMapping("/md5Check")
     public ObjectNode md5Check(@RequestParam(value = "md5File") String md5File,
-                               HttpSession session,
                                HttpServletRequest request) {
         json = mapper.createObjectNode();
         // 从cookie中获取登陆用户信息
-        User user = userService.getUser(session, request);
+        User user = userService.getUser(request);
         // 未登录 直接否
         if (user == null) {
             json.put(STATUS_NAME, STATUS_CODE_NOT_LOGIN);
@@ -115,18 +113,16 @@ public class UploadFileController extends BaseController<UploadFile, Integer> {
      *
      * @param md5File
      * @param chunk
-     * @param session
      * @param request
      * @return
      */
-    @PostMapping("/chunkCheck")
     @ResponseBody
+    @PostMapping("/chunkCheck")
     public Boolean chunkCheck(@RequestParam(value = "md5File") String md5File,
                               @RequestParam(value = "chunk") Integer chunk,
-                              HttpSession session,
                               HttpServletRequest request) {
         // 从cookie中获取登陆用户信息
-        User user = userService.getUser(session, request);
+        User user = userService.getUser(request);
         // 未登录 直接否
         if (user == null) return false;
         // 无权限 直接否
@@ -147,19 +143,18 @@ public class UploadFileController extends BaseController<UploadFile, Integer> {
      * @param file
      * @param md5File
      * @param chunk
-     * @param session
      * @param request
      * @return
      */
-    @PostMapping("/upload")
+    @LogRecord
     @ResponseBody
+    @PostMapping("/upload")
     public Boolean upload(@RequestParam(value = "file") MultipartFile file,
                           @RequestParam(value = "md5File") String md5File,
                           @RequestParam(value = "chunk", required = false) Integer chunk,
-                          HttpSession session,
                           HttpServletRequest request) {
         // 从cookie中获取登陆用户信息
-        User user = userService.getUser(session, request);
+        User user = userService.getUser(request);
         // 未登录 直接否
         if (user == null) return false;
         // 无权限 直接否
@@ -194,21 +189,20 @@ public class UploadFileController extends BaseController<UploadFile, Integer> {
      * @param chunks
      * @param md5File
      * @param name
-     * @param session
      * @param request
      * @return
      * @throws Exception
      */
-    @PostMapping("/merge")
+    @LogRecord
     @ResponseBody
+    @PostMapping("/merge")
     public ObjectNode merge(@RequestParam(value = "chunks", required = false) Integer chunks,
                             @RequestParam(value = "md5File") String md5File,
                             @RequestParam(value = "name") String name,
-                            HttpSession session,
                             HttpServletRequest request) throws Exception {
         json = mapper.createObjectNode();
         // 从cookie中获取登陆用户信息
-        User user = userService.getUser(session, request);
+        User user = userService.getUser(request);
         // 未登录
         if (user == null) {
             json.put(STATUS_NAME, STATUS_CODE_NOT_LOGIN);
@@ -254,9 +248,9 @@ public class UploadFileController extends BaseController<UploadFile, Integer> {
                 file.delete();
             }
         } catch (Exception e) {
-            json.put("status", 1);
+            json.put(STATUS_NAME, STATUS_CODE_EXCEPTION);
         } finally {
-            json.put("status", 0);
+            json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
             fileOutputStream.close();
         }
         // 保存到数据库
@@ -278,19 +272,18 @@ public class UploadFileController extends BaseController<UploadFile, Integer> {
      * 上传文件后将上传的文件设置为头像
      *
      * @param md5File
-     * @param session
      * @param request
      * @return
      * @throws Exception
      */
+    @LogRecord
     @ResponseBody
     @GetMapping("/avatar")
     public ObjectNode avatar(
             @RequestParam(value = "md5File") String md5File,
-            HttpSession session,
             HttpServletRequest request) throws Exception {
         json = mapper.createObjectNode();
-        User user = userService.getUser(session, request);
+        User user = userService.getUser(request);
         // 未登录
         if (user == null) {
             json.put(STATUS_NAME, STATUS_CODE_NOT_LOGIN);

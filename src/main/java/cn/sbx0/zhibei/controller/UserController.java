@@ -1,7 +1,10 @@
 package cn.sbx0.zhibei.controller;
 
+import cn.sbx0.zhibei.annotation.LogRecord;
 import cn.sbx0.zhibei.entity.User;
 import cn.sbx0.zhibei.service.BaseService;
+import cn.sbx0.zhibei.tool.CookieTools;
+import cn.sbx0.zhibei.tool.StringTools;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -35,19 +38,19 @@ public class UserController extends BaseController<User, Integer> {
 
     @JsonView(User.Admin.class)
     @Override
-    public ObjectNode list(Integer page, Integer size, HttpSession session, HttpServletRequest request) {
-        return super.list(page, size, session, request);
+    public ObjectNode list(Integer page, Integer size, HttpServletRequest request) {
+        return super.list(page, size, request);
     }
 
     /**
      * 进入后台
      *
-     * @param session
      * @return
      */
+    @LogRecord
     @GetMapping("/admin")
-    public String admin(HttpSession session, HttpServletRequest request) {
-        User user = userService.getUser(session, request);
+    public String admin(HttpServletRequest request) {
+        User user = userService.getUser(request);
         if (user != null) {
             if (userService.checkPermission(request, user)) {
                 return "admin";
@@ -59,16 +62,16 @@ public class UserController extends BaseController<User, Integer> {
     /**
      * 查看当前登录用户基本信息
      *
-     * @param session
      * @param request
      * @return
      */
+    @LogRecord
     @JsonView(User.Admin.class)
     @ResponseBody
     @GetMapping("/info")
-    public ObjectNode info(HttpSession session, HttpServletRequest request) {
+    public ObjectNode info(HttpServletRequest request) {
         json = mapper.createObjectNode();
-        User user = userService.getUser(session, request);
+        User user = userService.getUser(request);
         if (user != null) {
             ObjectNode attr = mapper.convertValue(user, ObjectNode.class);
             json.set("user", attr);
@@ -87,12 +90,13 @@ public class UserController extends BaseController<User, Integer> {
      * @param session
      * @return
      */
+    @LogRecord
     @ResponseBody
     @PostMapping(value = "/login")
     public ObjectNode login(User user, HttpServletResponse response, HttpSession session) {
         json = mapper.createObjectNode();
         // 判断是否为空
-        if (BaseService.checkNullStr(user.getName()) || BaseService.checkNullStr(user.getPassword())) {
+        if (StringTools.checkNullStr(user.getName()) || StringTools.checkNullStr(user.getPassword())) {
             // 操作状态保存
             json.put(STATUS_NAME, STATUS_CODE_NOT_FOUND);
             return json;
@@ -102,15 +106,15 @@ public class UserController extends BaseController<User, Integer> {
         // 登陆成功
         if (user != null) {
             // 创建Cookie
-            response.addCookie(BaseService.createCookie(BaseService.COOKIE_NAMES.get(0), user.getId() + "", 30));
-            response.addCookie(BaseService.createCookie(BaseService.COOKIE_NAMES.get(1), BaseService.getKey(user.getId()), 30));
-            response.addCookie(BaseService.createCookie(BaseService.COOKIE_NAMES.get(2), user.getName(), 30));
+            response.addCookie(CookieTools.createCookie(CookieTools.COOKIE_NAMES.get(0), user.getId() + "", 30));
+            response.addCookie(CookieTools.createCookie(CookieTools.COOKIE_NAMES.get(1), StringTools.getKey(user.getId()), 30));
+            response.addCookie(CookieTools.createCookie(CookieTools.COOKIE_NAMES.get(2), user.getName(), 30));
             session.setAttribute("user", user);
             // 操作状态保存
             json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
         } else {
             // 清除Cookie
-            BaseService.removeCookies(response);
+            CookieTools.removeCookies(response);
             // 操作状态保存
             json.put(STATUS_NAME, STATUS_CODE_FILED);
         }
@@ -124,13 +128,14 @@ public class UserController extends BaseController<User, Integer> {
      * @param response
      * @return
      */
+    @LogRecord
     @GetMapping(value = "/logout")
     public String logout(HttpSession session, HttpServletResponse response) {
         try {
             // 清除session
             session.removeAttribute("user");
             // 清除Cookie
-            BaseService.removeCookies(response);
+            CookieTools.removeCookies(response);
             return "redirect:/login.html";
         } catch (Exception e) {
             return "error";
@@ -143,6 +148,7 @@ public class UserController extends BaseController<User, Integer> {
      * @param u
      * @return
      */
+    @LogRecord
     @ResponseBody
     @PostMapping("/register")
     public ObjectNode register(User u) {

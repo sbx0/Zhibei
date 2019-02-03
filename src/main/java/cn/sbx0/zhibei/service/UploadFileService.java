@@ -2,6 +2,7 @@ package cn.sbx0.zhibei.service;
 
 import cn.sbx0.zhibei.dao.UploadFileDao;
 import cn.sbx0.zhibei.entity.UploadFile;
+import cn.sbx0.zhibei.tool.StringTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -95,7 +96,7 @@ public class UploadFileService extends BaseService<UploadFile, Integer> {
         try {
             // 分页查询
             Page<UploadFile> uploadFiles;
-            if (BaseService.checkNullStr(type))
+            if (StringTools.checkNullStr(type))
                 uploadFiles = uploadFileDao.findAll(pageable);
             else {
                 switch (type) {

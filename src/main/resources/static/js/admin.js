@@ -35,6 +35,11 @@ var main = new Vue({
                 value: "file",
                 data: {},
             },
+            log: {
+                name: i18N.table.log,
+                value: "log",
+                data: {},
+            },
         },
         query_data: {}
     },

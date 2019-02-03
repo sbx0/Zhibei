@@ -108,6 +108,7 @@ var i18N = {
         permission: "权限表",
         certification: "申请表",
         file: "文件表",
+        log: "日志表",
     },
     alert: {
         empty: "为空",
