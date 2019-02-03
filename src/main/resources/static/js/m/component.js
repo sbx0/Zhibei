@@ -6,7 +6,7 @@ var component_header = {
             i18N: i18N,
         }
     },
-    template: '<div class="header">\n    <a class="logo" href="/m/index.html">\n        <img src="../img/logo.png" alt="" width="52">\n    </a>\n    <span class="pull-right">\n        <div v-show="not_login">\n            <a href="../login.html" class="btn btn-mini btn-primary btn-normal">{{i18N.login}}</a>\n            <a href="../login.html" class="btn btn-mini btn-success btn-normal">{{i18N.register}}</a>\n        </div>\n        <div v-show="!not_login">\n            <a href="#">\n                {{user.name}}\n                <img :src="user.avatar" alt="" class="img" width="25">\n            </a>\n        </div>\n    </span>\n</div>'
+    template: '<div class="header">\n    <a class="logo" href="/m/index.html">\n        <img src="../img/logo.png" alt="" width="52">\n    </a>\n    <span class="pull-right">\n        <div v-show="not_login">\n            <a href="../m/login.html" class="btn btn-mini btn-primary btn-normal">{{i18N.login}}</a>\n            <a href="../m/login.html?register=true" class="btn btn-mini btn-success btn-normal">{{i18N.register}}</a>\n        </div>\n        <div v-show="!not_login">\n            <a href="../m/setting.html">\n                {{user.name}}\n                <img :src="user.avatar" alt="" class="img" width="25">\n            </a>\n        </div>\n    </span>\n</div>'
 };
 // 尾部
 var component_footer = {

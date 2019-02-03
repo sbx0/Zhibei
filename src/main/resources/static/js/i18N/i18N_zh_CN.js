@@ -58,11 +58,13 @@ var i18N = {
     desktop: "桌面",
     mobile: "手机",
     version: "版本",
+    integral: "积分",
+    level: "等级",
 
     lib: lib,
     m_nav_data: [
-        {id: 1, text: "首页", path: "/index.html", icon: "<i class=\"fas fa-home\"></i>"},
-        {id: 2, text: "登陆", path: "/login.html", icon: "<i class=\"fas fa-sign-in-alt\"></i>"},
+        {id: 1, text: "首页", path: "/m/index.html", icon: "<i class=\"fas fa-home\"></i>"},
+        {id: 2, text: "登陆", path: "/m/index.html", icon: "<i class=\"fas fa-sign-in-alt\"></i>"},
         {id: 3, text: "测试", path: "#", icon: "<i class=\"fas fa-sign-in-alt\"></i>"},
         {id: 4, text: "测试", path: "#", icon: "<i class=\"fas fa-sign-in-alt\"></i>"},
         {id: 5, text: "我", path: "#", icon: "<i class=\"fas fa-sign-in-alt\"></i>"},

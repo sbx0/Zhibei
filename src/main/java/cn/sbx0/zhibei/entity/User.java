@@ -50,6 +50,20 @@ public class User implements Serializable {
     @JsonView(Admin.class)
     @ManyToOne(cascade = {CascadeType.MERGE}, targetEntity = Role.class)
     private Role role; // 角色
+    @JsonView(Admin.class)
+    private Date birthday; // 生日
+    @JsonView(Admin.class)
+    @Column(nullable = false, columnDefinition = "Decimal(10,1) default '0.0'")
+    private Double integral; // 积分
+    @JsonView(Normal.class)
+    @Column(nullable = false, columnDefinition = "Int(11) Default '0'")
+    private Integer level; // 用户等级
+    @JsonView(Admin.class)
+    @Column(nullable = false, columnDefinition = "Decimal(10,1) default '0.0'")
+    private double exp; // 用户经验
+    @JsonView(Admin.class)
+    @Column(nullable = false, columnDefinition = "Decimal(10,1) default '100.0'")
+    private double exp_max; // 当前等级的最大经验值，超过清空升级
 
     /**
      * 正常情况下需要转换成Json的属性
@@ -157,6 +171,46 @@ public class User implements Serializable {
         this.role = role;
     }
 
+    public Date getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
+    }
+
+    public Double getIntegral() {
+        return integral;
+    }
+
+    public void setIntegral(Double integral) {
+        this.integral = integral;
+    }
+
+    public Integer getLevel() {
+        return level;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
+    }
+
+    public double getExp() {
+        return exp;
+    }
+
+    public void setExp(double exp) {
+        this.exp = exp;
+    }
+
+    public double getExp_max() {
+        return exp_max;
+    }
+
+    public void setExp_max(double exp_max) {
+        this.exp_max = exp_max;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -171,6 +225,11 @@ public class User implements Serializable {
                 ", avatar='" + avatar + '\'' +
                 ", sex='" + sex + '\'' +
                 ", role=" + role +
+                ", birthday=" + birthday +
+                ", integral=" + integral +
+                ", level=" + level +
+                ", exp=" + exp +
+                ", exp_max=" + exp_max +
                 '}';
     }
 }

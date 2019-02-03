@@ -1,4 +1,4 @@
-if (browser.versions.mobile) {
+if (!browser.versions.mobile) {
     var no_redirect = getQueryVariable("no_redirect");
     if (!no_redirect) {
         location.href = "/m/login.html"
@@ -11,7 +11,10 @@ var main = new Vue({
         login_or_register: true, // 用于登陆与注册之间切换
         not_login: true, // 是否登陆
     },
-    components: {},
+    components: {
+        "component-footer": component_footer,
+        "component-menu": component_menu,
+    },
     methods: {
         login: function () {
             var check_username = checkStrIsIllegal($("#login_username").val());

@@ -1,7 +1,7 @@
-if (browser.versions.mobile) {
+if (!browser.versions.mobile) {
     var no_redirect = getQueryVariable("no_redirect");
     if (!no_redirect) {
-        location.href = "/m/setting.html"
+        location.href = "/setting.html"
     }
 }
 var main = new Vue({
@@ -60,8 +60,9 @@ var main = new Vue({
         ],
     },
     components: {
-        "component-nav-bar": component_nav_bar,
+        "component-header": component_header,
         "component-footer": component_footer,
+        "component-menu": component_menu,
     },
     methods: {},
     create: function () {

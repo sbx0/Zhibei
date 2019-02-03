@@ -1,0 +1,145 @@
+<html lang="en">
+<head>
+
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+
+    <link rel="stylesheet" href="../css/lib/bootstrap.css">
+    <link rel="stylesheet" href="../css/lib/common.css">
+    <link rel="stylesheet" href="../css/lib/link.css">
+    <link rel="stylesheet" href="../css/lib/user-setting.css">
+    <link rel="stylesheet" href="../css/lib/webuploader.css">
+    <link rel="stylesheet" href="../css/lib/mobile.css">
+    <link rel="stylesheet" href="../css/custom.css">
+
+    <title>设置</title>
+
+</head>
+<body>
+<div id="main" v-cloak>
+    <component-header
+            :not_login="not_login"
+            :user="user"
+    ></component-header>
+    <div class="container padding-0">
+
+        <div class="aw-people-detail">
+            <div class="mod-head clearfix">
+                <img :src="user.avatar" alt="" class="img" width="50">
+                <div class="title clearfix">
+                    <h1 class="pull-left">
+                        {{user.name}}
+                    </h1>
+                </div>
+            </div>
+            <div class="mod-body clearfix">
+                <ul>
+                    <li>
+                        <b>{{user.integral}}</b>
+                        {{i18N.integral}}
+                    </li>
+                    <li>
+                        <b>{{user.level}}</b>
+                        {{i18N.level}}
+                    </li>
+                </ul>
+            </div>
+            <div class="mod-footer clearfix">
+                <ul>
+                    <!--<li class="active">-->
+                    <!--<a href="#join" role="tab" data-toggle="tab">参与</a>-->
+                    <!--</li>-->
+                    <!--<li>-->
+                    <!--<a href="#publish" role="tab" data-toggle="tab">发起</a>-->
+                    <!--</li>-->
+                    <!--<li>-->
+                    <!--<a href="#follow" role="tab" data-toggle="tab">关注</a>-->
+                    <!--</li>-->
+                    <li class="active">
+                        <a href="#information" role="tab" data-toggle="tab">{{i18N.information}}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="aw-box">
+            <div class="tab-content">
+                <div class="tab-pane" id="join">
+                    <div class="aw-feed-list">
+                        <div class="mod-body">
+                            <ul id="join_listview">
+                            </ul>
+                        </div>
+                        <div class="mod-footer">
+                            <a class="aw-load-more" id="load_join" auto-load="false" data-page="1">
+                                <i class="icon icon-loading icon-spin"></i>
+                                <span>{{i18N.more}}</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="publish">
+                    <div class="aw-feed-list active">
+                        <div class="mod-body">
+                            <ul id="publish_listview">
+                            </ul>
+                        </div>
+                        v
+                    </div>
+                </div>
+                <div class="tab-pane" id="follow">
+                    <div class="mod card-mod">
+                        <div class="mod-head">
+                            <h2>123</h2>
+                        </div>
+                        <div class="mod-body">
+                            <ul class="user-list">
+                                <li>
+                                    <a href="#"> <img class="img" width="25" src="#" alt="zhengqiang"></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane active" id="profile">
+                    <div class="mod card-mod people-profile">
+                        <div class="mod-head">
+                            <h2>{{i18N.information}}</h2>
+                        </div>
+                        <div class="mod-body">
+                            <lable>{{i18N.username}}:</lable>
+                            <input class="form-control" type="text" :value="user.name">
+                            <lable>{{i18N.email}}:</lable>
+                            <input class="form-control" type="text" :value="user.email">
+                            <lable>{{i18N.introduction}}:</lable>
+                            <input class="form-control" type="text" :value="user.introduction">
+                            <h5>{{i18N.avatar}}{{i18N.setting}}</h5>
+                            <div id="uploader" class="wu-example mb-3">
+                                <!--用来存放文件信息-->
+                                <div id="thelist" class="uploader-list"></div>
+                                <div class="btns">
+                                    <div id="picker">{{i18N.upload}}{{i18N.avatar}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <a class="btn btn-success btn-slarge" onclick="">
+                            {{i18N.save}}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <component-footer></component-footer>
+    <component-menu></component-menu>
+</div>
+
+<script src="../js/base/load.js"></script>
+<script src="../js/lib/bootstrap-3.4.0.min.js"></script>
+<script src="../js/lib/md5.js"></script>
+<script src="../js/lib/webuploader.min.js"></script>
+<script src="../js/m/setting.js"></script>
+</body>
+</html>
