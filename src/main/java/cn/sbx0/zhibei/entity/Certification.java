@@ -21,15 +21,15 @@ public class Certification implements Serializable {
     private Integer id; // id
     @Column(nullable = false, unique = true, length = 30)
     private String info; // 认证信息
-    @Column(columnDefinition = "enum('personal','enterprise','university','mechanism')")
-    private String type; // 类型 [个人|企业|院校|机构]
+    @Column(columnDefinition = "enum('personal','admin','enterprise','university','mechanism')")
+    private String type; // 类型 [个人|管理员|企业|院校|机构]
     @Column(nullable = false)
     private Boolean passed = Boolean.FALSE; // 是否通过
     private Date start_time; // 开始时间
     private Date end_time; // 结束时间
     @ManyToOne(cascade = {CascadeType.MERGE}, targetEntity = User.class, optional = false)
     private User user;
-    private String license; // 营业执照 或 机构名称
+    private String license; // 营业执照 或 机构名称 或 身份证信息
     private String img; // 申请文件
 
     public static long getSerialVersionUID() {

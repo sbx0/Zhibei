@@ -60,6 +60,19 @@ var i18N = {
     version: "版本",
     integral: "积分",
     level: "等级",
+    type: "种类",
+    license: "相关证件号",
+    license_alert: "身份证号 或 营业执照号 或 院校名称 或 机构名称",
+    file: "文件",
+    certification_file_alert: "请提交对应的身份证或者组织机构代码证件扫描",
+
+    certification_type: {
+        personal: "个人认证",
+        admin: "管理员认证",
+        enterprise: "企业认证",
+        university: "院校认证",
+        mechanism: "机构认证",
+    },
 
     lib: lib,
     m_nav_data: [

@@ -15,7 +15,7 @@ var component_footer = {
             i18N: i18N,
         }
     },
-    template: '<footer class="text-center text-color-999 mb-50">\n    <span v-html="i18N.foot_html"></span>\n    <div align="center">\n        <select id="i18N_select">\n            <option :value="option.name" v-for="option in i18N.lib">{{option.value}}</option>\n        </select>\n    </div>\n</footer>'
+    template: '<footer class="text-center text-color-999 mb-50">\n    <span v-html="i18N.foot_html"></span>\n    <p>\n        <a href="/user/logout">{{i18N.logout}}</a>\n    </p>\n    <div align="center">\n        <select id="i18N_select">\n            <option :value="option.name" v-for="option in i18N.lib">{{option.value}}</option>\n        </select>\n    </div>\n</footer>'
 };
 // 菜单
 var component_menu = {

@@ -95,7 +95,7 @@ public class UserService extends BaseService<User, Integer> {
      */
     @Override
     public boolean save(User user) {
-        encryptPassword(user); // 加密密码
+        user = encryptPassword(user); // 加密密码
         return super.save(user);
     }
 
@@ -149,7 +149,7 @@ public class UserService extends BaseService<User, Integer> {
      * @return
      */
     User encryptPassword(User user) {
-        user.setPassword(StringTools.encryptPassword(user.getPassword()));
+        user.setPassword(StringTools.encryptPassword(user.getPassword() + user.getId()));
         return user;
     }
 
@@ -187,7 +187,6 @@ public class UserService extends BaseService<User, Integer> {
             return null;
         if (!user.getName().equals(name))
             return null;
-        session.setAttribute("user", user); // 不知道有没有用
         return user;
     }
 

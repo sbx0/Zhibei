@@ -48,8 +48,8 @@ public class CookieTools {
      * @param response response
      */
     public static void removeCookies(HttpServletResponse response) {
-        for (String COOKIE_NAME : COOKIE_NAMES) {
-            Cookie cookie = new Cookie(COOKIE_NAME, null);
+        for (String cookieName : COOKIE_NAMES) {
+            Cookie cookie = new Cookie(cookieName, null);
             cookie.setDomain(DOMAIN);
             cookie.setMaxAge(0);
             cookie.setPath("/");

@@ -181,30 +181,6 @@ WebUploader.Uploader.register({
                         $("#url").val(url);
                         $('#' + file.id).find('p.state').text("上传成功");
                         $('#' + file.id).find('.progress').fadeOut();
-                        $.ajax({
-                            type: "GET",
-                            url: "/file/avatar",
-                            data: {
-                                md5File: md5File,
-                            },
-                            cache: false,
-                            async: false,  // 同步
-                            dataType: "json",
-                            success: function (response) {
-                                var status = response.status;
-                                if (status == 0) {
-                                    var url = response.url
-                                    url = "http://" + window.location.host + "/upload/" + url;
-                                    $("#picker").show();
-                                    $("#url").val(url);
-                                    $('#' + file.id).find('p.state').text("上传成功");
-                                    $('#' + file.id).find('.progress').fadeOut();
-                                } else {
-                                    $('#' + file.id).find('p.state').text('merge error');
-                                    deferred.reject();
-                                }
-                            }
-                        })
                     } else {
                         $('#' + file.id).find('p.state').text('merge error');
                         deferred.reject();
@@ -244,7 +220,6 @@ uploader.on('fileQueued', function (file) {
 uploader.on('uploadProgress', function (file, percentage) {
     var $li = $('#' + file.id),
         $percent = $li.find('.progress .progress-bar');
-
     // 避免重复创建
     if (!$percent.length) {
         $percent = $('<div class="progress progress-striped active">' +
@@ -255,9 +230,69 @@ uploader.on('uploadProgress', function (file, percentage) {
     $percent.css('width', percentage * 100 + '%');
 });
 
+// 上传成功
+uploader.on('uploadSuccess', function (file) {
+    $.ajax({
+        type: "GET",
+        url: "/file/avatar",
+        data: {
+            md5File: md5File,
+        },
+        cache: false,
+        async: false,  // 同步
+        dataType: "json",
+        success: function (response) {
+            var status = response.status;
+            if (status == 0) {
+                var url = response.url
+                url = "http://" + window.location.host + "/upload/" + url;
+                $("#picker").show();
+                $("#url").val(url);
+                $('#' + file.id).find('p.state').text("头像成功");
+                refresh();
+                $('#' + file.id).find('.progress').fadeOut();
+            } else {
+                $('#' + file.id).find('p.state').text('merge error');
+                deferred.reject();
+            }
+        }
+    });
+});
+
+var certification_file = WebUploader.create({
+    auto: true,// 选完文件后，是否自动上传。
+    server: '/file/upload',// 文件接收服务端。
+    pick: '#certification_file',// 选择文件的按钮。可选。
+    chunked: true,// 开启分片上传
+    chunkSize: 5 * 1024 * 1024,// 5M
+    chunkRetry: 3,// 错误重试次数
+    fileNumLimit: 1, // 只能上传一个文件
+});
+
+// 上传成功
+certification_file.on('uploadSuccess', function () {
+    $.ajax({
+        type: "GET",
+        url: "/file/md5Check",
+        data: {
+            md5File: md5File,
+        },
+        cache: false,
+        async: false,  // 同步
+        dataType: "json",
+        success: function (response) {
+            var status = response.status;
+            if (status == 7) {
+                $("#certification_img").val(response.type + response.name);
+            } else {
+
+            }
+        }
+    });
+});
+
 // 初始化用户信息
 get_info();
-
 
 // 方法定义
 // 检测登陆状态
@@ -284,7 +319,7 @@ function get_info() {
 // 事件绑定
 // 切换语言时title也会切换
 $(function () {
-    document.title = main.i18N.index;
+    document.title = main.i18N.setting;
 });
 // 语言下拉栏选中
 var i18N_config = getCookie("i18N_config")

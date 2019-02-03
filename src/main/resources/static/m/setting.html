@@ -45,62 +45,20 @@
                 </ul>
             </div>
             <div class="mod-footer clearfix">
-                <ul>
-                    <!--<li class="active">-->
-                    <!--<a href="#join" role="tab" data-toggle="tab">参与</a>-->
-                    <!--</li>-->
-                    <!--<li>-->
-                    <!--<a href="#publish" role="tab" data-toggle="tab">发起</a>-->
-                    <!--</li>-->
-                    <!--<li>-->
-                    <!--<a href="#follow" role="tab" data-toggle="tab">关注</a>-->
-                    <!--</li>-->
-                    <li class="active">
+                <!-- Nav tabs -->
+                <ul role="tablist">
+                    <li role="tab" class="active">
                         <a href="#information" role="tab" data-toggle="tab">{{i18N.information}}</a>
+                    </li>
+                    <li role="tab">
+                        <a href="#certification" role="tab" data-toggle="tab">{{i18N.certification}}</a>
                     </li>
                 </ul>
             </div>
         </div>
         <div class="aw-box">
             <div class="tab-content">
-                <div class="tab-pane" id="join">
-                    <div class="aw-feed-list">
-                        <div class="mod-body">
-                            <ul id="join_listview">
-                            </ul>
-                        </div>
-                        <div class="mod-footer">
-                            <a class="aw-load-more" id="load_join" auto-load="false" data-page="1">
-                                <i class="icon icon-loading icon-spin"></i>
-                                <span>{{i18N.more}}</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="tab-pane" id="publish">
-                    <div class="aw-feed-list active">
-                        <div class="mod-body">
-                            <ul id="publish_listview">
-                            </ul>
-                        </div>
-                        v
-                    </div>
-                </div>
-                <div class="tab-pane" id="follow">
-                    <div class="mod card-mod">
-                        <div class="mod-head">
-                            <h2>123</h2>
-                        </div>
-                        <div class="mod-body">
-                            <ul class="user-list">
-                                <li>
-                                    <a href="#"> <img class="img" width="25" src="#" alt="zhengqiang"></a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="tab-pane active" id="profile">
+                <div class="tab-pane active" id="information" role="tabpanel">
                     <div class="mod card-mod people-profile">
                         <div class="mod-head">
                             <h2>{{i18N.information}}</h2>
@@ -117,7 +75,8 @@
                                 <!--用来存放文件信息-->
                                 <div id="thelist" class="uploader-list"></div>
                                 <div class="btns">
-                                    <div id="picker">{{i18N.upload}}{{i18N.avatar}}
+                                    <div id="picker">
+                                        {{i18N.upload}}{{i18N.avatar}}
                                     </div>
                                 </div>
                             </div>
@@ -126,6 +85,57 @@
                     <div class="text-center">
                         <a class="btn btn-success btn-slarge" onclick="">
                             {{i18N.save}}
+                        </a>
+                    </div>
+                </div>
+                <div class="tab-pane" id="certification" role="tabpanel">
+                    <div class="mod card-mod people-profile">
+                        <div class="mod-head">
+                            <h2>{{i18N.certification}}</h2>
+                        </div>
+                        <div class="mod-body">
+                            <form id="certification_form">
+                                <input id="certification_img" name="img" hidden>
+                                <div class="form-group">
+                                    <label for="certification_type">
+                                        {{i18N.type}}
+                                    </label>
+                                    <select class="form-control" id="certification_type" name="type">
+                                        <option v-for="(type,key) in i18N.certification_type" :value="key">
+                                            {{type}}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="certification_license">
+                                        {{i18N.license}}
+                                    </label>
+                                    <input type="text" class="form-control"
+                                           id="certification_license"
+                                           name="license"
+                                           :placeholder="i18N.license_alert"/>
+                                </div>
+                                <div class="form-group">
+                                    <label for="certification_file">
+                                        {{i18N.upload}}{{i18N.certification}}{{i18N.file}}
+                                    </label>
+                                    <div class="wu-example mb-3">
+                                        <!--用来存放文件信息-->
+                                        <div class="uploader-list"></div>
+                                        <div class="btns">
+                                            <div id="certification_file">
+                                                {{i18N.upload}}{{i18N.certification}}{{i18N.file}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p class="help-block">{{i18N.certification_file_alert}}</p>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <a class="btn btn-success btn-slarge" onclick="">
+                            {{i18N.submit}}
                         </a>
                     </div>
                 </div>

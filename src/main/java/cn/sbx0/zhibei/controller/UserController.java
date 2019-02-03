@@ -87,13 +87,14 @@ public class UserController extends BaseController<User, Integer> {
      *
      * @param user
      * @param response
-     * @param session
+     * @param request
      * @return
      */
     @LogRecord
     @ResponseBody
     @PostMapping(value = "/login")
-    public ObjectNode login(User user, HttpServletResponse response, HttpSession session) {
+    public ObjectNode login(User user, HttpServletResponse response, HttpServletRequest request) {
+        HttpSession session = request.getSession();
         json = mapper.createObjectNode();
         // 判断是否为空
         if (StringTools.checkNullStr(user.getName()) || StringTools.checkNullStr(user.getPassword())) {
@@ -115,6 +116,8 @@ public class UserController extends BaseController<User, Integer> {
         } else {
             // 清除Cookie
             CookieTools.removeCookies(response);
+            // 清除session
+            session.removeAttribute("user");
             // 操作状态保存
             json.put(STATUS_NAME, STATUS_CODE_FILED);
         }
@@ -130,12 +133,13 @@ public class UserController extends BaseController<User, Integer> {
      */
     @LogRecord
     @GetMapping(value = "/logout")
-    public String logout(HttpSession session, HttpServletResponse response) {
+    public String logout(HttpServletRequest request, HttpServletResponse response) {
+        HttpSession session = request.getSession();
         try {
-            // 清除session
-            session.removeAttribute("user");
             // 清除Cookie
             CookieTools.removeCookies(response);
+            // 清除session
+            session.removeAttribute("user");
             return "redirect:/login.html";
         } catch (Exception e) {
             return "error";

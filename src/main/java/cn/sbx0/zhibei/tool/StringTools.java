@@ -32,7 +32,7 @@ public class StringTools {
      * @return
      */
     public static String encryptPassword(String password) {
-        return getHash(password + StringTools.KEY, "MD5");
+        return getHash(password + KEY, "MD5");
     }
 
     /**
