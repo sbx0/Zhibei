@@ -1,4 +1,3 @@
-// i18N配置文件 - 繁體中文
 var i18N = {
     user: "用戶",
     website_name: "智貝",
@@ -60,6 +59,19 @@ var i18N = {
     version: "版本",
     integral: "積分",
     level: "等級",
+    type: "種類",
+    license: "相關證件號",
+    license_alert: "身份證號 或 營業執照號 或 院校名稱 或 機構名稱",
+    file: "文件",
+    certification_file_alert: "請提交對應的身份證或者組織機構代碼證件掃描",
+
+    certification_type: {
+        personal: "個人認證",
+        admin: "管理員認證",
+        enterprise: "企業認證",
+        university: "院校認證",
+        mechanism: "機構認證",
+    },
 
     lib: lib,
     m_nav_data: [

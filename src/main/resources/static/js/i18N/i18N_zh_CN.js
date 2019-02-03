@@ -1,4 +1,3 @@
-// i18N配置文件 - 简体中文
 var i18N = {
     user: "用户",
     website_name: "智贝",
