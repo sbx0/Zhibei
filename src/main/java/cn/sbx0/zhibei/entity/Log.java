@@ -1,5 +1,6 @@
 package cn.sbx0.zhibei.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -23,6 +24,7 @@ public class Log implements Serializable {
     private String ip; // IP
     @ManyToOne(cascade = {CascadeType.MERGE}, targetEntity = User.class)
     private User user; // 人物
+    @JsonFormat(pattern = "yyyy-MM-dd HH:ss")
     @Column(nullable = false)
     private Date time; // 记录时间
     @Column(nullable = false)

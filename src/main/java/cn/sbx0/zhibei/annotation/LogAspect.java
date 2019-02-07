@@ -41,28 +41,26 @@ public class LogAspect {
     @After(value = "pointcut()")
     public void After(JoinPoint joinPoint) {
         String className = joinPoint.getTarget().getClass().getSimpleName(); // 类名
-//        Object[] args = joinPoint.getArgs(); // 参数
-//        for (Object arg : args) {
-//            System.out.println(arg);
-//        }
         // 获取此次请求的request对象
-        Log log = new Log();
-        log.setClassName(className);
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String methodName = joinPoint.getSignature().getName(); // 方法名
-        log.setMethod(methodName);
-        log.setIp(RequestTools.getIpAddress(request));
         User user = userService.getUser(request);
-        log.setUser(user);
-        if (request.getQueryString() != null) {
-            log.setArgs(request.getQueryString());
-            log.setUrl(request.getRequestURL().toString() + "?" + request.getQueryString());
-        } else {
-            log.setUrl(request.getRequestURL().toString());
+        if (!user.getRole().getName().equals("admin")) {
+            Log log = new Log();
+            log.setMethod(methodName);
+            log.setIp(RequestTools.getIpAddress(request));
+            log.setClassName(className);
+            log.setUser(user);
+            if (request.getQueryString() != null) {
+                log.setArgs(request.getQueryString());
+                log.setUrl(request.getRequestURL().toString() + "?" + request.getQueryString());
+            } else {
+                log.setUrl(request.getRequestURL().toString());
+            }
+            log.setTime(new Date());
+            log.setRunTime(runTime);
+            logService.save(log);
         }
-        log.setTime(new Date());
-        log.setRunTime(runTime);
-        logService.save(log);
     }
 
     // 环绕通知

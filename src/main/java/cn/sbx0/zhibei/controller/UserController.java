@@ -38,8 +38,8 @@ public class UserController extends BaseController<User, Integer> {
 
     @JsonView(User.Admin.class)
     @Override
-    public ObjectNode list(Integer page, Integer size, HttpServletRequest request) {
-        return super.list(page, size, request);
+    public ObjectNode list(Integer page, Integer size, String attribute, String direction, HttpServletRequest request) {
+        return super.list(page, size, attribute, direction, request);
     }
 
     /**

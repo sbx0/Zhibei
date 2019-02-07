@@ -1,5 +1,6 @@
 package cn.sbx0.zhibei.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -25,7 +26,9 @@ public class Certification implements Serializable {
     private String type; // 类型 [个人|管理员|企业|院校|机构]
     @Column(nullable = false)
     private Boolean passed = Boolean.FALSE; // 是否通过
+    @JsonFormat(pattern = "yyyy-MM-dd HH:ss")
     private Date start_time; // 开始时间
+    @JsonFormat(pattern = "yyyy-MM-dd HH:ss")
     private Date end_time; // 结束时间
     @ManyToOne(cascade = {CascadeType.MERGE}, targetEntity = User.class, optional = false)
     private User user;

@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
@@ -64,14 +65,17 @@ public abstract class BaseController<T, ID> {
     @LogRecord
     @ResponseBody
     @GetMapping("/list")
-    public ObjectNode list(Integer page, Integer size, HttpServletRequest request) {
+    public ObjectNode list(Integer page, Integer size, String attribute, String direction, HttpServletRequest request) {
         if (page == null) page = 1;
         if (size == null) size = 10;
         json = mapper.createObjectNode();
         User user = userService.getUser(request);
         if (user != null) {
             if (userService.checkPermission(request, user)) {
-                Page<T> tPage = getService().findAll(BaseService.buildPageable(page, size, BaseService.buildSort("id", "ASC")));
+                if (attribute == null) attribute = "id";
+                if (direction == null) direction = "desc";
+                Sort sort = BaseService.buildSort(attribute, direction);
+                Page<T> tPage = getService().findAll(BaseService.buildPageable(page, size, sort));
                 List<T> tList = tPage.getContent();
                 if (tList != null && tList.size() > 0) {
                     ArrayNode jsons = mapper.createArrayNode();
@@ -200,7 +204,7 @@ public abstract class BaseController<T, ID> {
     public void initBinder(WebDataBinder binder) {
         //转换日期 注意这里的转化要和传进来的字符串的格式一直 如2015-9-9 就应该为yyyy-MM-dd
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));// CustomDateEditor为自定义日期编辑器
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true)); // CustomDateEditor为自定义日期编辑器
     }
 
 }

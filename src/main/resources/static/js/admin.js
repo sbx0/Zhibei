@@ -47,7 +47,7 @@ var main = new Vue({
     methods: {},
     create: function () {
 
-    }
+    },
 });
 
 // 从链接获取参数
@@ -64,17 +64,11 @@ var i18N_config = getCookie("i18N_config")
 if (i18N_config != "") {
     $("#i18N_select").val(getCookie("i18N_config"));
 }
-
-// 页码选择修改
-$("#page_size_select").change(function () {
-    main.size = $("#page_size_select").val();
-    main.page = 1;
-    query();
-});
 // 切换表
 $("#table_select").change(function () {
     main.size = $("#page_size_select").val();
     main.page = 1;
+    $("#table_sort").val("id");
     query();
 });
 // 语言切换
@@ -85,16 +79,19 @@ $("#i18N_select").change(function () {
 
 // 查询表
 function query() {
+    main.size = $("#page_size_select").val();
+    main.page = 1;
     if (main.page == null) {
         main.page = 1;
     }
     if (main.size == null) {
         main.size = 10;
     }
-    main.table = $("#table_select").val();
+    var attribute = $("#table_sort").val();
+    if (attribute == null) attribute = 'id';
     $.ajax({
         type: "get",
-        url: "../" + $("#table_select").val() + "/list?page=" + main.page + "&size=" + main.size,
+        url: "../" + $("#table_select").val() + "/list?page=" + main.page + "&size=" + main.size + "&attribute=" + attribute + "&direction=" + $("#table_sort_direction").val(),
         dataType: "json",
         success: function (json) {
             var status = json.status;

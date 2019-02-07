@@ -1,5 +1,6 @@
 package cn.sbx0.zhibei.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -31,6 +32,7 @@ public class UploadFile implements Serializable {
     String md5; // md5值
     @Column(nullable = false)
     Long size; // 文件大小
+    @JsonFormat(pattern = "yyyy-MM-dd HH:ss")
     @Column(nullable = false)
     Date time; // 上传日期
     @Column(nullable = false)

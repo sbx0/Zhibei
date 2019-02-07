@@ -64,6 +64,10 @@ var i18N = {
     license_alert: "身份证号 或 营业执照号 或 院校名称 或 机构名称",
     file: "文件",
     certification_file_alert: "请提交对应的身份证或者组织机构代码证件扫描",
+    sort: "排序",
+    asc: "升序",
+    desc: "降序",
+    direction: "方向",
 
     certification_type: {
         personal: "个人认证",

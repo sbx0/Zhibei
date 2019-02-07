@@ -64,6 +64,10 @@ var i18N = {
     license_alert: "身份證號 或 營業執照號 或 院校名稱 或 機構名稱",
     file: "文件",
     certification_file_alert: "請提交對應的身份證或者組織機構代碼證件掃描",
+    sort: "排序",
+    asc: "升序",
+    desc: "降序",
+    direction: "方向",
 
     certification_type: {
         personal: "個人認證",

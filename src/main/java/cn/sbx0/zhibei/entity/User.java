@@ -1,5 +1,6 @@
 package cn.sbx0.zhibei.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -31,6 +32,7 @@ public class User implements Serializable {
     @Column(length = 30)
     private String introduction;
     @JsonView(Admin.class)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:ss")
     @Column(nullable = false)
     private Date registerTime; // 注册时间
     @JsonView(Admin.class)
