@@ -45,22 +45,25 @@ public class LogAspect {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String methodName = joinPoint.getSignature().getName(); // 方法名
         User user = userService.getUser(request);
-        if (!user.getRole().getName().equals("admin")) {
-            Log log = new Log();
-            log.setMethod(methodName);
-            log.setIp(RequestTools.getIpAddress(request));
-            log.setClassName(className);
-            log.setUser(user);
-            if (request.getQueryString() != null) {
-                log.setArgs(request.getQueryString());
-                log.setUrl(request.getRequestURL().toString() + "?" + request.getQueryString());
-            } else {
-                log.setUrl(request.getRequestURL().toString());
+        if (user != null) {
+            if (user.getRole().getName().equals("admin")) {
+                return;
             }
-            log.setTime(new Date());
-            log.setRunTime(runTime);
-            logService.save(log);
         }
+        Log log = new Log();
+        log.setUser(user);
+        log.setMethod(methodName);
+        log.setIp(RequestTools.getIpAddress(request));
+        log.setClassName(className);
+        if (request.getQueryString() != null) {
+            log.setArgs(request.getQueryString());
+            log.setUrl(request.getRequestURL().toString() + "?" + request.getQueryString());
+        } else {
+            log.setUrl(request.getRequestURL().toString());
+        }
+        log.setTime(new Date());
+        log.setRunTime(runTime);
+        logService.save(log);
     }
 
     // 环绕通知
