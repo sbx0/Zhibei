@@ -88,11 +88,12 @@
                             <td>{{i18N.total_elements}}:{{total_elements}}</td>
                             <td>
                                 {{i18N.page_size}}：
-                                <select id="page_size_select">
+                                <select id="page_size_select"
+                                        :value="size">
                                     <option
                                             :value="num"
                                             v-for="num in total_elements"
-                                            v-if="num%50==0&&num<=1000"
+                                            v-if="num%10==0&&num<=1000"
                                     >
                                         {{num}}
                                     </option>
@@ -102,6 +103,7 @@
                                 {{i18N.sort}}：
                                 <select
                                         id="table_sort"
+                                        :value="attribute"
                                         v-for="(object,index) in query_data"
                                         v-if="index == 0">
                                     <option
@@ -114,13 +116,15 @@
                             </td>
                             <td>
                                 {{i18N.direction}}：
-                                <select id="table_sort_direction">
+                                <select
+                                        id="table_sort_direction"
+                                        :value="direction">
                                     <option value="DESC">{{i18N.desc}}</option>
                                     <option value="ASC">{{i18N.asc}}</option>
                                 </select>
                             </td>
                             <td>
-                                <a href="javascript:query();" class="text-success">{{i18N.submit}}</a>
+                                <a href="javascript:ajax_query();" class="text-success">{{i18N.submit}}</a>
                             </td>
                         </tr>
                         </tfoot>
@@ -129,9 +133,10 @@
                 <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-center">
                         <li class="page-item">
+                            <!--:href="'?table='+table+'&page='+(page-index)+'&size='+size+'&attribute='+attribute+'&direction='+direction"-->
                             <a
                                     class="page-link"
-                                    :href="'?table='+table+'&page='+(page-index)+'&size='+size"
+                                    href="javascript:prev_query();"
                                     v-if="(page-index)>0"
                                     aria-label="Previous"
                             >
@@ -141,7 +146,7 @@
                         <li class="page-item">
                             <a
                                     class="page-link"
-                                    :href="'?table='+table+'&page=1&size='+size"
+                                    :href="'?table='+table+'&page=1&size='+size+'&attribute='+attribute+'&direction='+direction"
                                     aria-label="Previous"
                                     v-if="page!=1"
                             >
@@ -155,13 +160,16 @@
                         >
                             <a
                                     class="page-link"
-                                    :href="'?table='+table+'&page='+(index)+'&size='+size"
+                                    :href="'?table='+table+'&page='+(index)+'&size='+size+'&attribute='+attribute+'&direction='+direction"
                             >
                                 {{index}}
                             </a>
                         </li>
                         <a class="page-link text-success"
-                           :href="'?table='+table+'&page='+page+'&size='+size">{{page}}</a>
+                           :href="'?table='+table+'&page='+page+'&size='+size+'&attribute='+attribute+'&direction='+direction"
+                        >
+                            {{page}}
+                        </a>
                         <li class="page-item"
                             v-for="index in 5"
                             :key="index"
@@ -169,7 +177,7 @@
                         >
                             <a
                                     class="page-link"
-                                    :href="'?table='+table+'&page='+(page+index)+'&size='+size"
+                                    :href="'?table='+table+'&page='+(page+index)+'&size='+size+'&attribute='+attribute+'&direction='+direction"
                             >
                                 {{page+index}}
                             </a>
@@ -177,7 +185,7 @@
                         <li class="page-item">
                             <a
                                     class="page-link"
-                                    :href="'?table='+table+'&page='+total_pages+'&size='+size"
+                                    :href="'?table='+table+'&page='+total_pages+'&size='+size+'&attribute='+attribute+'&direction='+direction"
                                     v-if="page!=total_pages"
                                     aria-label="Previous"
                             >
@@ -187,7 +195,7 @@
                         <li class="page-item">
                             <a
                                     class="page-link"
-                                    :href="'?table='+table+'&page='+(page+index)+'&size='+size"
+                                    href="javascript:next_query();"
                                     v-if="(page+index)<=total_pages"
                                     aria-label="Next"
                             >

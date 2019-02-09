@@ -7,6 +7,8 @@ var main = new Vue({
         index: 1,
         page: 1,
         size: 10,
+        attribute: "id",
+        direction: "ASC",
         total_pages: 0,
         total_elements: 0,
         table_data: {
@@ -51,12 +53,31 @@ var main = new Vue({
 });
 
 // 从链接获取参数
-main.page = getQueryVariable("page");
-main.size = getQueryVariable("size");
+var page = getQueryVariable("page");
+if (page != null) {
+    main.page = page;
+}
+var size = getQueryVariable("size");
+if (size != null) {
+    main.size = size;
+    $("#page_size_select").val(size);
+}
 var table = getQueryVariable("table");
 if (table != null) {
+    main.table = table;
     $("#table_select").val(table);
 }
+var attribute = getQueryVariable("attribute");
+if (attribute != null) {
+    main.attribute = attribute;
+    $("#table_sort").val(attribute);
+}
+var direction = getQueryVariable("direction");
+if (direction != null) {
+    main.direction = direction;
+    $("#table_sort_direction").val(main.direction);
+}
+
 // 初始化查询
 query();
 // 语言下拉栏选中
@@ -66,8 +87,10 @@ if (i18N_config != "") {
 }
 // 切换表
 $("#table_select").change(function () {
-    main.size = $("#page_size_select").val();
+    main.attribute = "id";
     main.page = 1;
+    main.table = $("#table_select").val();
+    main.size = $("#page_size_select").val();
     $("#table_sort").val("id");
     query();
 });
@@ -77,21 +100,53 @@ $("#i18N_select").change(function () {
     refresh();
 });
 
+// 上一页
+function prev_query() {
+    main.page = main.page - 1;
+    query();
+}
+
+// 下一页
+function next_query() {
+    main.page = main.page + 1;
+    query();
+}
+
 // 查询表
-function query() {
-    main.size = $("#page_size_select").val();
+function ajax_query() {
     main.page = 1;
+    main.size = $("#page_size_select").val();
+    query();
+}
+
+function query() {
+    var attribute = $("#table_sort").val();
+    if (attribute != null) {
+        main.attribute = attribute;
+    }
+    var direction = $("#table_sort_direction").val();
+    if (direction != null) {
+        main.direction = direction;
+    }
     if (main.page == null) {
+        main.page = 1;
+    }
+    if (main.page < 1) {
         main.page = 1;
     }
     if (main.size == null) {
         main.size = 10;
     }
-    var attribute = $("#table_sort").val();
-    if (attribute == null) attribute = 'id';
+    if (main.size < 1 || main.size > 1000) {
+        main.size = 10;
+    }
     $.ajax({
         type: "get",
-        url: "../" + $("#table_select").val() + "/list?page=" + main.page + "&size=" + main.size + "&attribute=" + attribute + "&direction=" + $("#table_sort_direction").val(),
+        url: "../" + main.table +
+            "/list?page=" + main.page +
+            "&size=" + main.size +
+            "&attribute=" + main.attribute +
+            "&direction=" + main.direction,
         dataType: "json",
         success: function (json) {
             var status = json.status;
