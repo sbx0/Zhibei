@@ -32,7 +32,7 @@ public class UploadFile implements Serializable {
     String md5; // md5值
     @Column(nullable = false)
     Long size; // 文件大小
-    @JsonFormat(pattern = "yyyy-MM-dd HH:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     @Column(nullable = false)
     Date time; // 上传日期
     @Column(nullable = false)

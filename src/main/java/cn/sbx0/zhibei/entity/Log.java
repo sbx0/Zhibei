@@ -24,7 +24,7 @@ public class Log implements Serializable {
     private String ip; // IP
     @ManyToOne(cascade = {CascadeType.MERGE}, targetEntity = User.class)
     private User user; // 人物
-    @JsonFormat(pattern = "yyyy-MM-dd HH:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     @Column(nullable = false)
     private Date time; // 记录时间
     @Column(nullable = false)

@@ -7,6 +7,8 @@ if (!browser.versions.mobile) {
 var main = new Vue({
     el: '#main',
     data: {
+        certification_data: {},
+        not_sumbit_certification: false,
         i18N: i18N,
         not_login: true,
         search_result_show: "none",
@@ -69,6 +71,54 @@ var main = new Vue({
 
     }
 });
+
+checkCertification();
+
+// 检查认证
+function checkCertification() {
+    $.ajax({
+        type: "get",
+        url: "/certification/status",
+        dataType: "json",
+        success: function (json) {
+            var status = json.status;
+            if (statusCodeToBool(status)) {
+                main.not_sumbit_certification = true;
+                main.certification_data = json.certification;
+            } else {
+                main.not_sumbit_certification = false;
+                main.certification_data = {};
+            }
+            return false;
+        },
+        error: function () {
+            alert(i18N.network + i18N.alert.error);
+            return false;
+        }
+    });
+}
+
+// 提交认证
+function submitCertification() {
+    $.ajax({
+        type: "post",
+        url: "/certification/submit",
+        data: $("#certification_form").serialize(),
+        dataType: "json",
+        success: function (json) {
+            var status = json.status;
+            if (statusCodeToBool(status)) {
+                checkCertification();
+            }
+            alert(statusCodeToAlert(status));
+            return false;
+        },
+        error: function () {
+            alert(i18N.network + i18N.alert.error);
+            return false;
+        }
+    });
+}
 
 var md5File;
 //监听分块上传过程中的时间点

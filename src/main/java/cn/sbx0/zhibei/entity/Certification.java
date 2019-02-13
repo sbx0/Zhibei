@@ -24,15 +24,16 @@ public class Certification implements Serializable {
     private String info; // 认证信息
     @Column(columnDefinition = "enum('personal','admin','enterprise','university','mechanism')")
     private String type; // 类型 [个人|管理员|企业|院校|机构]
-    @Column(nullable = false)
     private Boolean passed = Boolean.FALSE; // 是否通过
-    @JsonFormat(pattern = "yyyy-MM-dd HH:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     private Date start_time; // 开始时间
-    @JsonFormat(pattern = "yyyy-MM-dd HH:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     private Date end_time; // 结束时间
     @ManyToOne(cascade = {CascadeType.MERGE}, targetEntity = User.class, optional = false)
     private User user;
+    @Column(nullable = false)
     private String license; // 营业执照 或 机构名称 或 身份证信息
+    @Column(nullable = false)
     private String img; // 申请文件
 
     public static long getSerialVersionUID() {

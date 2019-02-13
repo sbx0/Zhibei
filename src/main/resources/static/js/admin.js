@@ -52,6 +52,33 @@ var main = new Vue({
     },
 });
 
+// 通用删除
+function deleteOne(id) {
+    if (confirm("确认删除？")) {
+        $.ajax({
+            type: "get",
+            url: "/" + main.table +
+                "/delete?id=" + id,
+            dataType: "json",
+            success: function (json) {
+                var status = json.status;
+                if (statusCodeToBool(status)) {
+                    query();
+                }
+                alert(statusCodeToAlert(status))
+            },
+            error: function () {
+                alert(i18N.network + i18N.alert.error);
+            }
+        });
+    }
+}
+
+// 通用修改
+function updateOne(id) {
+
+}
+
 // 从链接获取参数
 var page = getQueryVariable("page");
 if (page != null) {

@@ -32,7 +32,7 @@ public class User implements Serializable {
     @Column(length = 30)
     private String introduction;
     @JsonView(Admin.class)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     @Column(nullable = false)
     private Date registerTime; // 注册时间
     @JsonView(Admin.class)

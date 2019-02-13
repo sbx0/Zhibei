@@ -19,4 +19,26 @@ public class CertificationService extends BaseService<Certification, Integer> {
     public PagingAndSortingRepository<Certification, Integer> getDao() {
         return certificationDao;
     }
+
+    /**
+     * 判断是否有已提交但尚未审核的认证申请
+     *
+     * @param userId
+     * @return
+     */
+    public boolean existsByUserAndPassed(Integer userId) {
+        String result = certificationDao.existsByUserAndPassed(userId);
+        return result != null;
+    }
+
+    /**
+     * 获取是否有已提交但尚未审核的认证申请
+     *
+     * @param userId
+     * @return
+     */
+    public Certification findByUserAndPassed(Integer userId) {
+        Certification certification = certificationDao.findByUserAndPassed(userId);
+        return certification;
+    }
 }
