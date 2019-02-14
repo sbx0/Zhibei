@@ -19,4 +19,9 @@ public class RoleService extends BaseService<Role, Integer> {
     public PagingAndSortingRepository<Role, Integer> getDao() {
         return roleDao;
     }
+
+    @Override
+    public Role getEntity() {
+        return new Role();
+    }
 }

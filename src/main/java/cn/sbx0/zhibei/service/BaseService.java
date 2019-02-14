@@ -30,6 +30,13 @@ public abstract class BaseService<T, ID> {
     public abstract PagingAndSortingRepository<T, ID> getDao();
 
     /**
+     * 获取一个空的实体
+     *
+     * @return 对应的实体
+     */
+    public abstract T getEntity();
+
+    /**
      * 检查对象指定属性是否为空字符或NULL 需要为属性设置get方法
      *
      * @param object 需要判断的对象

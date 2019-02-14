@@ -19,4 +19,9 @@ public class LogService extends BaseService<Log, Integer> {
     public PagingAndSortingRepository<Log, Integer> getDao() {
         return logDao;
     }
+
+    @Override
+    public Log getEntity() {
+        return new Log();
+    }
 }

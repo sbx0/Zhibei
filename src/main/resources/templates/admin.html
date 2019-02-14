@@ -56,33 +56,76 @@
                         </select>
                     </div>
                 </div>
-                <!--table show-->
                 <div>
-                    <table id="table" style="white-space:nowrap;"
-                           class="table table-responsive">
-                        <thead>
-                        <tr v-for="(object,index) in query_data" v-if="index == 0">
-                            <th>操作</th>
-                            <th v-for="(value,key) in object">{{key}}</th>
-                        </tr>
-                        </thead>
-                        <!--table content-->
-                        <tbody>
-                        <tr v-for="object in query_data">
-                            <td>
-                                <a :href="'javascript:deleteOne('+object.id+')'" class="text-danger">删除</a>
-                                <a :href="'javascript:updateOne('+object.id+')'">修改</a>
-                            </td>
-                            <td v-for="o in object">
-                                <span v-if="o instanceof Object">
-                                    {{o.id}}
-                                </span>
-                                <span v-else>{{o}}</span>
-                            </td>
-                        </tr>
-                        </tbody>
-                        <!--table page-->
-                    </table>
+                    <form id="save_or_update_form">
+                        <table id="table" style="white-space:nowrap;" class="table table-responsive">
+                            <thead>
+                            <tr v-for="(object,index) in query_data" v-if="index == 0">
+                                <th>操作</th>
+                                <th v-for="(value,key) in object">{{key}}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <a class="text-success" href="javascript:saveOne()">保存</a>
+                                </td>
+                                <td v-for="(value,a) in attribute_data" v-if="attribute_data.id != ''">
+                                    <input
+                                            type="text"
+                                            :placeholder="a"
+                                            :name="a"
+                                            v-if="a != 'id' && !(value instanceof Object)"
+                                            :value="value"
+                                    />
+                                    <input
+                                            type="text"
+                                            :placeholder="a"
+                                            :name="a"
+                                            v-if="a == 'id' && !(value instanceof Object)"
+                                            :value="value"
+                                            readonly
+                                    />
+                                    <input
+                                            type="text"
+                                            :placeholder="a"
+                                            :name="a"
+                                            v-if="value instanceof Object"
+                                            :value="value.id"
+                                            readonly
+                                    />
+                                </td>
+                                <td v-for="(value,a) in attribute_data" v-if="attribute_data.id == ''">
+                                    <input
+                                            type="text"
+                                            :placeholder="a"
+                                            :name="a"
+                                            v-if="a != 'id'"
+                                    />
+                                    <input
+                                            type="text"
+                                            :placeholder="a"
+                                            :name="a"
+                                            v-if="a == 'id'"
+                                            readonly
+                                    />
+                                </td>
+                            </tr>
+                            <tr v-for="object in query_data">
+                                <td>
+                                    <a :href="'javascript:deleteOne('+object.id+')'" class="text-danger">删除</a>
+                                    <a :href="'javascript:updateOne('+object.id+')'">修改</a>
+                                </td>
+                                <td v-for="o in object">
+                                    <span v-if="o instanceof Object">
+                                        {{o.id}}
+                                    </span>
+                                    <span v-else>{{o}}</span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </form>
                     <div>
                         {{i18N.page_number}}:{{page}}/{{total_pages}}
                         {{i18N.total_elements}}:{{total_elements}}

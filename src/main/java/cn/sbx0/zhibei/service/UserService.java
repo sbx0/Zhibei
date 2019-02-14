@@ -28,6 +28,11 @@ public class UserService extends BaseService<User, Integer> {
         return userDao;
     }
 
+    @Override
+    public User getEntity() {
+        return new User();
+    }
+
     /**
      * 将增删查改转换成二进制
      *

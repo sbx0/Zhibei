@@ -68,6 +68,9 @@ var i18N = {
     asc: "ASC",
     desc: "DESC",
     direction: "Direction",
+    info: "Info",
+    under_review: "Under Review",
+    failed: "Failed",
 
     Certification_type: {
         Personal: "Personal Certification",

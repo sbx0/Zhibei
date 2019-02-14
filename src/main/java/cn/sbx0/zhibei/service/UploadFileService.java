@@ -29,6 +29,11 @@ public class UploadFileService extends BaseService<UploadFile, Integer> {
         return uploadFileDao;
     }
 
+    @Override
+    public UploadFile getEntity() {
+        return new UploadFile();
+    }
+
     public String path; // 上传路径
 
     public String getPath() {

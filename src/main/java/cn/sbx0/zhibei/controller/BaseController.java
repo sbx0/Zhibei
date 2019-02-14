@@ -77,8 +77,8 @@ public abstract class BaseController<T, ID> {
                 Sort sort = BaseService.buildSort(attribute, direction);
                 Page<T> tPage = getService().findAll(BaseService.buildPageable(page, size, sort));
                 List<T> tList = tPage.getContent();
+                ArrayNode jsons = mapper.createArrayNode();
                 if (tList != null && tList.size() > 0) {
-                    ArrayNode jsons = mapper.createArrayNode();
                     for (T t : tList) {
                         ObjectNode object = mapper.convertValue(t, ObjectNode.class);
                         jsons.add(object);
@@ -89,6 +89,15 @@ public abstract class BaseController<T, ID> {
                     json.put("total_elements", tPage.getTotalElements());
                     json.put("page", page);
                     json.put("size", size);
+                } else {
+                    T t = getService().getEntity();
+                    ObjectNode object = mapper.convertValue(t, ObjectNode.class);
+                    jsons.add(object);
+                    json.set("objects", jsons);
+                    json.put("total_pages", 0);
+                    json.put("total_elements", 0);
+                    json.put("page", 0);
+                    json.put("size", 0);
                 }
                 json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
             } else {

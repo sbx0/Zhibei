@@ -43,7 +43,8 @@ var main = new Vue({
                 data: {},
             },
         },
-        query_data: {}
+        query_data: {},
+        attribute_data: {},
     },
     components: {},
     methods: {},
@@ -51,6 +52,28 @@ var main = new Vue({
 
     },
 });
+
+// 通用保存
+function saveOne() {
+    $.ajax({
+        type: "post",
+        url: "/" + main.table + "/add",
+        data: $("#save_or_update_form").serialize(),
+        dataType: "json",
+        success: function (json) {
+            var status = json.status;
+            alert(statusCodeToAlert(status));
+            if (statusCodeToBool(status)) {
+                query();
+            }
+            return false;
+        },
+        error: function () {
+            alert(i18N.network + i18N.alert.error);
+            return false;
+        }
+    });
+}
 
 // 通用删除
 function deleteOne(id) {
@@ -76,7 +99,23 @@ function deleteOne(id) {
 
 // 通用修改
 function updateOne(id) {
-
+    $.ajax({
+        type: "get",
+        url: "/" + main.table +
+            "/" + id,
+        dataType: "json",
+        success: function (json) {
+            var status = json.status;
+            if (statusCodeToBool(status)) {
+                main.attribute_data = json.object;
+            } else {
+                alert(statusCodeToAlert(status));
+            }
+        },
+        error: function () {
+            alert(i18N.network + i18N.alert.error);
+        }
+    });
 }
 
 // 从链接获取参数
@@ -179,6 +218,8 @@ function query() {
             var status = json.status;
             if (statusCodeToBool(status)) {
                 main.query_data = json.objects;
+                main.attribute_data = JSON.parse(JSON.stringify(main.query_data[0]));
+                main.attribute_data.id = "";
                 main.page = json.page;
                 main.size = json.size;
                 main.total_pages = json.total_pages;

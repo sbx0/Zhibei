@@ -20,4 +20,8 @@ public class PermissionService extends BaseService<Permission, Integer> {
         return permissionDao;
     }
 
+    @Override
+    public Permission getEntity() {
+        return new Permission();
+    }
 }

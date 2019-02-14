@@ -20,6 +20,11 @@ public class CertificationService extends BaseService<Certification, Integer> {
         return certificationDao;
     }
 
+    @Override
+    public Certification getEntity() {
+        return new Certification();
+    }
+
     /**
      * 判断是否有已提交但尚未审核的认证申请
      *
