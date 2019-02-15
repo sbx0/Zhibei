@@ -71,6 +71,10 @@ var i18N = {
     info: "信息",
     under_review: "審核中",
     failed: "失敗",
+    role: "角色",
+    permission: "權限",
+    log: "日誌",
+    management: "管理",
 
     certification_type: {
         personal: "個人認證",
@@ -84,18 +88,20 @@ var i18N = {
     m_nav_data: [
         {id: 1, text: "首頁", path: "/m/index.html", icon: "<i class=\"fas fa-home\"></i>"},
         {id: 2, text: "登陸", path: "/m/index.html", icon: "<i class=\"fas fa-sign-in-alt\"></i>"},
-        {id: 3, text: "測試", path: "#", icon: "<i class=\"fas fa-sign-in-alt\"></i>"},
-        {id: 4, text: "測試", path: "#", icon: "<i class=\"fas fa-sign-in-alt\"></i>"},
-        {id: 5, text: "我", path: "#", icon: "<i class=\"fas fa-sign-in-alt\"></i>"},
+        {id: 3, text: "後台", path: "/user/admin", icon: "<i class=\"fas fa-sign-in-alt\"></i>"},
+        {id: 4, text: "權限", path: "/user/permission", icon: "<i class=\"fas fa-sign-in-alt\"></i>"},
+        {id: 5, text: "我的", path: "/m/setting.html", icon: "<i class=\"fas fa-sign-in-alt\"></i>"},
     ],
     nav_data: [
         {id: 1, text: "首頁", path: "/index.html", icon: "<i class=\"fas fa-home\"></i>"},
         {id: 2, text: "登陸", path: "/login.html", icon: "<i class=\"fas fa-sign-in-alt\"></i>"},
-        {id: 3, text: "測試", path: "#", icon: "<i class=\"fas fa-sign-in-alt\"></i>"},
+        {id: 3, text: "後台", path: "/user/admin", icon: "<i class=\"fas fa-sign-in-alt\"></i>"},
+        {id: 4, text: "權限", path: "/user/permission", icon: "<i class=\"fas fa-sign-in-alt\"></i>"},
     ],
     nav_more_data: [
-        {id: 1, text: "後台", path: "/admin", icon: "<i class=\"fas fa-lock\"></i>"},
-        {id: 2, text: "手機版", path: "/m/index.html?no_redirect=true", icon: "<i class=\"fas fa-lock\"></i>"},
+        {id: 1, text: "後台", path: "/user/admin", icon: "<i class=\"fas fa-lock\"></i>"},
+        {id: 2, text: "權限", path: "/user/permission", icon: "<i class=\"fas fa-lock\"></i>"},
+        {id: 3, text: "手機版", path: "/m/index.html?no_redirect=true", icon: "<i class=\"fas fa-lock\"></i>"},
     ],
     nav_user_data: [
         {id: 1, text: "私信", path: "#", icon: "<i class=\"fas fa-comments\"></i>"},

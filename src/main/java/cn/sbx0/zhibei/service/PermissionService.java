@@ -24,4 +24,16 @@ public class PermissionService extends BaseService<Permission, Integer> {
     public Permission getEntity() {
         return new Permission();
     }
+
+    /**
+     * 判断权限是否存在
+     *
+     * @param url
+     * @param str
+     * @return
+     */
+    public boolean existsByUrlAndStr(String url, String str) {
+        String result = permissionDao.existsByUrlAndStr(url, str);
+        return result != null;
+    }
 }

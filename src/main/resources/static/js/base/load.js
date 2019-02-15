@@ -30,6 +30,23 @@ document.write("<script src=\"/js/lib/popper-1.12.9.min.js\"></script>");
 // document.write("<script src=\"/js/lib/bootstrap-4.0.0.min.js\"></script>");
 // 加载FontAwesome 5.0.0
 document.write("<script src=\"/js/lib/fontawesome-5.0.0.js\"></script>");
+// 消息提示 Messenger
+document.write("<script src=\"/js/lib/messenger.min.js\"></script>");
+document.write("<script src=\"/js/lib/messenger-theme-flat.js\"></script>");
+
+// 重写alert
+function alert(msg, type) {
+    Messenger.options = {
+        extraClasses: 'messenger-fixed messenger-on-bottom',
+        theme: 'flat'
+    };
+    Messenger().post({
+        message: msg,
+        type: type,
+        hideAfter: 3,
+        showCloseButton: true,
+    });
+}
 
 // 加载工具库
 document.write("<script src=\"/js/base/tools.js\"></script>");

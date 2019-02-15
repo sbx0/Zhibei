@@ -1,83 +1,65 @@
-<html lang="en" xmlns:th="http://www.springframework.org/schema/data/jaxb">
+<!doctype html>
+<html lang="en" class="h-100" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v3.8.5">
+    <title>Ooooooooops</title>
 
     <link rel="stylesheet" th:href="@{/css/lib/bootstrap-4.0.0.min.css}">
-    <link rel="stylesheet" th:href="@{/css/lib/dashboard.css}">
-    <link rel="stylesheet" th:href="@{/css/custom.css}">
 
-    <title>This is error page</title>
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+
+        .container {
+            width: auto;
+            max-width: 680px;
+            padding: 0 15px;
+        }
+
+        .footer {
+            background-color: #f5f5f5;
+        }
+    </style>
 
 </head>
-<body>
-<div id="main" v-cloak>
-
-    <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
-        <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">
-            {{i18N.website_name}}
-        </a>
-        <input class="form-control form-control-dark w-100" type="text" :placeholder="i18N.search">
-    </nav>
-
-    <div class="container-fluid">
-        <div class="row">
-
-            <nav class="col-md-2 d-none d-md-block bg-light sidebar">
-                <div class="sidebar-sticky">
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link active" :href="url.path" v-for="url in i18N.nav_data">
-                                <span v-html="url.icon"></span>
-                                &nbsp;
-                                {{url.text}}
-                            </a>
-                            <div class="ml-3 mt-3">
-                                <select id="i18N_select" class="form-control-sm">
-                                    <option :value="option.name" v-for="option in i18N.lib">{{option.value}}</option>
-                                </select>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-
-            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
-                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-                    <h6>{{i18N.error_message}}</h6>
-                </div>
-            </main>
-        </div>
+<body class="d-flex flex-column h-100">
+<!-- Begin page content -->
+<main role="main" class="flex-shrink-0">
+    <div class="container">
+        <h1 class="mt-5" th:text="${status}"></h1>
+        <p>
+            <span th:text="${timestamp}"></span>
+        </p>
+        <p>
+            <span th:text="${error}"></span>
+        </p>
+        <p>
+            <span th:text="${message}"></span>
+        </p>
+        <p>回到 <a href="/index.html">首页</a></p>
     </div>
+</main>
 
-</div>
-
-<script th:src="@{/js/base/load.js}"></script>
-<script>
-    var main = new Vue({
-        el: '#main',
-        data: {
-            i18N: i18N,
-        },
-    });
-
-    // 语言下拉栏选中
-    var i18N_config = getCookie("i18N_config")
-    if (i18N_config != "") {
-        $("#i18N_select").val(getCookie("i18N_config"));
-    }
-
-    // 语言切换
-    $("#i18N_select").change(function () {
-        setCookie("i18N_config", $("#i18N_select").val(), 30);
-        refresh();
-    });
-
-    // 切换语言时title也会切换
-    $(function () {
-        document.title = main.i18N.error_message;
-    });
-</script>
+<footer class="footer mt-auto py-3">
+    <div class="container">
+        <span class="text-muted">智贝科技有限公司</span>
+    </div>
+</footer>
 </body>
 </html>

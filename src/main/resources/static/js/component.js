@@ -60,6 +60,7 @@ var component_login_register = {
     },
     template: '<div class="aw-user-nav">\n    <div v-show="!not_login">\n        <a href="javascript:void(0);" class="aw-user-nav-dropdown">\n            <img alt="" :src="user.avatar"/>\n            <span class="badge badge-important">999+</span>\n        </a>\n        <div class="aw-dropdown dropdown-list pull-right">\n            <ul class="aw-dropdown-list">\n                <li v-for="url in i18N.nav_user_data">\n                    <a :href="url.path">\n                        <span v-html="url.icon"></span>\n                        {{url.text}}\n                    </a>\n                </li>\n            </ul>\n        </div>\n    </div>\n    <a v-show="not_login" class="login btn btn-normal btn-primary" href="/login.html">\n        {{i18N.login}}\n    </a>\n    <a v-show="not_login" class="register btn btn-normal btn-success" href="/login.html?register=true">\n        {{i18N.register}}\n    </a>\n</div>'
 };
+// 发布按钮
 var component_post = {
     props: ["not_login"],
     data: function () {

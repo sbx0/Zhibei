@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import java.util.Date;
+import java.util.Map;
 
 /**
  * 基础用户 控制层
@@ -49,13 +50,36 @@ public class UserController extends BaseController<User, Integer> {
      */
     @LogRecord
     @GetMapping("/admin")
-    public String admin(HttpServletRequest request) {
+    public String admin(HttpServletRequest request, Map<String, Object> map) {
         User user = userService.getUser(request);
         if (user != null) {
             if (userService.checkPermission(request, user)) {
                 return "admin";
             }
         }
+        map.put("status", "500");
+        map.put("timestamp", new Date());
+        map.put("message", "无权访问");
+        return "error";
+    }
+
+    /**
+     * 进入后台
+     *
+     * @return
+     */
+    @LogRecord
+    @GetMapping("/permission")
+    public String permission(HttpServletRequest request, Map<String, Object> map) {
+        User user = userService.getUser(request);
+        if (user != null) {
+            if (userService.checkPermission(request, user)) {
+                return "permission";
+            }
+        }
+        map.put("status", "500");
+        map.put("timestamp", new Date());
+        map.put("message", "无权访问");
         return "error";
     }
 
