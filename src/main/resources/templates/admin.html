@@ -1,4 +1,4 @@
-<html lang="en" xmlns:th="http://www.springframework.org/schema/data/jaxb">
+<html lang="en" xmlns:th="http://www.springframework.org/schema/data/jaxb" xmlns:v-on="http://www.w3.org/1999/xhtml">
 <head>
 
     <meta charset="utf-8">
@@ -14,7 +14,6 @@
 <body>
 <div id="main" v-cloak>
 
-    <!--nav bar begin-->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="/user/admin">
             {{i18N.website_name}}
@@ -42,16 +41,13 @@
             </form>
         </div>
     </nav>
-    <!--nav bar end-->
-    <!--container begin-->
+
     <div class="container">
         <div class="row">
-            <!--main beign-->
             <main role="main" class="col-md-12 ml-sm-auto col-lg-12 pt-3 px-4">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
                     <h6>{{i18N.admin_message}}</h6>
                     <div class="btn-toolbar mb-2 mb-md-0">
-                        <!--table select-->
                         <select id="table_select" class="form-control-sm">
                             <option :value="table.value" v-for="table in table_data">{{table.name}}</option>
                         </select>
@@ -62,60 +58,32 @@
                         <table id="table" style="white-space:nowrap;" class="table table-responsive">
                             <thead>
                             <tr v-for="(object,index) in query_data" v-if="index == 0">
-                                <th>操作</th>
-                                <th v-for="(value,key) in object">{{key}}</th>
+                                <th>
+                                    <a
+                                            href="javascript:void(0)"
+                                            v-on:click.capture="update(0)"
+                                            data-toggle="modal"
+                                            :data-target="'#'+table+'Modal'"
+                                            class="text-success"
+                                    >
+                                        {{i18N.add}}
+                                    </a>
+                                </th>
+                                <th v-for="attribute in attribute_data">{{attribute.name}}</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td>
-                                    <a class="text-success" href="javascript:saveOne()">保存</a>
-                                </td>
-                                <td v-for="(value,a) in attribute_data" v-if="attribute_data.id != ''">
-                                    <input
-                                            type="text"
-                                            :placeholder="a"
-                                            :name="a"
-                                            v-if="a != 'id' && !(value instanceof Object)"
-                                            :value="value"
-                                    />
-                                    <input
-                                            type="text"
-                                            :placeholder="a"
-                                            :name="a"
-                                            v-if="a == 'id' && !(value instanceof Object)"
-                                            :value="value"
-                                            readonly
-                                    />
-                                    <input
-                                            type="text"
-                                            :placeholder="a"
-                                            :name="a"
-                                            v-if="value instanceof Object"
-                                            :value="value.id"
-                                            readonly
-                                    />
-                                </td>
-                                <td v-for="(value,a) in attribute_data" v-if="attribute_data.id == ''">
-                                    <input
-                                            type="text"
-                                            :placeholder="a"
-                                            :name="a"
-                                            v-if="a != 'id'"
-                                    />
-                                    <input
-                                            type="text"
-                                            :placeholder="a"
-                                            :name="a"
-                                            v-if="a == 'id'"
-                                            readonly
-                                    />
-                                </td>
-                            </tr>
                             <tr v-for="object in query_data">
                                 <td>
-                                    <a :href="'javascript:deleteOne('+object.id+')'" class="text-danger">删除</a>
-                                    <a :href="'javascript:updateOne('+object.id+')'">修改</a>
+                                    <a :href="'javascript:deleteOne('+object.id+')'" class="text-danger">
+                                        {{i18N.delete}}
+                                    </a>
+                                    <a
+                                            href="javascript:void(0)"
+                                            v-on:click.capture="update(object.id)"
+                                            data-toggle="modal"
+                                            :data-target="'#'+table+'Modal'"
+                                    >{{i18N.update}}</a>
                                 </td>
                                 <td v-for="o in object">
                                     <span v-if="o instanceof Object">
@@ -243,21 +211,27 @@
                         </nav>
                     </div>
                 </div>
-                <!-- 控制申请 -->
                 <select id="i18N_select" class="form-control-sm container mb-3">
                     <option :value="option.name" v-for="option in i18N.lib">{{option.value}}</option>
                 </select>
             </main>
-            <!--main end-->
         </div>
     </div>
-    <!--container end-->
+
+    <!--自动批量生成管理模态框-->
+    <base-modal
+            :name="table"
+            :title="table+i18N.management"
+            :body="modal_data"
+    ></base-modal>
+
 </div>
 
 <script th:src="@{/js/lib/jquery-3.2.1.slim.min.js}"></script>
 <script th:src="@{/js/lib/popper-1.12.9.min.js}"></script>
 <script th:src="@{/js/lib/bootstrap-4.0.0.min.js}"></script>
 <script th:src="@{/js/base/load.js}"></script>
+<script th:src="@{/js/modal.js}"></script>
 <script th:src="@{/js/admin.js}"></script>
 </body>
 </html>

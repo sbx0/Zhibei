@@ -45,21 +45,138 @@ var main = new Vue({
         },
         query_data: {},
         attribute_data: {},
+        modal_data: [],
     },
-    components: {},
-    methods: {},
+    components: {
+        "base-modal": base_modal,
+    },
+    methods: {
+        update: function (id) {
+            updateOne(id);
+        }
+    },
     create: function () {
 
     },
 });
 
+function bind() {
+    // 取消之前的绑定
+    $("#" + main.table + "ModalSubmitBtn").unbind();
+    // 绑定模态框提交按钮点击事件
+    $("#" + main.table + "ModalSubmitBtn").on('click', function () {
+        saveOne(main.table + "_form");
+    });
+}
+
+// 通用拼装
+function build(data) {
+    main.modal_data = [];
+    var modal_data = [];
+    for (var i = 0; i < main.attribute_data.length; i++) {
+        var attribute = main.attribute_data[i];
+        if (attribute.name === 'introduction') {
+            modal_data[i] = {
+                id: attribute.name,
+                name: attribute.name,
+                value: data[attribute.name],
+                type: 'textarea',
+            };
+        } else if (attribute.name === 'email') {
+            modal_data[i] = {
+                id: attribute.name,
+                name: attribute.name,
+                value: data[attribute.name],
+                type: 'email',
+            };
+        } else if (attribute.name === 'id') {
+            modal_data[i] = {
+                id: attribute.name,
+                name: attribute.name,
+                value: data[attribute.name],
+                type: 'text',
+                readonly: 'readonly'
+            };
+        } else if (attribute.type === 'String') {
+            modal_data[i] = {
+                id: attribute.name,
+                name: attribute.name,
+                value: data[attribute.name],
+                type: 'text'
+            };
+        } else if (attribute.type === 'Date') {
+            if (data[attribute.name] != null) {
+                var time = Format(getDate(data[attribute.name].toString()), "yyyy-MM-dd")
+            } else {
+                time = "";
+            }
+            modal_data[i] = {
+                id: attribute.name,
+                name: attribute.name,
+                value: time,
+                type: 'date'
+            };
+        } else if (attribute.type === 'Double' || attribute.type === 'Integer') {
+            modal_data[i] = {
+                id: attribute.name,
+                name: attribute.name,
+                value: data[attribute.name],
+                type: 'number'
+            };
+        } else if (attribute.type === 'Boolean') {
+            modal_data[i] = {
+                id: attribute.name,
+                name: attribute.name,
+                value: data[attribute.name],
+                type: 'checkbox',
+            };
+        } else if (attribute.type === 'List') {
+            getData("permission");
+            modal_data[i] = {
+                id: attribute.name,
+                name: attribute.name,
+                value: "",
+                options: main["table_data"]["permission"]["data"],
+                multiple: true,
+                type: 'select',
+            };
+        } else if (
+            attribute.type === 'Role'
+            || attribute.type === 'User'
+            || attribute.type === 'Permission'
+            || attribute.type === 'Certification'
+            || attribute.type === 'Log'
+            || attribute.type === 'UploadFile'
+        ) {
+            getData(attribute.type.toLowerCase());
+            modal_data[i] = {
+                id: attribute.name,
+                name: attribute.name,
+                value: data[attribute.name],
+                options: main["table_data"][attribute.type.toLowerCase()]["data"],
+                type: 'select',
+            };
+        } else {
+            modal_data[i] = {
+                id: attribute.name,
+                name: attribute.name,
+                value: data[attribute.name],
+                type: 'text'
+            };
+        }
+    }
+    main.modal_data = modal_data;
+    bind();
+}
+
 // 通用保存
-function saveOne() {
+function saveOne(form_name) {
     $.ajax({
         type: "post",
         url: "/" + main.table + "/add",
-        data: $("#save_or_update_form").serialize(),
+        data: $("#" + form_name).serialize(),
         dataType: "json",
+        async: false,
         success: function (json) {
             var status = json.status;
             alert(statusCodeToAlert(status));
@@ -83,6 +200,7 @@ function deleteOne(id) {
             url: "/" + main.table +
                 "/delete?id=" + id,
             dataType: "json",
+            async: false,
             success: function (json) {
                 var status = json.status;
                 if (statusCodeToBool(status)) {
@@ -99,23 +217,21 @@ function deleteOne(id) {
 
 // 通用修改
 function updateOne(id) {
+    var object;
     $.ajax({
         type: "get",
         url: "/" + main.table +
             "/" + id,
         dataType: "json",
+        async: false,
         success: function (json) {
-            var status = json.status;
-            if (statusCodeToBool(status)) {
-                main.attribute_data = json.object;
-            } else {
-                alert(statusCodeToAlert(status));
-            }
+            object = json.object;
         },
         error: function () {
             alert(i18N.network + i18N.alert.error);
         }
     });
+    build(object);
 }
 
 // 从链接获取参数
@@ -185,6 +301,7 @@ function ajax_query() {
     query();
 }
 
+// 查询表
 function query() {
     var attribute = $("#table_sort").val();
     if (attribute != null) {
@@ -206,24 +323,68 @@ function query() {
     if (main.size < 1 || main.size > 1000) {
         main.size = 10;
     }
+    // 获取表头
     $.ajax({
         type: "get",
-        url: "../" + main.table +
+        url: "/" + main.table + "/attribute",
+        dataType: "json",
+        async: false,
+        success: function (json) {
+            var status = json.status;
+            if (statusCodeToBool(status)) {
+                main.attribute_data = json.attributes;
+            } else {
+                alert(statusCodeToAlert(status));
+            }
+        },
+        error: function () {
+            alert(i18N.network + i18N.alert.error);
+        }
+    });
+    // 获取数据
+    $.ajax({
+        type: "get",
+        url: "/" + main.table +
             "/list?page=" + main.page +
             "&size=" + main.size +
             "&attribute=" + main.attribute +
             "&direction=" + main.direction,
         dataType: "json",
+        async: false,
         success: function (json) {
             var status = json.status;
             if (statusCodeToBool(status)) {
+                main["table_data"][main.table]["data"] = json.objects;
                 main.query_data = json.objects;
-                main.attribute_data = JSON.parse(JSON.stringify(main.query_data[0]));
-                main.attribute_data.id = "";
                 main.page = json.page;
                 main.size = json.size;
                 main.total_pages = json.total_pages;
                 main.total_elements = json.total_elements;
+                if (json.objects == null) {
+                    alert(i18N.result + i18N.is + i18N.null);
+                }
+            } else {
+                alert(statusCodeToAlert(status))
+            }
+        },
+        error: function () {
+            alert(i18N.network + i18N.alert.error);
+        }
+    });
+}
+
+function getData(table) {
+    $.ajax({
+        type: "get",
+        url: "/" + table +
+            "/list?page=1" +
+            "&size=9999",
+        dataType: "json",
+        async: false,
+        success: function (json) {
+            var status = json.status;
+            if (statusCodeToBool(status)) {
+                main["table_data"][table]["data"] = json.objects;
                 if (json.objects == null) {
                     alert(i18N.result + i18N.is + i18N.null);
                 }

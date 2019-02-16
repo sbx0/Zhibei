@@ -62,10 +62,10 @@ public class User implements Serializable {
     private Integer level; // 用户等级
     @JsonView(Admin.class)
     @Column(nullable = false, columnDefinition = "Decimal(10,1) default '0.0'")
-    private double exp; // 用户经验
+    private Double exp; // 用户经验
     @JsonView(Admin.class)
     @Column(nullable = false, columnDefinition = "Decimal(10,1) default '100.0'")
-    private double exp_max; // 当前等级的最大经验值，超过清空升级
+    private Double exp_max; // 当前等级的最大经验值，超过清空升级
 
     /**
      * 正常情况下需要转换成Json的属性
@@ -79,6 +79,28 @@ public class User implements Serializable {
      */
     public interface Admin extends Normal {
 
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                ", introduction='" + introduction + '\'' +
+                ", registerTime=" + registerTime +
+                ", banned=" + banned +
+                ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", sex='" + sex + '\'' +
+                ", role=" + role +
+                ", birthday=" + birthday +
+                ", integral=" + integral +
+                ", level=" + level +
+                ", exp=" + exp +
+                ", exp_max=" + exp_max +
+                '}';
     }
 
     public static long getSerialVersionUID() {
@@ -197,41 +219,19 @@ public class User implements Serializable {
         this.level = level;
     }
 
-    public double getExp() {
+    public Double getExp() {
         return exp;
     }
 
-    public void setExp(double exp) {
+    public void setExp(Double exp) {
         this.exp = exp;
     }
 
-    public double getExp_max() {
+    public Double getExp_max() {
         return exp_max;
     }
 
-    public void setExp_max(double exp_max) {
+    public void setExp_max(Double exp_max) {
         this.exp_max = exp_max;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", password='" + password + '\'' +
-                ", introduction='" + introduction + '\'' +
-                ", registerTime=" + registerTime +
-                ", banned=" + banned +
-                ", phone='" + phone + '\'' +
-                ", email='" + email + '\'' +
-                ", avatar='" + avatar + '\'' +
-                ", sex='" + sex + '\'' +
-                ", role=" + role +
-                ", birthday=" + birthday +
-                ", integral=" + integral +
-                ", level=" + level +
-                ", exp=" + exp +
-                ", exp_max=" + exp_max +
-                '}';
     }
 }

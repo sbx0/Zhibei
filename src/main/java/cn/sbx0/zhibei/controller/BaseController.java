@@ -18,8 +18,10 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 公用基础 控制层
@@ -52,6 +54,37 @@ public abstract class BaseController<T, ID> {
      * @return 对应的服务层
      */
     public abstract BaseService<T, ID> getService();
+
+    /**
+     * 获取对象所有的属性名，属性类型
+     *
+     * @param request
+     * @return 实体
+     */
+    @LogRecord
+    @ResponseBody
+    @GetMapping("/attribute")
+    public ObjectNode getAttribute(HttpServletRequest request) {
+        json = mapper.createObjectNode();
+        User user = userService.getUser(request);
+        if (user != null) {
+            if (userService.checkPermission(request, user)) {
+                List<Map> attributes = getService().getAttribute();
+                ArrayNode jsons = mapper.createArrayNode();
+                for (Map info : attributes) {
+                    ObjectNode object = mapper.convertValue(info, ObjectNode.class);
+                    jsons.add(object);
+                }
+                json.set("attributes", jsons);
+                json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
+            } else {
+                json.put(STATUS_NAME, STATUS_CODE_NO_PERMISSION);
+            }
+        } else {
+            json.put(STATUS_NAME, STATUS_CODE_NOT_LOGIN);
+        }
+        return json;
+    }
 
     /**
      * 分页查询列表
@@ -124,6 +157,7 @@ public abstract class BaseController<T, ID> {
         if (user != null) {
             if (userService.checkPermission(request, user)) {
                 T t = getService().findById(id);
+                if (t == null) t = getService().getEntity();
                 ObjectNode object = mapper.convertValue(t, ObjectNode.class);
 //                json.set(t.getClass().getSimpleName().toLowerCase(), object);
                 json.set("object", object);

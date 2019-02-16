@@ -9,8 +9,13 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 公用基础 服务层
@@ -35,6 +40,23 @@ public abstract class BaseService<T, ID> {
      * @return 对应的实体
      */
     public abstract T getEntity();
+
+    /**
+     * 获取对象属性类型，属性名
+     */
+    public List getAttribute() {
+        Field[] fields = getEntity().getClass().getDeclaredFields();
+        List<Map> list = new ArrayList();
+        for (int i = 0; i < fields.length; i++) {
+            if (!fields[i].getName().equals("serialVersionUID")) {
+                Map infoMap = new HashMap();
+                infoMap.put("type", fields[i].getType().getSimpleName());
+                infoMap.put("name", fields[i].getName());
+                list.add(infoMap);
+            }
+        }
+        return list;
+    }
 
     /**
      * 检查对象指定属性是否为空字符或NULL 需要为属性设置get方法

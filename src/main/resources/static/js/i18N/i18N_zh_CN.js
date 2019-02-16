@@ -75,6 +75,16 @@ var i18N = {
     permission: "权限",
     log: "日志",
     management: "管理",
+    please: "请",
+    input: "输入",
+    name: "名称",
+    id: "编号",
+    available: "可用",
+    father: "父亲",
+    permissions: "权限",
+    update: "修改",
+    delete: "删除",
+    add: "增加",
 
     certification_type: {
         personal: "个人认证",
@@ -89,19 +99,16 @@ var i18N = {
         {id: 1, text: "首页", path: "/m/index.html", icon: "<i class=\"fas fa-home\"></i>"},
         {id: 2, text: "登陆", path: "/m/index.html", icon: "<i class=\"fas fa-sign-in-alt\"></i>"},
         {id: 3, text: "后台", path: "/user/admin", icon: "<i class=\"fas fa-sign-in-alt\"></i>"},
-        {id: 4, text: "权限", path: "/user/permission", icon: "<i class=\"fas fa-sign-in-alt\"></i>"},
-        {id: 5, text: "我的", path: "/m/setting.html", icon: "<i class=\"fas fa-sign-in-alt\"></i>"},
+        {id: 4, text: "我的", path: "/m/setting.html", icon: "<i class=\"fas fa-sign-in-alt\"></i>"},
     ],
     nav_data: [
         {id: 1, text: "首页", path: "/index.html", icon: "<i class=\"fas fa-home\"></i>"},
         {id: 2, text: "登陆", path: "/login.html", icon: "<i class=\"fas fa-sign-in-alt\"></i>"},
         {id: 3, text: "后台", path: "/user/admin", icon: "<i class=\"fas fa-sign-in-alt\"></i>"},
-        {id: 4, text: "权限", path: "/user/permission", icon: "<i class=\"fas fa-sign-in-alt\"></i>"},
     ],
     nav_more_data: [
         {id: 1, text: "后台", path: "/user/admin", icon: "<i class=\"fas fa-lock\"></i>"},
-        {id: 2, text: "权限", path: "/user/permission", icon: "<i class=\"fas fa-lock\"></i>"},
-        {id: 3, text: "手机版", path: "/m/index.html?no_redirect=true", icon: "<i class=\"fas fa-lock\"></i>"},
+        {id: 2, text: "手机版", path: "/m/index.html?no_redirect=true", icon: "<i class=\"fas fa-lock\"></i>"},
     ],
     nav_user_data: [
         {id: 1, text: "私信", path: "#", icon: "<i class=\"fas fa-comments\"></i>"},
