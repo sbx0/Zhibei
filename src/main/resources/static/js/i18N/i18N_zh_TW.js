@@ -85,6 +85,7 @@ var i18N = {
     update: "修改",
     delete: "刪除",
     add: "增加",
+    no_more_result: "沒有更多了",
 
     certification_type: {
         personal: "個人認證",
@@ -107,8 +108,9 @@ var i18N = {
         {id: 3, text: "後台", path: "/user/admin", icon: "<i class=\"fas fa-sign-in-alt\"></i>"},
     ],
     nav_more_data: [
-        {id: 1, text: "後台", path: "/user/admin", icon: "<i class=\"fas fa-lock\"></i>"},
-        {id: 2, text: "手機版", path: "/m/index.html?no_redirect=true", icon: "<i class=\"fas fa-lock\"></i>"},
+        {id: 1, text: "後台", path: "/user/admin", icon: ""},
+        {id: 2, text: "手機版", path: "/m/index.html?no_redirect=true", icon: ""},
+        {id: 3, text: "GitHub", path: "https://github.com/sbx0/Zhibei", icon: ""},
     ],
     nav_user_data: [
         {id: 1, text: "私信", path: "#", icon: "<i class=\"fas fa-comments\"></i>"},
@@ -118,7 +120,7 @@ var i18N = {
     nav_post_data: [
         {id: 1, text: "問題", path: "#", icon: "<i class=\"fas fa-question\"></i>"},
         {id: 2, text: "懸賞", path: "#", icon: "<i class=\"fas fa-award\"></i>"},
-        {id: 3, text: "文章", path: "#", icon: "<i class=\"far fa-newspaper\"></i>"},
+        {id: 3, text: "文章", path: "/post.html", icon: "<i class=\"far fa-newspaper\"></i>"},
         {id: 4, text: "建議", path: "#", icon: "<i class=\"fas fa-comment-medical\"></i>"},
     ],
     category_data: [
@@ -163,7 +165,8 @@ var i18N = {
             exp_max: "經驗上限",
         },
         role: {
-            id: "編號", name: "角色名稱",
+            id: "編號",
+            name: "角色名稱",
             introduction: "簡介",
             registerTime: "註冊時間",
             available: "是否可用",

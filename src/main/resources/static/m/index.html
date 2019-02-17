@@ -71,8 +71,8 @@
                             </h2>
                         </div>
                         <div class="mod-footer">
-                            <a :href="article.user.id">
-                                {{article.user.name}}
+                            <a :href="article.author.id">
+                                {{article.author.name}}
                             </a>
                             {{i18N.post}}{{i18N.article}}
                             <span class="pull-right color-999">
@@ -84,7 +84,7 @@
                 </ul>
             </div>
             <div class="mod-footer">
-                <a id="load_explore" class="aw-load-more" auto-load="false" data-page="2">
+                <a id="load_explore" class="aw-load-more" href="javascript:loadMore();">
                     <i class="icon icon-loading icon-spin"></i>
                     <span>{{i18N.more}}</span>
                 </a>

@@ -12,96 +12,19 @@ var main = new Vue({
         search_result_show: "none",
         search_list_show: "none",
         search_keyword: "",
+        index: 1,
+        page: 1,
+        size: 10,
+        attribute: "id",
+        direction: "ASC",
+        total_pages: 0,
+        total_elements: 0,
         user: {
             id: "-1",
             name: "未登录",
         },
-        article_data: [
-            {
-                id: 1,
-                title: "测试问题",
-                watch: 1,
-                replay: 1,
-                view: 1,
-                time: "2小时前",
-                content: "测试文章内容测试文章内容测试文章内容测试文章内容测试文章内容测试文章内容测试文章内容测试文章内容测试文章内容",
-                category: {
-                    id: 1,
-                    name: "建站运营",
-                },
-                user: {
-                    id: 2,
-                    name: "测试用户2",
-                },
-            },
-            {
-                id: 1,
-                title: "测试问题",
-                watch: 1,
-                replay: 1,
-                view: 1,
-                time: "2小时前",
-                content: "测试文章内容测试文章内容测试文章内容测试文章内容测试文章内容测试文章内容测试文章内容测试文章内容测试文章内容",
-                category: {
-                    id: 1,
-                    name: "建站运营",
-                },
-                user: {
-                    id: 2,
-                    name: "测试用户2",
-                },
-            },
-        ],
-        question_data: [
-            {
-                id: 1,
-                title: "测试问题",
-                watch: 1,
-                replay: 1,
-                view: 1,
-                time: "2小时前",
-                category: {
-                    id: 1,
-                    name: "插件",
-                },
-                user: {
-                    id: 1,
-                    name: "测试用户1",
-                },
-            },
-            {
-                id: 1,
-                title: "测试问题",
-                watch: 1,
-                replay: 1,
-                view: 1,
-                time: "2小时前",
-                category: {
-                    id: 1,
-                    name: "插件",
-                },
-                user: {
-                    id: 1,
-                    name: "测试用户1",
-                },
-            },
-            {
-                id: 1,
-                title: "测试问题",
-                watch: 1,
-                replay: 1,
-                view: 1,
-                time: "2小时前",
-                category: {
-                    id: 1,
-                    name: "插件",
-                },
-                user: {
-                    id: 1,
-                    name: "测试用户1",
-                },
-            },
-        ],
+        article_data: [],
+        question_data: [],
         search_user_data: [],
         search_topic_data: [],
         search_question_data: [],
@@ -123,6 +46,47 @@ var main = new Vue({
 
     }
 });
+
+getArticle();
+
+function loadMore() {
+    main.page++;
+    getArticle();
+}
+
+function getArticle() {
+    $.ajax({
+        type: "get",
+        url: "/article/index?page=" + main.page +
+            "&size=" + main.size +
+            "&attribute=" + main.attribute +
+            "&direction=" + main.direction,
+        dataType: "json",
+        async: false,
+        success: function (json) {
+            if (json.objects === null) {
+                main.page--;
+                alert(i18N.no_more_result);
+            } else if (main.page === 1) {
+                main.article_data = json.objects;
+            } else {
+                var article_data = [];
+                for (var i = 0; i < main.article_data.length; i++) {
+                    article_data.push(main.article_data[i]);
+                }
+                for (var i = 0; i < json.objects.length; i++) {
+                    article_data.push(json.objects[i]);
+                }
+                main.article_data = article_data;
+            }
+            return false;
+        },
+        error: function () {
+            alert(i18N.network + i18N.alert.error);
+            return false;
+        }
+    });
+}
 
 // 初始化用户信息
 get_info();
@@ -163,21 +127,4 @@ if (i18N_config != "") {
 $("#i18N_select").change(function () {
     setCookie("i18N_config", $("#i18N_select").val(), 30);
     refresh();
-});
-// 搜索框取消选中状态
-$("#search_input_nav_bar").blur(function () {
-    main.search_result_show = "none";
-    main.search_list_show = "none"
-});
-// 搜索框选中
-$("#search_input_nav_bar").focus(function () {
-    main.search_result_show = "block";
-});
-// 搜索框文字改变
-$("#search_input_nav_bar").on('input', function () {
-    if ($("#search_input_nav_bar").val() === "") {
-        main.search_list_show = "none";
-    } else {
-        main.search_list_show = "block";
-    }
 });

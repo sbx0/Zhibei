@@ -85,6 +85,7 @@ var i18N = {
     update: "Update",
     delete: "Delete",
     add: "Add",
+    no_more_result: "No More Result",
 
     Certification_type: {
         Personal: "Personal Certification",
@@ -107,8 +108,9 @@ var i18N = {
         {id: 3, text: "Admin", path: "/user/admin", icon: "<i class=\"fas fa-sign-in-alt\"></i>"},
     ],
     nav_more_data: [
-        {id: 1, text: "Admin", path: "/user/admin", icon: "<i class=\"fas fa-lock\"></i>"},
-        {id: 2, text: "Mobile", path: "/m/index.html?no_redirect=true", icon: "<i class=\"fas fa-lock\"></i>"},
+        {id: 1, text: "Admin", path: "/user/admin", icon: ""},
+        {id: 2, text: "Mobile", path: "/m/index.html?no_redirect=true", icon: ""},
+        {id: 3, text: "GitHub", path: "https://github.com/sbx0/Zhibei", icon: ""},
     ],
     nav_user_data: [
         {id: 1, text: "Message", path: "#", icon: "<i class=\"fas fa-comments\"></i>"},
@@ -118,7 +120,7 @@ var i18N = {
     nav_post_data: [
         {id: 1, text: "Question", path: "#", icon: "<i class=\"fas fa-question\"></i>"},
         {id: 2, text: "Reward", path: "#", icon: "<i class=\"fas fa-award\"></i>"},
-        {id: 3, text: "Article", path: "#", icon: "<i class=\"far fa-newspaper\"></i>"},
+        {id: 3, text: "Article", path: "/post.html", icon: "<i class=\"far fa-newspaper\"></i>"},
         {id: 4, text: "Advice", path: "#", icon: "<i class=\"fas fa-comment-medical\"></i>"},
     ],
     category_data: [

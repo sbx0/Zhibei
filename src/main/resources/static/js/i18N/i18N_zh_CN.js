@@ -85,6 +85,7 @@ var i18N = {
     update: "修改",
     delete: "删除",
     add: "增加",
+    no_more_result: "没有更多了",
 
     certification_type: {
         personal: "个人认证",
@@ -107,8 +108,9 @@ var i18N = {
         {id: 3, text: "后台", path: "/user/admin", icon: "<i class=\"fas fa-sign-in-alt\"></i>"},
     ],
     nav_more_data: [
-        {id: 1, text: "后台", path: "/user/admin", icon: "<i class=\"fas fa-lock\"></i>"},
-        {id: 2, text: "手机版", path: "/m/index.html?no_redirect=true", icon: "<i class=\"fas fa-lock\"></i>"},
+        {id: 1, text: "后台", path: "/user/admin", icon: ""},
+        {id: 2, text: "手机版", path: "/m/index.html?no_redirect=true", icon: ""},
+        {id: 3, text: "GitHub", path: "https://github.com/sbx0/Zhibei", icon: ""},
     ],
     nav_user_data: [
         {id: 1, text: "私信", path: "#", icon: "<i class=\"fas fa-comments\"></i>"},
@@ -118,7 +120,7 @@ var i18N = {
     nav_post_data: [
         {id: 1, text: "问题", path: "#", icon: "<i class=\"fas fa-question\"></i>"},
         {id: 2, text: "悬赏", path: "#", icon: "<i class=\"fas fa-award\"></i>"},
-        {id: 3, text: "文章", path: "#", icon: "<i class=\"far fa-newspaper\"></i>"},
+        {id: 3, text: "文章", path: "/post.html", icon: "<i class=\"far fa-newspaper\"></i>"},
         {id: 4, text: "建议", path: "#", icon: "<i class=\"fas fa-comment-medical\"></i>"},
     ],
     category_data: [

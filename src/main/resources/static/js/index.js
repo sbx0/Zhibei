@@ -9,6 +9,13 @@ var main = new Vue({
     data: {
         i18N: i18N,
         not_login: true,
+        index: 1,
+        page: 1,
+        size: 10,
+        attribute: "id",
+        direction: "ASC",
+        total_pages: 0,
+        total_elements: 0,
         search_result_show: "none",
         search_list_show: "none",
         search_keyword: "",
@@ -16,92 +23,8 @@ var main = new Vue({
             id: "-1",
             name: "未登录",
         },
-        article_data: [
-            {
-                id: 1,
-                title: "测试问题",
-                watch: 1,
-                replay: 1,
-                view: 1,
-                time: "2小时前",
-                content: "测试文章内容测试文章内容测试文章内容测试文章内容测试文章内容测试文章内容测试文章内容测试文章内容测试文章内容",
-                category: {
-                    id: 1,
-                    name: "建站运营",
-                },
-                user: {
-                    id: 2,
-                    name: "测试用户2",
-                },
-            },
-            {
-                id: 1,
-                title: "测试问题",
-                watch: 1,
-                replay: 1,
-                view: 1,
-                time: "2小时前",
-                content: "测试文章内容测试文章内容测试文章内容测试文章内容测试文章内容测试文章内容测试文章内容测试文章内容测试文章内容",
-                category: {
-                    id: 1,
-                    name: "建站运营",
-                },
-                user: {
-                    id: 2,
-                    name: "测试用户2",
-                },
-            },
-        ],
-        question_data: [
-            {
-                id: 1,
-                title: "测试问题",
-                watch: 1,
-                replay: 1,
-                view: 1,
-                time: "2小时前",
-                category: {
-                    id: 1,
-                    name: "插件",
-                },
-                user: {
-                    id: 1,
-                    name: "测试用户1",
-                },
-            },
-            {
-                id: 1,
-                title: "测试问题",
-                watch: 1,
-                replay: 1,
-                view: 1,
-                time: "2小时前",
-                category: {
-                    id: 1,
-                    name: "插件",
-                },
-                user: {
-                    id: 1,
-                    name: "测试用户1",
-                },
-            },
-            {
-                id: 1,
-                title: "测试问题",
-                watch: 1,
-                replay: 1,
-                view: 1,
-                time: "2小时前",
-                category: {
-                    id: 1,
-                    name: "插件",
-                },
-                user: {
-                    id: 1,
-                    name: "测试用户1",
-                },
-            },
-        ],
+        article_data: [],
+        question_data: [],
         search_user_data: [],
         search_topic_data: [],
         search_question_data: [],
@@ -129,6 +52,47 @@ var main = new Vue({
 
     }
 });
+
+getArticle();
+
+function loadMore() {
+    main.page++;
+    getArticle();
+}
+
+function getArticle() {
+    $.ajax({
+        type: "get",
+        url: "/article/index?page=" + main.page +
+            "&size=" + main.size +
+            "&attribute=" + main.attribute +
+            "&direction=" + main.direction,
+        dataType: "json",
+        async: false,
+        success: function (json) {
+            if (json.objects === null) {
+                main.page--;
+                alert(i18N.no_more_result);
+            } else if (main.page === 1) {
+                main.article_data = json.objects;
+            } else {
+                var article_data = [];
+                for (var i = 0; i < main.article_data.length; i++) {
+                    article_data.push(main.article_data[i]);
+                }
+                for (var i = 0; i < json.objects.length; i++) {
+                    article_data.push(json.objects[i]);
+                }
+                main.article_data = article_data;
+            }
+            return false;
+        },
+        error: function () {
+            alert(i18N.network + i18N.alert.error);
+            return false;
+        }
+    });
+}
 
 // 事件绑定
 // 切换语言时title也会切换

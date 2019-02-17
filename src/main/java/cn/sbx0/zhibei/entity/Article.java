@@ -22,12 +22,13 @@ public class Article implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(nullable = false, length = 100)
     @JsonView(Top.class)
+    @Column(nullable = false, length = 100)
     private String title; // 标题
     @JsonView(Top.class)
     @Column(nullable = false)
     private Date time; // 时间
+    @JsonView(Top.class)
     @Column(length = 250)
     private String introduction; // 简介
     @JsonView(Index.class)
@@ -35,7 +36,7 @@ public class Article implements Serializable {
     @Column(nullable = false)
     private String content; // 内容
     private Date lastChangeTime; // 上次修改时间
-    @JsonIgnore
+    @JsonView(Admin.class)
     @Column(length = 40)
     private String password; // 密码
     @JsonView(Index.class)
@@ -55,6 +56,7 @@ public class Article implements Serializable {
      * 大于0 时 越大，排序越靠前
      * 小于0 隐藏
      */
+    @JsonView(Admin.class)
     @Column(nullable = false)
     private Integer top; // 置顶排序
     @JsonView(Top.class)
@@ -68,6 +70,14 @@ public class Article implements Serializable {
 
     // 首页
     public interface Index extends Top {
+
+    }
+
+    /**
+     * 我全都要
+     */
+    public interface Admin extends Index {
+
     }
 
     @Override

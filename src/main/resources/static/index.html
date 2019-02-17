@@ -158,34 +158,30 @@
                                         </h4>
 
                                         <p>
-                                            <a class="aw-question-tags" :href="article.category.id">
-                                                {{article.category.name}}
+                                            <a class="aw-question-tags" :href="article.id">
+                                                这里放标签
                                             </a>
                                             •
-                                            <a :href="article.user.id" class="aw-user-name">
-                                                {{article.user.name}}
+                                            <a :href="article.author.id" class="aw-user-name">
+                                                {{article.author.name}}
                                             </a>
                                             <span class="text-color-999">
-                                                {{i18N.post}}{{i18N.article}}
+                                                {{i18N.post}} {{i18N.article}}
                                                 •
-                                                {{article.watch}}{{i18N.watch}}
+                                                {{i18N.attribute.article.likes}} {{article.likes}}
                                                 •
-                                                {{article.replay}}{{i18N.replay}}
+                                                {{i18N.attribute.article.comments}} {{article.comments}}
                                                 •
-                                                {{article.view}}{{i18N.view}}
+                                                {{i18N.attribute.article.views}} {{article.views}}
                                                 •
                                                 {{article.time}}
                                             </span>
                                         </p>
-
                                         <!-- 文章内容调用 -->
                                         <div class="markitup-box">
-                                            <img src="http://wenda.wecenter.com/uploads/article/20190130/b03c50852ae894fea0fb9e4b59aa0948.png"
-                                                 class="img-polaroid pull-left inline-img"
-                                                 title="微信截图_20190130161417.png" alt="微信截图_20190130161417.png">
-                                            <div class="img pull-right"></div>
-                                            {{article.content}}
-                                            <a class="more" href="#">{{i18N.read_more}}</a>
+                                            <!--<img src="" class="img-polaroid pull-left inline-img">-->
+                                            <!--<div class="img pull-right"></div>-->
+                                            {{article.introduction}}
                                         </div>
                                         <!--<div class="collapse all-content"></div>-->
                                         <!-- end 文章内容调用 -->
@@ -196,22 +192,9 @@
                         <div class="mod-footer">
                             <div class="page-control">
                                 <ul class="pagination pull-right">
-                                    <li class="active"><a href="javascript:;">1</a></li>
-                                    <li>
-                                        <a href="#">2</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">3</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">4</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">&gt;</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">&gt;&gt;</a>
-                                    </li>
+                                    <a href="javascript:loadMore();">
+                                        {{i18N.read_more}}
+                                    </a>
                                 </ul>
                             </div>
                         </div>
@@ -293,44 +276,6 @@
 
     <component-footer></component-footer>
 
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <a type="button" class="close icon icon-delete" data-dismiss="modal" aria-hidden="true"></a>
-                    <h4 class="modal-title" id="myModalLabel">{{i18N.post}}{{i18N.question}}</h4>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Email address</label>
-                            <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Email">
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputPassword1">Password</label>
-                            <input type="text" class="form-control" id="exampleInputPassword1"
-                                   placeholder="Password">
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputFile">File input</label>
-                            <input type="file" id="exampleInputFile">
-                            <p class="help-block">Example block-level help text here.</p>
-                        </div>
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox"> Check me out
-                            </label>
-                        </div>
-                    </form>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
 </div>
 
 <script src="/js/base/load.js"></script>
