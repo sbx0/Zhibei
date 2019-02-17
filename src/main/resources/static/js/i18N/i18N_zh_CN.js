@@ -141,6 +141,7 @@ var i18N = {
         certification: "申请表",
         file: "文件表",
         log: "日志表",
+        article: "文章表",
     },
     attribute: {
         user: {
@@ -211,6 +212,21 @@ var i18N = {
             method: "方法",
             className: "类名",
             url: "链接",
+        },
+        article: {
+            id: "编号",
+            title: "标题",
+            time: "发表时间",
+            introduction: "简介",
+            content: "内容",
+            lastChangeTime: "上次修改时间",
+            password: "密码",
+            views: "查看数",
+            comments: "评论数",
+            likes: "喜欢数",
+            dislikes: "不喜欢数",
+            top: "置顶排序指数",
+            author: "作者",
         },
     },
     alert: {

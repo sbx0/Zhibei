@@ -42,6 +42,11 @@ var main = new Vue({
                 value: "log",
                 data: {},
             },
+            article: {
+                name: i18N.table.article,
+                value: "article",
+                data: {},
+            },
         },
         query_data: {},
         attribute_data: {},
@@ -153,6 +158,7 @@ function build(data) {
             || attribute.type === 'Certification'
             || attribute.type === 'Log'
             || attribute.type === 'UploadFile'
+            || attribute.type === 'Article'
         ) {
             getData(attribute.type.toLowerCase());
             if (data[attribute.name] != null) data[attribute.name] = data[attribute.name]["id"];

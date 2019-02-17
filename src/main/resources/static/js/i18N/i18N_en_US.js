@@ -141,6 +141,7 @@ var i18N = {
         certification: "Certification Table",
         file: "File Table",
         log: "Log Table",
+        article: "Article Table",
     },
     attribute: {
         user: {
@@ -211,6 +212,21 @@ var i18N = {
             method: "Method",
             className: "Classname",
             url: "Url",
+        },
+        article: {
+            id: "ID",
+            title: "Title",
+            time: "Time",
+            introduction: "Introduction",
+            content: "Content",
+            lastChangeTime: "LastChangeTime",
+            password: "Password",
+            views: "Views",
+            comments: "Comments",
+            likes: "Likes",
+            dislikes: "Dislikes",
+            top: "Top",
+            author: "Author",
         },
     },
     alert: {
