@@ -105,10 +105,9 @@ function build(data) {
                 type: 'text'
             };
         } else if (attribute.type === 'Date') {
+            var time = "";
             if (data[attribute.name] != null) {
-                var time = Format(getDate(data[attribute.name].toString()), "yyyy-MM-dd")
-            } else {
-                time = "";
+                time = Format(getDate(data[attribute.name].toString()), "yyyy-MM-dd")
             }
             modal_data[i] = {
                 id: attribute.name,
@@ -131,13 +130,20 @@ function build(data) {
                 type: 'checkbox',
             };
         } else if (attribute.type === 'List') {
+            var time = "";
+            var ids = [];
+            if (data[attribute.name] != null) {
+                for (var j = 0; j < data[attribute.name].length; j++) {
+                    ids.push("" + data[attribute.name][j].id + "");
+                }
+            }
             getData("permission");
             modal_data[i] = {
                 id: attribute.name,
                 name: attribute.name,
-                value: "",
+                selected: ids,
                 options: main["table_data"]["permission"]["data"],
-                multiple: true,
+                multiple: "multiple",
                 type: 'select',
             };
         } else if (
@@ -149,10 +155,11 @@ function build(data) {
             || attribute.type === 'UploadFile'
         ) {
             getData(attribute.type.toLowerCase());
+            if (data[attribute.name] != null) data[attribute.name] = data[attribute.name]["id"];
             modal_data[i] = {
                 id: attribute.name,
                 name: attribute.name,
-                value: data[attribute.name],
+                selected: data[attribute.name],
                 options: main["table_data"][attribute.type.toLowerCase()]["data"],
                 type: 'select',
             };
@@ -373,6 +380,7 @@ function query() {
     });
 }
 
+// 获取某张表的前9999条数据
 function getData(table) {
     $.ajax({
         type: "get",

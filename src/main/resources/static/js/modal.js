@@ -1,12 +1,45 @@
 // 基础选择框
 var base_select = {
-    props: ["id", "name", "value", "type", 'multiple', 'disable', 'options'],
+    props: ["id", "name", "value", "type", 'multiple', 'disable', 'options', 'selected'],
     data: function () {
         return {
             i18N: i18N,
         }
     },
-    template: '<div class="form-group">\n    <label :for="id+\'_\'+type">\n        {{name}}\n    </label>\n    <select\n            :id="id+\'_\'+type"\n            :name="id"\n            :value="value"\n            :multiple="multiple"\n            :disable="disable"\n            class="form-control"\n    >\n        <option\n                v-for="o in options"\n                :value="o.id"\n        >\n            {{o.name}}\n        </option>\n    </select>\n</div>',
+    computed: {
+        option_selected: {
+            get: function () {
+                var option_selected = [];
+                if (this.selected != null) {
+                    for (var i = 0; i < this.options.length; i++) {
+                        for (var j = 0; j < this.selected.length; j++) {
+                            if (this.options[i].id.toString() === this.selected[j]) {
+                                option_selected.push(this.options[i]);
+                            }
+                        }
+                    }
+                }
+                return option_selected;
+            },
+        },
+        option_unselected: {
+            get: function () {
+                var option_unselected = this.options.slice();
+                if (this.selected != null) {
+                    for (var i = 0; i < this.options.length; i++) {
+                        for (var j = 0; j < this.selected.length; j++) {
+                            if (this.options[i].id.toString() === this.selected[j]) {
+                                var index = this.options.indexOf(this.options[i]);
+                                option_unselected.splice(index, 1);
+                            }
+                        }
+                    }
+                }
+                return option_unselected;
+            },
+        }
+    },
+    template: '<div class="form-group">\n    <label :for="id+\'_\'+type">\n        {{name}}\n    </label>\n    <select\n            :id="id+\'_\'+type"\n            :name="id"\n            :multiple="multiple"\n            :disable="disable"\n            v-if="multiple != null"\n            class="form-control"\n    >\n        <option\n                v-for="o in option_selected"\n                :value="o.id"\n                selected="selected"\n        >\n            {{o.name}}\n        </option>\n        <option\n                v-for="o in option_unselected"\n                :value="o.id"\n        >\n            {{o.name}}\n        </option>\n    </select>\n    <select\n            :id="id+\'_\'+type"\n            :name="id"\n            :multiple="multiple"\n            :value="selected"\n            :disable="disable"\n            v-else\n            class="form-control"\n    >\n        <option\n                v-for="o in option_unselected"\n                :value="o.id"\n        >\n            {{o.name}}\n        </option>\n    </select>\n</div>',
 };
 // 基础输入框
 var base_input = {
@@ -63,7 +96,7 @@ var base_table = {
             i18N: i18N,
         }
     },
-    template: '<form :id="name+\'_form\'">\n    <div\n            v-for="b in body"\n    >\n        <base-checkbox\n                v-if="b.type===\'checkbox\'"\n                :id="b.id"\n                :name="b.name"\n                :value="b.value"\n                :type="b.type"\n                :disable="b.disable"\n        >\n        </base-checkbox>\n        <base-radio\n                v-else-if="b.type===\'radio\'"\n                :id="b.id"\n                :name="b.name"\n                :value="b.value"\n                :type="b.type"\n                :disable="b.disable"\n        >\n        </base-radio>\n        <base-textarea\n                v-else-if="b.type===\'textarea\'"\n                :id="b.id"\n                :name="b.name"\n                :value="b.value"\n                :type="b.type"\n                :placeholder="b.placeholder"\n                :help="b.help"\n                :readonly="b.readonly"\n        >\n        </base-textarea>\n        <base-select\n                v-else-if="b.type===\'select\'"\n                :id="b.id"\n                :name="b.name"\n                :value="b.value"\n                :type="b.type"\n                :multiple="b.multiple"\n                :disable="b.disable"\n                :options="b.options"\n        ></base-select>\n        <base-input\n                v-else\n                :id="b.id"\n                :name="b.name"\n                :value="b.value"\n                :type="b.type"\n                :placeholder="b.placeholder"\n                :help="b.help"\n                :readonly="b.readonly"\n        >\n        </base-input>\n    </div>\n    <div v-html="btn"></div>\n</form>',
+    template: '<form :id="name+\'_form\'">\n    <div\n            v-for="b in body"\n    >\n        <base-checkbox\n                v-if="b.type===\'checkbox\'"\n                :id="b.id"\n                :name="b.name"\n                :value="b.value"\n                :type="b.type"\n                :disable="b.disable"\n        >\n        </base-checkbox>\n        <base-radio\n                v-else-if="b.type===\'radio\'"\n                :id="b.id"\n                :name="b.name"\n                :value="b.value"\n                :type="b.type"\n                :disable="b.disable"\n        >\n        </base-radio>\n        <base-textarea\n                v-else-if="b.type===\'textarea\'"\n                :id="b.id"\n                :name="b.name"\n                :value="b.value"\n                :type="b.type"\n                :placeholder="b.placeholder"\n                :help="b.help"\n                :readonly="b.readonly"\n        >\n        </base-textarea>\n        <base-select\n                v-else-if="b.type===\'select\'"\n                :id="b.id"\n                :name="b.name"\n                :selected="b.selected"\n                :type="b.type"\n                :multiple="b.multiple"\n                :disable="b.disable"\n                :options="b.options"\n        ></base-select>\n        <base-input\n                v-else\n                :id="b.id"\n                :name="b.name"\n                :value="b.value"\n                :type="b.type"\n                :placeholder="b.placeholder"\n                :help="b.help"\n                :readonly="b.readonly"\n        >\n        </base-input>\n    </div>\n    <div v-html="btn"></div>\n</form>',
 };
 // 基础模态框
 var base_modal = {
