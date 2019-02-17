@@ -69,7 +69,9 @@
                                         {{i18N.add}}
                                     </a>
                                 </th>
-                                <th v-for="attribute in attribute_data">{{attribute.name}}</th>
+                                <th v-for="attribute in attribute_data">
+                                    {{i18N['attribute'][table][attribute.name]}}
+                                </th>
                             </tr>
                             </thead>
                             <tbody>
@@ -118,10 +120,10 @@
                                 v-if="index == 0"
                                 class="form-control-sm">
                             <option
-                                    v-for="(value,key) in object"
-                                    :value="key"
+                                    v-for="attribute in attribute_data"
+                                    :value="attribute.name"
                             >
-                                {{key}}
+                                {{i18N['attribute'][table][attribute.name]}}
                             </option>
                         </select>
                         {{i18N.direction}}：
@@ -221,7 +223,7 @@
     <!--自动批量生成管理模态框-->
     <base-modal
             :name="table"
-            :title="table+i18N.management"
+            :title="i18N['table'][table]+i18N.management"
             :body="modal_data"
     ></base-modal>
 

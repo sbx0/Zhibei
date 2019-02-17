@@ -47,7 +47,7 @@ public class User implements Serializable {
     @JsonView(Normal.class)
     private String avatar; // 头像
     @JsonView(Admin.class)
-    @Column(columnDefinition = "enum('male','female','none')")
+    @Column(columnDefinition = "enum('male','female','')")
     private String sex; // 类型 [男|女|空]
     @JsonView(Admin.class)
     @ManyToOne(cascade = {CascadeType.MERGE}, targetEntity = Role.class)

@@ -45,11 +45,6 @@ public class LogAspect {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String methodName = joinPoint.getSignature().getName(); // 方法名
         User user = userService.getUser(request);
-        if (user != null) {
-            if (user.getRole().getName().equals("admin")) {
-                return;
-            }
-        }
         Log log = new Log();
         log.setUser(user);
         log.setMethod(methodName);

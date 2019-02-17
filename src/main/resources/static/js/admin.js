@@ -78,21 +78,21 @@ function build(data) {
         if (attribute.name === 'introduction') {
             modal_data[i] = {
                 id: attribute.name,
-                name: attribute.name,
+                name: i18N["attribute"][main.table][attribute.name],
                 value: data[attribute.name],
                 type: 'textarea',
             };
         } else if (attribute.name === 'email') {
             modal_data[i] = {
                 id: attribute.name,
-                name: attribute.name,
+                name: i18N["attribute"][main.table][attribute.name],
                 value: data[attribute.name],
                 type: 'email',
             };
         } else if (attribute.name === 'id') {
             modal_data[i] = {
                 id: attribute.name,
-                name: attribute.name,
+                name: i18N["attribute"][main.table][attribute.name],
                 value: data[attribute.name],
                 type: 'text',
                 readonly: 'readonly'
@@ -100,7 +100,7 @@ function build(data) {
         } else if (attribute.type === 'String') {
             modal_data[i] = {
                 id: attribute.name,
-                name: attribute.name,
+                name: i18N["attribute"][main.table][attribute.name],
                 value: data[attribute.name],
                 type: 'text'
             };
@@ -111,21 +111,21 @@ function build(data) {
             }
             modal_data[i] = {
                 id: attribute.name,
-                name: attribute.name,
+                name: i18N["attribute"][main.table][attribute.name],
                 value: time,
                 type: 'date'
             };
         } else if (attribute.type === 'Double' || attribute.type === 'Integer') {
             modal_data[i] = {
                 id: attribute.name,
-                name: attribute.name,
+                name: i18N["attribute"][main.table][attribute.name],
                 value: data[attribute.name],
                 type: 'number'
             };
         } else if (attribute.type === 'Boolean') {
             modal_data[i] = {
                 id: attribute.name,
-                name: attribute.name,
+                name: i18N["attribute"][main.table][attribute.name],
                 value: data[attribute.name],
                 type: 'checkbox',
             };
@@ -140,7 +140,7 @@ function build(data) {
             getData("permission");
             modal_data[i] = {
                 id: attribute.name,
-                name: attribute.name,
+                name: i18N["attribute"][main.table][attribute.name],
                 selected: ids,
                 options: main["table_data"]["permission"]["data"],
                 multiple: "multiple",
@@ -158,7 +158,7 @@ function build(data) {
             if (data[attribute.name] != null) data[attribute.name] = data[attribute.name]["id"];
             modal_data[i] = {
                 id: attribute.name,
-                name: attribute.name,
+                name: i18N["attribute"][main.table][attribute.name],
                 selected: data[attribute.name],
                 options: main["table_data"][attribute.type.toLowerCase()]["data"],
                 type: 'select',
@@ -166,7 +166,7 @@ function build(data) {
         } else {
             modal_data[i] = {
                 id: attribute.name,
-                name: attribute.name,
+                name: i18N["attribute"][main.table][attribute.name],
                 value: data[attribute.name],
                 type: 'text'
             };
