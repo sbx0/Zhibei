@@ -71,6 +71,9 @@
                             </h2>
                         </div>
                         <div class="mod-footer">
+                            <a :href="article.id" rel="nofollow">
+                                <img class="img" :src="article.author.avatar" width="20">
+                            </a>
                             <a :href="article.author.id">
                                 {{article.author.name}}
                             </a>

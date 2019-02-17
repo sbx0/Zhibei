@@ -184,6 +184,7 @@ public class UserController extends BaseController<User, Integer> {
         u.setRegisterTime(new Date());
         json = mapper.createObjectNode();
         try {
+            u = userService.encryptPassword(u); // 加密密码
             if (userService.save(u)) {
                 json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
             } else {

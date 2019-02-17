@@ -100,7 +100,6 @@ public class UserService extends BaseService<User, Integer> {
      */
     @Override
     public boolean save(User user) {
-        user = encryptPassword(user); // 加密密码
         return super.save(user);
     }
 
@@ -153,8 +152,8 @@ public class UserService extends BaseService<User, Integer> {
      * @param user
      * @return
      */
-    User encryptPassword(User user) {
-        user.setPassword(StringTools.encryptPassword(user.getPassword() + user.getId()));
+    public User encryptPassword(User user) {
+        user.setPassword(StringTools.encryptPassword(user.getPassword()));
         return user;
     }
 

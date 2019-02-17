@@ -148,7 +148,7 @@
                                 </div>
                                 <div class="aw-item article" v-for="article in article_data">
                                     <a class="aw-user-name hidden-xs" href="#" rel="nofollow">
-                                        <img src="/img/avatar-min-img.png" alt=""/>
+                                        <img :src="article.author.avatar" alt=""/>
                                     </a>
                                     <div class="aw-question-content">
                                         <h4>
