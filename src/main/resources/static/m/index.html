@@ -6,9 +6,14 @@
 
     <script src="/js/base/load_css.js"></script>
     <link rel="stylesheet" href="/css/lib/bootstrap.css">
-    <link rel="stylesheet" href="/css/lib/common.css">
-    <link rel="stylesheet" href="/css/lib/link.css">
     <link rel="stylesheet" href="/css/lib/mobile.css">
+    <link rel="stylesheet" href="/css/lib/int.css">
+    <link rel="stylesheet" href="/css/lib/member.css">
+    <link rel="stylesheet" href="/css/lib/layout.css">
+    <link rel="stylesheet" href="/css/lib/layui.css">
+    <link rel="stylesheet" href="/css/lib/index.css">
+
+
     <link rel="stylesheet" href="/css/custom.css">
 
     <title>首页</title>
@@ -17,110 +22,91 @@
 <body>
 <div id="main" v-cloak>
 
-    <component-header
-            :not_login="not_login"
-            :user="user"
-    ></component-header>
+    <div class="searchbox">
+        <form id="search_form" action="/m/search/" method="post">
+            <header>
+                <h1><img src="/img/logo_larger.png"></h1>
+                <span class="search" style="background: #f9f9f9;">
+                <input name="q" type="text" id="index_search" placeholder="搜索"
+                       style="width:90%;font: 400 13.3333px Arial;text-indent: 5px;float: left;">
+                <b style="float: right;width: 15px;line-height: 27px;">
+                    <img src="/img/search.png">
+                </b>
+                </span>
+                <a href="/m/inbox/"><em>
+                    <img src="/img/note.png"><i id="">0</i></em></a>
+            </header>
+        </form>
+    </div>
 
-    <div class="top-category">
+    <div class="gztj_tab phb_tab">
         <ul>
-            <li v-for="url in i18N.category_data">
-                <a :href="url.path">
-                    <span v-html="url.icon"></span>
-                    {{url.text}}
-                </a>
-            </li>
+            <li class=" tabs" type="is_focus"><a href="#">关注推荐</a></li>
+            <li class="tabs cur" type="is_new"><a href="#">最新</a></li>
+            <li class="tabs" type="is_hot"><a href="#">热门</a></li>
         </ul>
     </div>
-    <!--end 分类-->
-    <!--内容-->
-    <div class="container">
-        <div class="aw-question-list">
-            <div class="mod-body">
-                <ul id="load_explore_list">
-                    <!--问题列表-->
-                    <li v-for="question in question_data">
-                        <div class="mod-body">
-                            <h2>
-                                <a :href="question.id">
-                                    {{question.title}}
-                                </a>
-                            </h2>
-                        </div>
-                        <div class="mod-footer">
-                            <a :href="question.id" rel="nofollow">
-                                <img class="img"
-                                     src="../img/avatar-min-img.png" alt=""
-                                     width="20">
-                            </a>
-                            <a :href="question.user.id">
-                                {{question.user.name}}
-                            </a>
-                            {{i18N.post}}{{i18N.question}}
-                            <span class="pull-right color-999">
-                                {{question.time}}
-                            </span>
-                        </div>
-                    </li>
-                    <!--end 问题列表-->
-                    <!--文章列表-->
-                    <li v-for="article in article_data">
-                        <div class="mod-body">
-                            <h2>
-                                <a :href="article.id">{{article.title}}</a>
-                            </h2>
-                        </div>
-                        <div class="mod-footer">
-                            <a :href="article.id" rel="nofollow">
-                                <img class="img" :src="article.author.avatar" width="20">
-                            </a>
-                            <a :href="article.author.id">
-                                {{article.author.name}}
-                            </a>
-                            {{i18N.post}}{{i18N.article}}
-                            <span class="pull-right color-999">
+
+    <div class="adds" style="padding-bottom: 60px;word-wrap:break-word;word-break:break-all; ">
+        <div class="tj_list">
+            <ul>
+                <li v-for="article in article_data">
+                    <article class="list findlist" style="height: auto;">
+                        <h1>
+                            {{article.title}}
+                        </h1>
+                        <a :href="article.author.id" class="autohead">
+                            <img :src="article.author.avatar">
+                            <h6>{{article.author.name}}</h6>
+                        </a>
+                        <dl class="listbox clearfix">
+                            <dd style="width:100%;height:auto;">
+                                {{article.introduction}}
+                            </dd>
+                        </dl>
+                        <span class="listbottom">
+                            <em>
+                                <img src="/img/z.png">
+                                {{article.likes}}
+                            </em>
+                            <em>
+                                <img src="/img/p.png">
+                                {{article.comments}}
+                            </em>
+                            <em>
+                                <img src="/img/eye_ico.png">
+                                {{article.views}}
+                            </em>
+                            <i>
                                 {{article.time}}
-                            </span>
-                        </div>
-                    </li>
-                    <!--end 文章列表-->
-                </ul>
-            </div>
-            <div class="mod-footer">
-                <a id="load_explore" class="aw-load-more" href="javascript:loadMore();">
-                    <i class="icon icon-loading icon-spin"></i>
-                    <span>{{i18N.more}}</span>
-                </a>
-            </div>
-            <div class="aw-explore-hot-topic">
-                <div class="mod-head">
-                    <h3>{{i18N.hot}}{{i18N.topic}}</h3>
-                </div>
-                <div class="mod-body">
-                    <ul>
-                        <li v-for="topic in hot_topic_data">
-                            <a class="pull-left" :href="topic.id">
-                                <img :src="topic.img" alt="" width="50">
-                            </a>
-                            <div class="content pull-left">
-                                <span class="topic-tag clearfix">
-                                    <a class="text" :href="topic.id">{{topic.name}}</a>
-                                </span>
-                                <p class="color-999">
-                                    <span class="text-color-999">
-                                        <b>{{topic.question}}</b> {{i18N.question}}
-                                        •
-                                        <b>{{topic.watch}}</b> {{i18N.watch}}
-                                    </span>
-                                </p>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+                            </i>
+                        </span>
+                    </article>
+                </li>
+            </ul>
         </div>
+
+        <a id="load_explore" class="aw-load-more" href="javascript:loadMore();">
+            <i class="icon icon-loading icon-spin"></i>
+            <span>{{i18N.more}}</span>
+        </a>
+
     </div>
-    <!--end内容-->
+
+    <a href="/m/post.html">
+        <article class="qmeun">
+            <span><img src="/img/edit.png"></span>
+            <!--<a href="/m/addarticle/" class="q2" style="display: none;"><img src="/img/e2.png"></a>-->
+            <!--<a href="/m/publish/" class="q3" style="display: none;"><img src="/img/e3.png"></a>-->
+        </article>
+    </a>
+
+    <div class="load_more" style="display: none;">
+        <a href="javascript:loadMore();">
+            <img src="/img/loading.gif">
+        </a>
+    </div>
+
     <component-footer></component-footer>
     <component-menu></component-menu>
 </div>

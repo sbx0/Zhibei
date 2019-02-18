@@ -5,6 +5,7 @@ import cn.sbx0.zhibei.entity.Certification;
 import cn.sbx0.zhibei.entity.User;
 import cn.sbx0.zhibei.service.BaseService;
 import cn.sbx0.zhibei.service.CertificationService;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +53,6 @@ public class CertificationController extends BaseController<Certification, Integ
         if (user != null) {
             Certification certification = certificationService.findByUserAndPassed(user.getId());
             if (certification != null) {
-                certification.setUser(null);
                 ObjectNode object = mapper.convertValue(certification, ObjectNode.class);
                 json.set("certification", object);
                 json.put(STATUS_NAME, STATUS_CODE_SUCCESS);

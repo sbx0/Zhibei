@@ -97,10 +97,9 @@ var i18N = {
 
     lib: lib,
     m_nav_data: [
-        {id: 1, text: "Index", path: "/m/index.html", icon: "<i class=\"fas fa-home\"></i>"},
-        {id: 2, text: "Login", path: "/m/login.html", icon: "<i class=\"fas fa-sign-in-alt\"></i>"},
-        {id: 3, text: "Admin", path: "/user/admin", icon: "<i class=\"fas fa-sign-in-alt\"></i>"},
-        {id: 4, text: "My", path: "/m/setting.html", icon: "<i class=\"fas fa-sign-in-alt\"></i>"},
+        {id: 1, text: "Index", path: "/m/index.html", icon: "<i class=\"icon xfind\"></i>"},
+        {id: 2, text: "Topic", path: "/m/index.html", icon: "<i class=\"icon theme\"></i>"},
+        {id: 3, text: "My", path: "/m/user.html", icon: "<i class=\"icon my\"></i>"},
     ],
     nav_data: [
         {id: 1, text: "Index", path: "/index.html", icon: "<i class=\"fas fa-home\"></i>"},

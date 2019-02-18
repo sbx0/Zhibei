@@ -1,0 +1,58 @@
+<html lang="en">
+<head>
+
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+
+    <script src="/js/base/load_css.js"></script>
+    <link rel="stylesheet" href="/css/lib/bootstrap.css">
+    <link rel="stylesheet" href="/css/lib/mobile.css">
+    <link rel="stylesheet" href="/css/lib/member.css">
+    <link rel="stylesheet" href="/css/lib/editor.css">
+
+    <link rel="stylesheet" href="/css/custom.css">
+
+    <title>sbx0 的个人主页</title>
+
+</head>
+
+<body class="">
+<div id="main" v-cloak>
+
+    <div class="container">
+        <form id="article_post_form">
+            <base-input
+                    id="title"
+                    :name="i18N.attribute.article.title"
+                    type="input"
+            ></base-input>
+            <base-input
+                    id="introduction"
+                    :name="i18N.attribute.article.introduction"
+                    type="input"
+            ></base-input>
+            <label>{{i18N.attribute.article.content}}</label>
+            <div class="form-group">
+                <textarea id="content" name="content" class="form-control"></textarea>
+            </div>
+            <a href="javascript:post();" class="btn btn-default btn-block">{{i18N.post}}</a>
+        </form>
+    </div>
+
+    <component-footer></component-footer>
+
+    <div id="aw-ajax-box" class="aw-ajax-box" style="height:60px;"></div>
+
+    <component-menu></component-menu>
+
+</div>
+
+<script src="/js/base/load.js"></script>
+<script src="/js/lib/bootstrap-3.4.0.min.js"></script>
+<script src="/js/lib/marked.js"></script>
+<script src="/js/lib/editor.js"></script>
+<script src="/js/modal.js"></script>
+<script src="/js/m/post.js"></script>
+
+</body>
+</html>

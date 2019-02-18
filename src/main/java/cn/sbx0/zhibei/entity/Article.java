@@ -1,5 +1,6 @@
 package cn.sbx0.zhibei.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.hibernate.annotations.DynamicInsert;
@@ -26,6 +27,7 @@ public class Article implements Serializable {
     @Column(nullable = false, length = 100)
     private String title; // 标题
     @JsonView(Top.class)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     @Column(nullable = false)
     private Date time; // 时间
     @JsonView(Top.class)
@@ -35,6 +37,7 @@ public class Article implements Serializable {
     @Lob
     @Column(nullable = false)
     private String content; // 内容
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     private Date lastChangeTime; // 上次修改时间
     @JsonView(Admin.class)
     @Column(length = 40)

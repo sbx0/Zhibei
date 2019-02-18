@@ -15,8 +15,8 @@ var main = new Vue({
         index: 1,
         page: 1,
         size: 10,
-        attribute: "id",
-        direction: "ASC",
+        attribute: "time",
+        direction: "DESC",
         total_pages: 0,
         total_elements: 0,
         user: {

@@ -43,3 +43,6 @@ JavaScript框架:[Vue.js](https://cn.vuejs.org/index.html "Vue.js")
 [WeCenter](http://wenda.wecenter.com "WeCenter") 前端静态界面模版  
 [WebUploader](https://github.com/fex-team/webuploader/ "WebUploader") 上传组件  
 [Messenger](http://github.hubspot.com/messenger/docs/welcome/ "Messenger") 消息提示  
+[Hsiaoming Yang's editor](https://lab.lepture.com/editor/ "Hsiaoming Yang's editor")  Markdown编辑器（被小姐姐魔改过的，依赖下面两个开源项目）  
+> [marked](https://github.com/markedjs/marked "marked")  A markdown parser and compiler. Built for speed.  
+[quill](https://github.com/quilljs/quill "marked")  Quill is a modern WYSIWYG editor built for compatibility and extensibility.  
