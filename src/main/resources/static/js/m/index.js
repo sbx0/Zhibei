@@ -1,3 +1,4 @@
+// Mobile Version
 if (!browser.versions.mobile) {
     var no_redirect = getQueryVariable("no_redirect");
     if (!no_redirect) {

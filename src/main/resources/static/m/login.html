@@ -4,6 +4,16 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
 
+    <script>
+        // 判断当前是否为手机端
+        if (browser.versions.mobile) {
+            var no_redirect = getQueryVariable("no_redirect");
+            if (!no_redirect) {
+                location.href = "/m/login.html"
+            }
+        }
+    </script>
+
     <script src="/js/base/load_css.js"></script>
     <link rel="stylesheet" href="/css/lib/bootstrap.css">
     <link rel="stylesheet" href="/css/lib/mobile.css">
@@ -121,6 +131,7 @@
 </div>
 
 <script src="/js/base/load.js"></script>
+<script src="/js/m/component.js"></script>
 <script src="/js/lib/bootstrap-3.4.0.min.js"></script>
 <script src="/js/m/login.js"></script>
 </body>

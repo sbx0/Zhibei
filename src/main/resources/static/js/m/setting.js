@@ -1,3 +1,4 @@
+// Mobile Version
 if (!browser.versions.mobile) {
     var no_redirect = getQueryVariable("no_redirect");
     if (!no_redirect) {
@@ -8,7 +9,7 @@ var main = new Vue({
     el: '#main',
     data: {
         certification_data: {},
-        not_sumbit_certification: false,
+        not_submit_certification: false,
         i18N: i18N,
         not_login: true,
         search_result_show: "none",
@@ -16,55 +17,13 @@ var main = new Vue({
         search_keyword: "",
         user: {
             id: "-1",
-            name: "未登录",
-        },
-        search_user_data: [
-            {id: 1, name: "测试用户1", desc: "测试介绍1", img: "/img/avatar-min-img.png"},
-            {id: 2, name: "测试用户3", desc: "测试介绍2", img: "/img/avatar-min-img.png"},
-            {id: 3, name: "测试用户2", desc: "测试介绍3", img: "/img/avatar-min-img.png"},
-            {id: 4, name: "测试用户4", desc: "测试介绍4", img: "/img/avatar-min-img.png"},
-            {id: 5, name: "测试用户5", desc: "测试介绍5", img: "/img/avatar-min-img.png"},
-        ],
-        search_topic_data: [
-            {id: 1, name: "测试话题1", number: "1"},
-            {id: 2, name: "测试话题2", number: "2"},
-            {id: 3, name: "测试话题3", number: "3"},
-            {id: 4, name: "测试话题4", number: "4"},
-            {id: 5, name: "测试话题5", number: "5"},
-        ],
-        search_question_data: [
-            {id: 1, title: "测试问题1", comment_number: "1"},
-            {id: 2, title: "测试问题2", comment_number: "2"},
-            {id: 3, title: "测试问题3", comment_number: "3"},
-            {id: 4, title: "测试问题4", comment_number: "4"},
-            {id: 5, title: "测试问题5", comment_number: "5"},
-        ],
-        notification_data: [
-            {id: 1, title: "测试通知1"},
-            {id: 2, title: "测试通知2"},
-            {id: 3, title: "测试通知3"},
-            {id: 4, title: "测试通知4"},
-            {id: 5, title: "测试通知5"},
-        ],
-        hot_topic_data: [
-            {id: 1, name: "测试热门话题1", question: "11", watch: "11", img: "../img/topic-mid-img.png"},
-            {id: 2, name: "测试热门话题2", question: "11", watch: "11", img: "../img/topic-mid-img.png"},
-            {id: 3, name: "测试热门话题3", question: "11", watch: "11", img: "../img/topic-mid-img.png"},
-            {id: 4, name: "测试热门话题4", question: "11", watch: "11", img: "../img/topic-mid-img.png"},
-            {id: 5, name: "测试热门话题5", question: "11", watch: "11", img: "../img/topic-mid-img.png"},
-        ],
-        hot_user_data: [
-            {id: 1, name: "测试用户1", question: "11", like: "11", img: "../img/avatar-min-img.png"},
-            {id: 2, name: "测试用户2", question: "11", like: "11", img: "../img/avatar-min-img.png"},
-            {id: 3, name: "测试用户3", question: "11", like: "11", img: "../img/avatar-min-img.png"},
-            {id: 4, name: "测试用户4", question: "11", like: "11", img: "../img/avatar-min-img.png"},
-            {id: 5, name: "测试用户5", question: "11", like: "11", img: "../img/avatar-min-img.png"},
-        ],
+            name: "未登录"
+        }
     },
     components: {
         "component-header": component_header,
         "component-footer": component_footer,
-        "component-menu": component_menu,
+        "component-menu": component_menu
     },
     methods: {},
     create: function () {
@@ -83,10 +42,10 @@ function checkCertification() {
         success: function (json) {
             var status = json.status;
             if (statusCodeToBool(status)) {
-                main.not_sumbit_certification = true;
+                main.not_submit_certification = true;
                 main.certification_data = json.certification;
             } else {
-                main.not_sumbit_certification = false;
+                main.not_submit_certification = false;
                 main.certification_data = {};
             }
             return false;
@@ -135,7 +94,7 @@ WebUploader.Uploader.register({
             type: "POST",
             url: "/file/md5Check",
             data: {
-                md5File: md5File, //文件唯一标记
+                md5File: md5File //文件唯一标记
             },
             async: false,  // 同步
             dataType: "json",
@@ -143,7 +102,7 @@ WebUploader.Uploader.register({
                 var status = response.status;
                 if (statusCodeToBool(status)) {
                     deferred.resolve();  //文件不存在或不完整，发送该文件
-                } else if (status == 7) {
+                } else if (status === 7) {
                     var name = response.name;
                     var type = response.type;
                     var url = "http://" + window.location.host + "/upload/" + type + "/" + name;

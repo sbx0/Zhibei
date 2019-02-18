@@ -1,9 +1,10 @@
-// if (browser.versions.mobile) {
-//     var no_redirect = getQueryVariable("no_redirect");
-//     if (!no_redirect) {
-//         location.href = "/m/index.html"
-//     }
-// }
+// Mobile Version
+if (!browser.versions.mobile) {
+    var no_redirect = getQueryVariable("no_redirect");
+    if (!no_redirect) {
+        location.href = "/post.html"
+    }
+}
 var main = new Vue({
     el: '#main',
     data: {

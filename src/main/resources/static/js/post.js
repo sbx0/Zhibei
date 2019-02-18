@@ -1,9 +1,12 @@
-// if (browser.versions.mobile) {
-//     var no_redirect = getQueryVariable("no_redirect");
-//     if (!no_redirect) {
-//         location.href = "/m/index.html"
-//     }
-// }
+/**
+ * PC端发布
+ * post.html 的 js
+ *
+ * @param json 一般是Ajax获得到的json字符串
+ * @param json.object 通用对象json字符串
+ * @param json.objects 通用对象列表json字符串
+ */
+// Vue.js
 var main = new Vue({
     el: '#main',
     data: {
@@ -14,16 +17,16 @@ var main = new Vue({
         search_keyword: "",
         user: {
             id: "-1",
-            name: "未登录",
+            name: "未登录"
         },
         search_user_data: [],
         search_topic_data: [],
-        search_question_data: [],
+        search_question_data: []
     },
     components: {
         "component-nav-bar": component_nav_bar,
         "component-footer": component_footer,
-        "base-input": base_input,
+        "base-input": base_input
     },
     methods: {},
     create: function () {
@@ -36,7 +39,8 @@ editor.render();
 
 // 发布文章
 function post() {
-    $("#content").val(editor.value());
+    var content = $("#content");
+    content.val(editor.value());
     // 判断标题是否存在
     if (checkNullStr($("#title_input").val())) {
         alert(i18N.please + i18N.input + i18N.attribute.article.title);
@@ -48,7 +52,7 @@ function post() {
         return false;
     }
     // 判断博文内容是否存在
-    if (checkNullStr($("#content").val())) {
+    if (checkNullStr(content.val())) {
         alert(i18N.please + i18N.input + i18N.attribute.article.content);
         return false;
     }

@@ -97,9 +97,9 @@ var i18N = {
 
     lib: lib,
     m_nav_data: [
-        {id: 1, text: "發現", path: "/ m / index.html", icon: "<i class = \"icon xfind \"> </i>"},
-        {id: 2, text: "話題", path: "/ m / index.html", icon: "<i class = \"icon theme \"> </i>"},
-        {id: 3, text: "我的", path: "/ m / user.html", icon: "<i class = \"icon my \"> </i>"},
+        {id: 1, text: "發現", path: "/m/index.html", icon: "<i class=\"icon xfind\"></i>"},
+        {id: 2, text: "話題", path: "/m/index.html", icon: "<i class=\"icon theme\"></i>"},
+        {id: 3, text: "我的", path: "/m/user.html", icon: "<i class =\"icon my\"></i>"},
     ],
     nav_data: [
         {id: 1, text: "首頁", path: "/index.html", icon: "<i class=\"fas fa-home\"></i>"},

@@ -1,7 +1,8 @@
+// Mobile Version
 if (!browser.versions.mobile) {
     var no_redirect = getQueryVariable("no_redirect");
     if (!no_redirect) {
-        location.href = "/m/login.html"
+        location.href = "/login.html"
     }
 }
 var main = new Vue({

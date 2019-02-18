@@ -1,80 +1,129 @@
+/**
+ * 后台管理
+ * admin.html 的 js
+ *
+ * @param json 一般是Ajax获得到的json字符串
+ * @param json.object 通用对象json字符串
+ * @param json.objects 通用对象列表json字符串
+ */
+// Vue.js
 var main = new Vue({
     el: '#main',
     data: {
-        i18N: i18N,
-        not_login: true,
-        table: "user",
-        index: 1,
-        page: 1,
-        size: 10,
-        attribute: "id",
-        direction: "ASC",
-        total_pages: 0,
-        total_elements: 0,
+        i18N: i18N, // 国际化配置读取
+        not_login: true, // 是否登陆
+        table: "user", // 默认表
+        index: 1, // 用于分页显示逻辑
+        page: 1, // 当前页数
+        size: 10, // 每页条数
+        attribute: "id", // 默认按编号属性排序
+        direction: "ASC", // 默认正序
+        total_pages: 0, // 结果一共有多少页
+        total_elements: 0, // 一共有多少结果
+        query_data: {}, // 查询结果
+        attribute_data: {}, // 表头数据
+        modal_data: [], // 用于模版显示的数据
+        // 表数据
         table_data: {
-            user: {
-                name: i18N.table.user,
-                value: "user",
-                data: {},
-            },
-            role: {
-                name: i18N.table.role,
-                value: "role",
-                data: {},
-            },
-            permission: {
-                name: i18N.table.permission,
-                value: "permission",
-                data: {},
-            },
-            certification: {
-                name: i18N.table.certification,
-                value: "certification",
-                data: {},
-            },
-            file: {
-                name: i18N.table.file,
-                value: "file",
-                data: {},
-            },
-            log: {
-                name: i18N.table.log,
-                value: "log",
-                data: {},
-            },
-            article: {
-                name: i18N.table.article,
-                value: "article",
-                data: {},
-            },
-        },
-        query_data: {},
-        attribute_data: {},
-        modal_data: [],
+            user: {name: i18N.table.user, value: "user", data: {}},
+            role: {name: i18N.table.role, value: "role", data: {}},
+            permission: {name: i18N.table.permission, value: "permission", data: {}},
+            certification: {name: i18N.table.certification, value: "certification", data: {}},
+            file: {name: i18N.table.file, value: "file", data: {}},
+            log: {name: i18N.table.log, value: "log", data: {}},
+            article: {name: i18N.table.article, value: "article", data: {}}
+        }
     },
     components: {
-        "base-modal": base_modal,
+        "base-modal": base_modal // 基本模态框模版
     },
     methods: {
+        // 修改某项
         update: function (id) {
             updateOne(id);
         }
     },
     create: function () {
 
-    },
+    }
 });
 
+// 下拉选择表
+var table_select = $("#table_select");
+// i18N语言下拉选择
+var i18N_select = $("#i18N_select");
+// 从cookie中读取i18N配置
+var i18N_config = getCookie("i18N_config");
+// 如果cookie中没有
+if (i18N_config !== "") {
+    i18N_select.val(getCookie("i18N_config"));
+}
+
+// 语言切换事件绑定
+i18N_select.change(function () {
+    setCookie("i18N_config", i18N_select.val(), 30);
+    refresh();
+});
+// 切换表事件绑定
+table_select.change(function () {
+    main.attribute = "id";
+    main.page = 1;
+    main.table = table_select.val();
+    main.size = $("#page_size_select").val();
+    $("#table_sort").val("id");
+    query();
+});
+
+// 初始化
+init();
+
+// 初始化
+function init() {
+    query();
+    getUrlVar();
+}
+
+// 从链接获取参数
+function getUrlVar() {
+    var page = getQueryVariable("page");
+    if (page != null) {
+        main.page = page;
+    }
+    var size = getQueryVariable("size");
+    if (size != null) {
+        main.size = size;
+        $("#page_size_select").val(size);
+    }
+    var table = getQueryVariable("table");
+    if (table != null) {
+        main.table = table;
+        table_select.val(table);
+    }
+    var attribute = getQueryVariable("attribute");
+    if (attribute != null) {
+        main.attribute = attribute;
+        $("#table_sort").val(attribute);
+    }
+    var direction = getQueryVariable("direction");
+    if (direction != null) {
+        main.direction = direction;
+        $("#table_sort_direction").val(main.direction);
+    }
+}
+
+// 模态框提交按钮事件绑定
 function bind() {
+    // 模态框提交按钮
+    var modalSubmitBtn = $("#" + main.table + "ModalSubmitBtn");
     // 取消之前的绑定
-    $("#" + main.table + "ModalSubmitBtn").unbind();
-    // 绑定模态框提交按钮点击事件
-    $("#" + main.table + "ModalSubmitBtn").on('click', function () {
+    modalSubmitBtn.unbind();
+    // 绑定点击事件
+    modalSubmitBtn.on('click', function () {
         saveOne(main.table + "_form");
     });
 }
 
-// 通用拼装
+// 通用拼装模版数据
 function build(data) {
     main.modal_data = [];
     var modal_data = [];
@@ -85,14 +134,14 @@ function build(data) {
                 id: attribute.name,
                 name: i18N["attribute"][main.table][attribute.name],
                 value: data[attribute.name],
-                type: 'textarea',
+                type: 'textarea'
             };
         } else if (attribute.name === 'email') {
             modal_data[i] = {
                 id: attribute.name,
                 name: i18N["attribute"][main.table][attribute.name],
                 value: data[attribute.name],
-                type: 'email',
+                type: 'email'
             };
         } else if (attribute.name === 'id') {
             modal_data[i] = {
@@ -132,10 +181,9 @@ function build(data) {
                 id: attribute.name,
                 name: i18N["attribute"][main.table][attribute.name],
                 value: data[attribute.name],
-                type: 'checkbox',
+                type: 'checkbox'
             };
         } else if (attribute.type === 'List') {
-            var time = "";
             var ids = [];
             if (data[attribute.name] != null) {
                 for (var j = 0; j < data[attribute.name].length; j++) {
@@ -149,7 +197,7 @@ function build(data) {
                 selected: ids,
                 options: main["table_data"]["permission"]["data"],
                 multiple: "multiple",
-                type: 'select',
+                type: 'select'
             };
         } else if (
             attribute.type === 'Role'
@@ -167,7 +215,7 @@ function build(data) {
                 name: i18N["attribute"][main.table][attribute.name],
                 selected: data[attribute.name],
                 options: main["table_data"][attribute.type.toLowerCase()]["data"],
-                type: 'select',
+                type: 'select'
             };
         } else {
             modal_data[i] = {
@@ -230,7 +278,7 @@ function deleteOne(id) {
 
 // 通用修改
 function updateOne(id) {
-    var object;
+    var object = null;
     $.ajax({
         type: "get",
         url: "/" + main.table +
@@ -246,54 +294,6 @@ function updateOne(id) {
     });
     build(object);
 }
-
-// 从链接获取参数
-var page = getQueryVariable("page");
-if (page != null) {
-    main.page = page;
-}
-var size = getQueryVariable("size");
-if (size != null) {
-    main.size = size;
-    $("#page_size_select").val(size);
-}
-var table = getQueryVariable("table");
-if (table != null) {
-    main.table = table;
-    $("#table_select").val(table);
-}
-var attribute = getQueryVariable("attribute");
-if (attribute != null) {
-    main.attribute = attribute;
-    $("#table_sort").val(attribute);
-}
-var direction = getQueryVariable("direction");
-if (direction != null) {
-    main.direction = direction;
-    $("#table_sort_direction").val(main.direction);
-}
-
-// 初始化查询
-query();
-// 语言下拉栏选中
-var i18N_config = getCookie("i18N_config")
-if (i18N_config != "") {
-    $("#i18N_select").val(getCookie("i18N_config"));
-}
-// 切换表
-$("#table_select").change(function () {
-    main.attribute = "id";
-    main.page = 1;
-    main.table = $("#table_select").val();
-    main.size = $("#page_size_select").val();
-    $("#table_sort").val("id");
-    query();
-});
-// 语言切换
-$("#i18N_select").change(function () {
-    setCookie("i18N_config", $("#i18N_select").val(), 30);
-    refresh();
-});
 
 // 上一页
 function prev_query() {

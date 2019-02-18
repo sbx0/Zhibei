@@ -1,3 +1,4 @@
+// Mobile Version
 if (!browser.versions.mobile) {
     var no_redirect = getQueryVariable("no_redirect");
     if (!no_redirect) {
@@ -8,7 +9,7 @@ var main = new Vue({
     el: '#main',
     data: {
         certification_data: {},
-        not_sumbit_certification: false,
+        not_submit_certification: false,
         i18N: i18N,
         not_login: true,
         search_result_show: "none",
@@ -16,7 +17,7 @@ var main = new Vue({
         search_keyword: "",
         user: {
             id: "-1",
-            name: "未登录",
+            name: "未登录"
         },
         search_user_data: [
             {id: 1, name: "测试用户1", desc: "测试介绍1", img: "/img/avatar-min-img.png"},
@@ -83,10 +84,10 @@ function checkCertification() {
         success: function (json) {
             var status = json.status;
             if (statusCodeToBool(status)) {
-                main.not_sumbit_certification = true;
+                main.not_submit_certification = true;
                 main.certification_data = json.certification;
             } else {
-                main.not_sumbit_certification = false;
+                main.not_submit_certification = false;
                 main.certification_data = {};
             }
             return false;

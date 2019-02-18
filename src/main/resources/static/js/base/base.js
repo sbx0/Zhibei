@@ -1,8 +1,11 @@
+// 初始化用户信息
+get_info();
+
 // 检测登陆状态
 function get_info() {
     $.ajax({
         type: "get",
-        url: "../user/info",
+        url: "/user/info",
         dataType: "json",
         success: function (json) {
             var status = json.status;
@@ -19,8 +22,6 @@ function get_info() {
     });
 }
 
-// 初始化用户信息
-get_info();
 // 语言下拉栏选中
 var i18N_config = getCookie("i18N_config")
 if (i18N_config != "") {

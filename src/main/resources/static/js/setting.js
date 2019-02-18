@@ -1,9 +1,12 @@
-if (browser.versions.mobile) {
-    var no_redirect = getQueryVariable("no_redirect");
-    if (!no_redirect) {
-        location.href = "/m/setting.html"
-    }
-}
+/**
+ * PC端设置
+ * setting.html 的 js
+ *
+ * @param json 一般是Ajax获得到的json字符串
+ * @param json.object 通用对象json字符串
+ * @param json.objects 通用对象列表json字符串
+ */
+// Vue.js
 var main = new Vue({
     el: '#main',
     data: {
@@ -14,54 +17,54 @@ var main = new Vue({
         search_keyword: "",
         user: {
             id: "-1",
-            name: "未登录",
+            name: "未登录"
         },
         search_user_data: [
             {id: 1, name: "测试用户1", desc: "测试介绍1", img: "/img/avatar-min-img.png"},
             {id: 2, name: "测试用户3", desc: "测试介绍2", img: "/img/avatar-min-img.png"},
             {id: 3, name: "测试用户2", desc: "测试介绍3", img: "/img/avatar-min-img.png"},
             {id: 4, name: "测试用户4", desc: "测试介绍4", img: "/img/avatar-min-img.png"},
-            {id: 5, name: "测试用户5", desc: "测试介绍5", img: "/img/avatar-min-img.png"},
+            {id: 5, name: "测试用户5", desc: "测试介绍5", img: "/img/avatar-min-img.png"}
         ],
         search_topic_data: [
             {id: 1, name: "测试话题1", number: "1"},
             {id: 2, name: "测试话题2", number: "2"},
             {id: 3, name: "测试话题3", number: "3"},
             {id: 4, name: "测试话题4", number: "4"},
-            {id: 5, name: "测试话题5", number: "5"},
+            {id: 5, name: "测试话题5", number: "5"}
         ],
         search_question_data: [
             {id: 1, title: "测试问题1", comment_number: "1"},
             {id: 2, title: "测试问题2", comment_number: "2"},
             {id: 3, title: "测试问题3", comment_number: "3"},
             {id: 4, title: "测试问题4", comment_number: "4"},
-            {id: 5, title: "测试问题5", comment_number: "5"},
+            {id: 5, title: "测试问题5", comment_number: "5"}
         ],
         notification_data: [
             {id: 1, title: "测试通知1"},
             {id: 2, title: "测试通知2"},
             {id: 3, title: "测试通知3"},
             {id: 4, title: "测试通知4"},
-            {id: 5, title: "测试通知5"},
+            {id: 5, title: "测试通知5"}
         ],
         hot_topic_data: [
             {id: 1, name: "测试热门话题1", question: "11", watch: "11", img: "../img/topic-mid-img.png"},
             {id: 2, name: "测试热门话题2", question: "11", watch: "11", img: "../img/topic-mid-img.png"},
             {id: 3, name: "测试热门话题3", question: "11", watch: "11", img: "../img/topic-mid-img.png"},
             {id: 4, name: "测试热门话题4", question: "11", watch: "11", img: "../img/topic-mid-img.png"},
-            {id: 5, name: "测试热门话题5", question: "11", watch: "11", img: "../img/topic-mid-img.png"},
+            {id: 5, name: "测试热门话题5", question: "11", watch: "11", img: "../img/topic-mid-img.png"}
         ],
         hot_user_data: [
             {id: 1, name: "测试用户1", question: "11", like: "11", img: "../img/avatar-min-img.png"},
             {id: 2, name: "测试用户2", question: "11", like: "11", img: "../img/avatar-min-img.png"},
             {id: 3, name: "测试用户3", question: "11", like: "11", img: "../img/avatar-min-img.png"},
             {id: 4, name: "测试用户4", question: "11", like: "11", img: "../img/avatar-min-img.png"},
-            {id: 5, name: "测试用户5", question: "11", like: "11", img: "../img/avatar-min-img.png"},
-        ],
+            {id: 5, name: "测试用户5", question: "11", like: "11", img: "../img/avatar-min-img.png"}
+        ]
     },
     components: {
         "component-nav-bar": component_nav_bar,
-        "component-footer": component_footer,
+        "component-footer": component_footer
     },
     methods: {},
     create: function () {
@@ -258,4 +261,5 @@ uploader.on('uploadProgress', function (file, percentage) {
 $(function () {
     document.title = main.i18N.setting;
 });
+
 document.write("<script src=\"/js/base/base.js\"></script>");

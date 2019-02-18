@@ -1,15 +1,18 @@
-if (browser.versions.mobile) {
-    var no_redirect = getQueryVariable("no_redirect");
-    if (!no_redirect) {
-        location.href = "/m/login.html"
-    }
-}
+/**
+ * PC端登陆
+ * login.html 的 js
+ *
+ * @param json 一般是Ajax获得到的json字符串
+ * @param json.object 通用对象json字符串
+ * @param json.objects 通用对象列表json字符串
+ */
+// Vue.js
 var main = new Vue({
     el: '#main',
     data: {
         i18N: i18N,
         login_or_register: true, // 用于登陆与注册之间切换
-        not_login: true, // 是否登陆
+        not_login: true // 是否登陆
     },
     components: {},
     methods: {
@@ -105,45 +108,14 @@ if (register) {
     main.login_or_register = false;
 }
 
-get_info();
-
-// 检测登陆状态
-function get_info() {
-    $.ajax({
-        type: "get",
-        url: "../user/info",
-        dataType: "json",
-        success: function (json) {
-            var status = json.status;
-            if (statusCodeToBool(status)) {
-                main.not_login = false;
-                location.href = "/index.html"
-            }
-        },
-        error: function () {
-            alert(i18N.network + i18N.alert.error);
-        }
-    });
-}
-
 // 登陆与注册之间界面切换
 function login_or_register() {
     main.login_or_register = !main.login_or_register;
 }
 
-// 语言下拉栏选中
-var i18N_config = getCookie("i18N_config")
-if (i18N_config != "") {
-    $("#i18N_select").val(getCookie("i18N_config"));
-}
-
-// 语言切换
-$("#i18N_select").change(function () {
-    setCookie("i18N_config", $("#i18N_select").val(), 30);
-    refresh();
-});
-
 // 切换语言时title也会切换
 $(function () {
     document.title = main.i18N.login;
 });
+
+document.write("<script src=\"/js/base/base.js\"></script>");
