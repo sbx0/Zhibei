@@ -12,7 +12,7 @@ import java.util.Map;
 
 @Component
 public class CookieTools {
-    private static String DOMAIN; // 域名
+    public static String DOMAIN; // 域名
     public static List<String> COOKIE_NAMES = Arrays.asList("ID", "KEY", "NAME");
 
     /**
