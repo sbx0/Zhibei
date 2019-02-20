@@ -42,34 +42,6 @@ public class ArticleController extends BaseController<Article, Integer> {
     }
 
     /**
-     * 客户端获取文章信息
-     *
-     * @param id      id
-     * @param request
-     * @return
-     */
-    @LogRecord
-    @ResponseBody
-    @GetMapping("/id/{id}")
-    public ObjectNode one(@PathVariable("id") Integer id, HttpServletRequest request) {
-        mapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION);
-        json = mapper.createObjectNode();
-        User user = userService.getUser(request);
-        Article article = getService().findById(id);
-        if (user != null && article.getAuthor().getId().equals(user.getId())) {
-            mapper.setConfig(mapper.getSerializationConfig().withView(JsonViewInterface.Normal.class));
-            json.put("author", true);
-        } else {
-            mapper.setConfig(mapper.getSerializationConfig().withView(JsonViewInterface.Simple.class));
-            json.put("author", false);
-        }
-        ObjectNode object = mapper.convertValue(article, ObjectNode.class);
-        json.set("object", object);
-        json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
-        return json;
-    }
-
-    /**
      * 发布文章
      *
      * @param article

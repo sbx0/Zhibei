@@ -9,7 +9,6 @@ import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
@@ -147,6 +146,26 @@ public abstract class BaseController<T, ID> {
     }
 
     /**
+     * 无需权限版根据id查询实体 去除了一些敏感信息
+     *
+     * @param id
+     * @return
+     */
+    @LogRecord
+    @ResponseBody
+    @GetMapping("/id/{id}")
+    public ObjectNode normalOne(@PathVariable("id") ID id) {
+        mapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION);
+        mapper.setConfig(mapper.getSerializationConfig().withView(JsonViewInterface.Normal.class));
+        json = mapper.createObjectNode();
+        T t = getService().findById(id);
+        ObjectNode object = mapper.convertValue(t, ObjectNode.class);
+        json.set("object", object);
+        json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
+        return json;
+    }
+
+    /**
      * 根据ID查询实体
      *
      * @param id id
@@ -165,7 +184,6 @@ public abstract class BaseController<T, ID> {
                 T t = getService().findById(id);
                 if (t == null) t = getService().getEntity();
                 ObjectNode object = mapper.convertValue(t, ObjectNode.class);
-//                json.set(t.getClass().getSimpleName().toLowerCase(), object);
                 json.set("object", object);
                 json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
             } else {
