@@ -1,6 +1,7 @@
 package cn.sbx0.zhibei.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -9,32 +10,57 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 认证
+ * 认证 实体类
  */
 @Entity
 @Table(name = "CERTIFICATIONS")
+@JsonView(JsonViewInterface.All.class)
 @DynamicInsert
 @DynamicUpdate
 public class Certification implements Serializable {
     private static final long serialVersionUID = -6064596742915995996L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id; // id
+
     @Column(nullable = false, unique = true, length = 30)
     private String info; // 认证信息
+
     @Column(columnDefinition = "enum('personal','admin','enterprise','university','mechanism')")
     private String type; // 类型 [个人|管理员|企业|院校|机构]
+
     private Boolean passed = Boolean.FALSE; // 是否通过
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     private Date start_time; // 开始时间
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     private Date end_time; // 结束时间
+
     @ManyToOne(cascade = {CascadeType.MERGE}, targetEntity = User.class, optional = false)
     private User user;
+
     @Column(nullable = false)
     private String license; // 营业执照 或 机构名称 或 身份证信息
+
     @Column(nullable = false)
     private String img; // 申请文件
+
+    @Override
+    public String toString() {
+        return "Certification{" +
+                "id=" + id +
+                ", info='" + info + '\'' +
+                ", type='" + type + '\'' +
+                ", passed=" + passed +
+                ", start_time=" + start_time +
+                ", end_time=" + end_time +
+                ", user=" + user +
+                ", license='" + license + '\'' +
+                ", img='" + img + '\'' +
+                '}';
+    }
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
@@ -110,20 +136,5 @@ public class Certification implements Serializable {
 
     public void setImg(String img) {
         this.img = img;
-    }
-
-    @Override
-    public String toString() {
-        return "Certification{" +
-                "id=" + id +
-                ", info='" + info + '\'' +
-                ", type='" + type + '\'' +
-                ", passed=" + passed +
-                ", start_time=" + start_time +
-                ", end_time=" + end_time +
-                ", user=" + user +
-                ", license='" + license + '\'' +
-                ", img='" + img + '\'' +
-                '}';
     }
 }

@@ -1,12 +1,15 @@
 package cn.sbx0.zhibei.controller;
 
 import cn.sbx0.zhibei.annotation.LogRecord;
+import cn.sbx0.zhibei.entity.JsonViewInterface;
 import cn.sbx0.zhibei.entity.User;
 import cn.sbx0.zhibei.service.BaseService;
 import cn.sbx0.zhibei.service.UserService;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
@@ -18,7 +21,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -99,9 +101,11 @@ public abstract class BaseController<T, ID> {
     @ResponseBody
     @GetMapping("/list")
     public ObjectNode list(Integer page, Integer size, String attribute, String direction, HttpServletRequest request) {
+        mapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION);
+        mapper.setConfig(mapper.getSerializationConfig().withView(JsonViewInterface.All.class));
+        json = mapper.createObjectNode();
         if (page == null) page = 1;
         if (size == null) size = 10;
-        json = mapper.createObjectNode();
         User user = userService.getUser(request);
         if (user != null) {
             if (userService.checkPermission(request, user)) {
@@ -152,6 +156,8 @@ public abstract class BaseController<T, ID> {
     @ResponseBody
     @GetMapping("/{id}")
     public ObjectNode one(@PathVariable("id") ID id, HttpServletRequest request) {
+        mapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION);
+        mapper.setConfig(mapper.getSerializationConfig().withView(JsonViewInterface.All.class));
         json = mapper.createObjectNode();
         User user = userService.getUser(request);
         if (user != null) {

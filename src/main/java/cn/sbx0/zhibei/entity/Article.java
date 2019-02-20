@@ -1,7 +1,6 @@
 package cn.sbx0.zhibei.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -19,39 +18,51 @@ import java.util.Date;
 @DynamicUpdate
 public class Article implements Serializable {
     private static final long serialVersionUID = -8099382889784133037L;
-    @JsonView(Top.class)
+
+    @JsonView(JsonViewInterface.Simple.class)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    @JsonView(Top.class)
+    private Integer id; // 编号
+
+    @JsonView(JsonViewInterface.Simple.class)
     @Column(nullable = false, length = 100)
     private String title; // 标题
-    @JsonView(Top.class)
+
+    @JsonView(JsonViewInterface.Simple.class)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     @Column(nullable = false)
     private Date time; // 时间
-    @JsonView(Top.class)
+
+    @JsonView(JsonViewInterface.Simple.class)
     @Column(length = 250)
     private String introduction; // 简介
-    @JsonView(Index.class)
+
+    @JsonView(JsonViewInterface.Normal.class)
     @Lob
     @Column(nullable = false)
     private String content; // 内容
+
+    @JsonView(JsonViewInterface.Normal.class)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     private Date lastChangeTime; // 上次修改时间
-    @JsonView(Admin.class)
+
+    @JsonView(JsonViewInterface.All.class)
     @Column(length = 40)
     private String password; // 密码
-    @JsonView(Index.class)
+
+    @JsonView(JsonViewInterface.Normal.class)
     @Column(nullable = false)
     private Integer views; // 查看数
-    @JsonView(Index.class)
+
+    @JsonView(JsonViewInterface.Normal.class)
     @Column(nullable = false)
     private Integer comments; // 评论数
-    @JsonView(Index.class)
+
+    @JsonView(JsonViewInterface.Normal.class)
     @Column(nullable = false)
     private Integer likes; // 喜欢数
-    @JsonView(Index.class)
+
+    @JsonView(JsonViewInterface.Normal.class)
     @Column(nullable = false)
     private Integer dislikes; // 不喜欢数
     /**
@@ -59,29 +70,13 @@ public class Article implements Serializable {
      * 大于0 时 越大，排序越靠前
      * 小于0 隐藏
      */
-    @JsonView(Admin.class)
+    @JsonView(JsonViewInterface.Simple.class)
     @Column(nullable = false)
     private Integer top; // 置顶排序
-    @JsonView(Top.class)
+
+    @JsonView(JsonViewInterface.Simple.class)
     @ManyToOne(cascade = {CascadeType.MERGE}, targetEntity = User.class, optional = false)
     private User author; // 作者
-
-    // 置顶
-    public interface Top {
-
-    }
-
-    // 首页
-    public interface Index extends Top {
-
-    }
-
-    /**
-     * 我全都要
-     */
-    public interface Admin extends Index {
-
-    }
 
     @Override
     public String toString() {

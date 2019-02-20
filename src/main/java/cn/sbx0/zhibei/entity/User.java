@@ -10,7 +10,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 基础用户
+ * 用户 实体类
  */
 @Entity
 @Table(name = "USERS")
@@ -18,68 +18,70 @@ import java.util.Date;
 @DynamicUpdate
 public class User implements Serializable {
     private static final long serialVersionUID = -7669301273984030395L;
-    @JsonView(Normal.class)
+
+    @JsonView(JsonViewInterface.Simple.class)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id; // id
-    @JsonView(Normal.class)
+
+    @JsonView(JsonViewInterface.Simple.class)
     @Column(nullable = false, unique = true, length = 15)
     private String name; // 用户名
-    @JsonView(Admin.class)
+
+    @JsonView(JsonViewInterface.All.class)
     @Column(nullable = false, length = 100)
     private String password; // 密码
-    @JsonView(Normal.class)
+
+    @JsonView(JsonViewInterface.Normal.class)
     @Column(length = 30)
     private String introduction;
-    @JsonView(Admin.class)
+
+    @JsonView(JsonViewInterface.Normal.class)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     @Column(nullable = false)
     private Date registerTime; // 注册时间
-    @JsonView(Admin.class)
+
+    @JsonView(JsonViewInterface.All.class)
     @Column(nullable = false)
     private Boolean banned = Boolean.FALSE; // 封禁
-    @JsonView(Admin.class)
+
+    @JsonView(JsonViewInterface.All.class)
     @Column(length = 30)
     private String phone; // 手机
-    @JsonView(Admin.class)
+
+    @JsonView(JsonViewInterface.All.class)
     @Column(length = 50)
     private String email; // 邮箱
-    @JsonView(Normal.class)
+
+    @JsonView(JsonViewInterface.Simple.class)
     private String avatar; // 头像
-    @JsonView(Admin.class)
+
+    @JsonView(JsonViewInterface.All.class)
     @Column(columnDefinition = "enum('male','female','')")
     private String sex; // 类型 [男|女|空]
-    @JsonView(Admin.class)
+
+    @JsonView(JsonViewInterface.All.class)
     @ManyToOne(cascade = {CascadeType.MERGE}, targetEntity = Role.class)
     private Role role; // 角色
-    @JsonView(Admin.class)
+
+    @JsonView(JsonViewInterface.All.class)
     private Date birthday; // 生日
-    @JsonView(Admin.class)
+
+    @JsonView(JsonViewInterface.All.class)
     @Column(nullable = false, columnDefinition = "Decimal(10,1) default '0.0'")
     private Double integral; // 积分
-    @JsonView(Normal.class)
+
+    @JsonView(JsonViewInterface.Simple.class)
     @Column(nullable = false, columnDefinition = "Int(11) Default '0'")
     private Integer level; // 用户等级
-    @JsonView(Admin.class)
+
+    @JsonView(JsonViewInterface.All.class)
     @Column(nullable = false, columnDefinition = "Decimal(10,1) default '0.0'")
     private Double exp; // 用户经验
-    @JsonView(Admin.class)
+
+    @JsonView(JsonViewInterface.All.class)
     @Column(nullable = false, columnDefinition = "Decimal(10,1) default '100.0'")
     private Double exp_max; // 当前等级的最大经验值，超过清空升级
-
-    /**
-     * 正常情况下需要转换成Json的属性
-     */
-    public interface Normal {
-
-    }
-
-    /**
-     * 我全都要
-     */
-    public interface Admin extends Normal {
-
-    }
 
     @Override
     public String toString() {

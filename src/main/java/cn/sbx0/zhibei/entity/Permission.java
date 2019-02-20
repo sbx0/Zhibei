@@ -1,5 +1,6 @@
 package cn.sbx0.zhibei.entity;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -7,10 +8,11 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 /**
- * 权限表
+ * 权限 实体类
  */
 @Entity
 @Table(name = "PERMISSIONS")
+@JsonView(JsonViewInterface.All.class)
 @DynamicInsert
 @DynamicUpdate
 public class Permission implements Serializable {
@@ -18,10 +20,13 @@ public class Permission implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     @Column(nullable = false, unique = true, length = 15)
     private String name; // 名称
+
     @Column(length = 30)
     private String introduction; // 介绍
+
     /**
      * 资源路径
      * 例子
@@ -31,6 +36,7 @@ public class Permission implements Serializable {
      */
     @Column(nullable = false)
     private String url; // 路径
+
     /**
      * 权限字符串
      * page例子：0 或 1
@@ -38,10 +44,25 @@ public class Permission implements Serializable {
      */
     @Column(nullable = false)
     private String str; // 权限字符串
+
     @Column(nullable = false)
     private Boolean available = Boolean.FALSE; // 是否可用
+
     @ManyToOne(cascade = {CascadeType.MERGE}, targetEntity = Permission.class)
     private Permission father; // 父亲
+
+    @Override
+    public String toString() {
+        return "Permission{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", introduction='" + introduction + '\'' +
+                ", url='" + url + '\'' +
+                ", str='" + str + '\'' +
+                ", available=" + available +
+                ", father=" + father +
+                '}';
+    }
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
@@ -101,18 +122,5 @@ public class Permission implements Serializable {
 
     public void setFather(Permission father) {
         this.father = father;
-    }
-
-    @Override
-    public String toString() {
-        return "Permission{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", introduction='" + introduction + '\'' +
-                ", url='" + url + '\'' +
-                ", str='" + str + '\'' +
-                ", available=" + available +
-                ", father=" + father +
-                '}';
     }
 }

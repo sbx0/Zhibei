@@ -2,11 +2,12 @@ package cn.sbx0.zhibei.controller;
 
 import cn.sbx0.zhibei.annotation.LogRecord;
 import cn.sbx0.zhibei.entity.Article;
+import cn.sbx0.zhibei.entity.JsonViewInterface;
 import cn.sbx0.zhibei.entity.User;
 import cn.sbx0.zhibei.service.ArticleService;
 import cn.sbx0.zhibei.service.BaseService;
 import cn.sbx0.zhibei.tool.StringTools;
-import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -14,10 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -41,6 +39,31 @@ public class ArticleController extends BaseController<Article, Integer> {
     @Autowired
     public ArticleController(ObjectMapper mapper) {
         this.mapper = mapper;
+    }
+
+    @LogRecord
+    @ResponseBody
+    @GetMapping("/id/{id}")
+    public ObjectNode one(@PathVariable("id") Integer id, HttpServletRequest request) {
+        mapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION);
+        json = mapper.createObjectNode();
+        User user = userService.getUser(request);
+        if (user != null) {
+            Article article = getService().findById(id);
+            if (article.getAuthor().getId().equals(user.getId())) {
+                mapper.setConfig(mapper.getSerializationConfig().withView(JsonViewInterface.Normal.class));
+                json.put("author", true);
+            } else {
+                mapper.setConfig(mapper.getSerializationConfig().withView(JsonViewInterface.Simple.class));
+                json.put("author", false);
+            }
+            ObjectNode object = mapper.convertValue(article, ObjectNode.class);
+            json.set("object", object);
+            json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
+        } else {
+            json.put(STATUS_NAME, STATUS_CODE_NOT_LOGIN);
+        }
+        return json;
     }
 
     /**
@@ -87,17 +110,17 @@ public class ArticleController extends BaseController<Article, Integer> {
      * @param size
      * @param attribute
      * @param direction
-     * @param request
      * @return
      */
-    @JsonView(Article.Index.class)
     @LogRecord
     @ResponseBody
     @GetMapping("/index")
-    public ObjectNode index(Integer page, Integer size, String attribute, String direction, HttpServletRequest request) {
+    public ObjectNode index(Integer page, Integer size, String attribute, String direction) {
+        mapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION);
+        mapper.setConfig(mapper.getSerializationConfig().withView(JsonViewInterface.Simple.class));
+        json = mapper.createObjectNode();
         if (page == null) page = 1;
         if (size == null) size = 10;
-        json = mapper.createObjectNode();
         if (attribute == null) attribute = "id";
         if (direction == null) direction = "desc";
         Sort sort = BaseService.buildSort(attribute, direction);
@@ -116,19 +139,4 @@ public class ArticleController extends BaseController<Article, Integer> {
         return json;
     }
 
-    /**
-     * 管理员界面获取列表
-     *
-     * @param page
-     * @param size
-     * @param attribute
-     * @param direction
-     * @param request
-     * @return
-     */
-    @JsonView(Article.Admin.class)
-    @Override
-    public ObjectNode list(Integer page, Integer size, String attribute, String direction, HttpServletRequest request) {
-        return super.list(page, size, attribute, direction, request);
-    }
 }

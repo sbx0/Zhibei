@@ -1,11 +1,13 @@
 package cn.sbx0.zhibei.controller;
 
 import cn.sbx0.zhibei.annotation.LogRecord;
+import cn.sbx0.zhibei.entity.JsonViewInterface;
 import cn.sbx0.zhibei.entity.User;
 import cn.sbx0.zhibei.service.BaseService;
 import cn.sbx0.zhibei.tool.CookieTools;
 import cn.sbx0.zhibei.tool.StringTools;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -37,7 +39,7 @@ public class UserController extends BaseController<User, Integer> {
         this.mapper = mapper;
     }
 
-    @JsonView(User.Admin.class)
+    @JsonView(JsonViewInterface.All.class)
     @Override
     public ObjectNode list(Integer page, Integer size, String attribute, String direction, HttpServletRequest request) {
         return super.list(page, size, attribute, direction, request);
@@ -90,10 +92,11 @@ public class UserController extends BaseController<User, Integer> {
      * @return
      */
     @LogRecord
-    @JsonView(User.Admin.class)
     @ResponseBody
     @GetMapping("/info")
     public ObjectNode info(HttpServletRequest request) {
+        mapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION);
+        mapper.setConfig(mapper.getSerializationConfig().withView(JsonViewInterface.Normal.class));
         json = mapper.createObjectNode();
         User user = userService.getUser(request);
         if (user != null) {

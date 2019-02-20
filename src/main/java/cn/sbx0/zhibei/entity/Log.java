@@ -1,6 +1,7 @@
 package cn.sbx0.zhibei.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -9,10 +10,11 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 日志实体类
+ * 日志 实体类
  */
 @Entity
 @Table(name = "LOGS")
+@JsonView(JsonViewInterface.All.class)
 @DynamicInsert
 @DynamicUpdate
 public class Log implements Serializable {
@@ -20,21 +22,29 @@ public class Log implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     @Column(nullable = false, length = 30)
     private String ip; // IP
+
     @ManyToOne(cascade = {CascadeType.MERGE}, targetEntity = User.class)
     private User user; // 人物
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     @Column(nullable = false)
     private Date time; // 记录时间
+
     @Column(nullable = false)
     private Long runTime; // 运行时间
+
     @Column(length = 100)
     private String args; // 参数
+
     @Column(nullable = false, length = 100)
     private String method; // 方法
+
     @Column(nullable = false, length = 100)
     private String className; // 类名
+
     @Column(nullable = false)
     private String url; // url
 

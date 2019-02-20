@@ -1,6 +1,7 @@
 package cn.sbx0.zhibei.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -9,34 +10,59 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 上传文件
+ * 上传文件 实体类
  */
 @Entity
 @Table(name = "FILES")
+@JsonView(JsonViewInterface.All.class)
 @DynamicInsert
 @DynamicUpdate
 public class UploadFile implements Serializable {
     private static final long serialVersionUID = 7933668333645679234L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    private Integer id;
+
     @Column(nullable = false, length = 100)
-    String originalName; // 原始文件名
+    private String originalName; // 原始文件名
+
     @Column(nullable = false, length = 50)
-    String name; // 唯一文件名
+    private String name; // 唯一文件名
+
     @Column(nullable = false, length = 10)
-    String ext; // 后缀名
+    private String ext; // 后缀名
+
     @Column(nullable = false, length = 10)
-    String type; // 文件类型
+    private String type; // 文件类型
+
     @Column(nullable = false, length = 50)
-    String md5; // md5值
+    private String md5; // md5值
+
     @Column(nullable = false)
-    Long size; // 文件大小
+    private Long size; // 文件大小
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     @Column(nullable = false)
-    Date time; // 上传日期
+    private Date time; // 上传日期
+
     @Column(nullable = false)
     private Boolean banned = Boolean.FALSE; // 封禁
+
+    @Override
+    public String toString() {
+        return "UploadFile{" +
+                "id=" + id +
+                ", originalName='" + originalName + '\'' +
+                ", name='" + name + '\'' +
+                ", ext='" + ext + '\'' +
+                ", type='" + type + '\'' +
+                ", md5='" + md5 + '\'' +
+                ", size=" + size +
+                ", time=" + time +
+                ", banned=" + banned +
+                '}';
+    }
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
@@ -112,20 +138,5 @@ public class UploadFile implements Serializable {
 
     public void setBanned(Boolean banned) {
         this.banned = banned;
-    }
-
-    @Override
-    public String toString() {
-        return "UploadFile{" +
-                "id=" + id +
-                ", originalName='" + originalName + '\'' +
-                ", name='" + name + '\'' +
-                ", ext='" + ext + '\'' +
-                ", type='" + type + '\'' +
-                ", md5='" + md5 + '\'' +
-                ", size=" + size +
-                ", time=" + time +
-                ", banned=" + banned +
-                '}';
     }
 }
