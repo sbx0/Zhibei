@@ -159,18 +159,22 @@ public class UserController extends BaseController<User, Integer> {
      * @return
      */
     @LogRecord
+    @ResponseBody
     @GetMapping(value = "/logout")
-    public String logout(HttpServletRequest request, HttpServletResponse response) {
+    public ObjectNode logout(HttpServletRequest request, HttpServletResponse response) {
+        json = mapper.createObjectNode();
         HttpSession session = request.getSession();
         try {
             // 清除Cookie
             CookieTools.removeCookies(response);
             // 清除session
             session.removeAttribute("user");
-            return "redirect:/login.html";
+            json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
         } catch (Exception e) {
-            return "error";
+            json.put(STATUS_NAME, STATUS_CODE_EXCEPTION);
+            json.put("msg", e.getMessage());
         }
+        return json;
     }
 
     /**
