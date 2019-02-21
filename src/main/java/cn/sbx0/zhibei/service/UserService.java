@@ -1,7 +1,10 @@
 package cn.sbx0.zhibei.service;
 
+import cn.sbx0.zhibei.dao.PermissionDao;
+import cn.sbx0.zhibei.dao.RoleDao;
 import cn.sbx0.zhibei.dao.UserDao;
 import cn.sbx0.zhibei.entity.Permission;
+import cn.sbx0.zhibei.entity.Role;
 import cn.sbx0.zhibei.entity.User;
 import cn.sbx0.zhibei.tool.CookieTools;
 import cn.sbx0.zhibei.tool.StringTools;
@@ -14,6 +17,8 @@ import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +28,9 @@ import java.util.Map;
 @Service
 public class UserService extends BaseService<User, Integer> {
     @Resource
-    UserDao userDao;
+    private UserDao userDao;
+    @Resource
+    private RoleDao roleDao;
 
     @Override
     public PagingAndSortingRepository<User, Integer> getDao() {
@@ -36,6 +43,46 @@ public class UserService extends BaseService<User, Integer> {
     }
 
     /**
+     * 注册
+     *
+     * @param user
+     * @return
+     */
+    public boolean register(User user) {
+        // 名称为空
+        if (StringTools.checkNullStr(user.getName())) return false;
+        user.setName(StringTools.killHTML(user.getName().trim()));
+        // 密码为空
+        if (StringTools.checkNullStr(user.getPassword())) return false;
+        user = encryptPassword(user); // 加密密码
+        user.setBanned(false); // 默认不封禁
+        user.setRegisterTime(new Date()); // 注册时间
+        // 默认角色 用户
+        Role userRole = roleDao.findByName("user");
+        if (userRole == null) { // 默认角色不存在
+            userRole = new Role();
+            userRole.setName("user");
+            userRole.setIntroduction("default role");
+            userRole.setAvailable(true);
+            List<Permission> permissions = new ArrayList<>();
+            userRole.setPermissions(permissions);
+            try {
+                roleDao.save(userRole);
+            } catch (Exception e) {
+                return false;
+            }
+            userRole = roleDao.findByName("user");
+        }
+        user.setRole(userRole);
+        try {
+            return save(user);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /**
      * 将增删查改转换成二进制
      *
      * @param methodType
@@ -45,9 +92,12 @@ public class UserService extends BaseService<User, Integer> {
         switch (methodType) {
             case "list":
                 return "0001";
-            case "add":
+            case "post":
+            case "upload":
+            case "avatar":
+            case "data":
                 return "0010";
-            case "update":
+            case "add":
                 return "0100";
             case "delete":
                 return "1000";
@@ -64,29 +114,36 @@ public class UserService extends BaseService<User, Integer> {
      */
     public boolean checkPermission(User user) {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        String method = request.getServletPath(); // 运行的方法
-        if (method == null) return true;
-        if (user.getRole() == null) return false;
-        List<Permission> permissions = user.getRole().getPermissions();
-        if (permissions == null) return false;
+        String path = request.getServletPath(); // 运行的方法
+        if (path == null) return true;
+        if (user.getRole() == null) return false; // 无角色
+        List<Permission> permissions = user.getRole().getPermissions(); // 权限列表
+        if (permissions == null) return false; // 无权限
         for (Permission permission : permissions) {
-            if (permission.getUrl().equals("*")) return true;
-            if (permission.getUrl().equals(method)) {
-                if (permission.getStr().equals("*")) return true;
-                if (permission.getStr().equals("0")) {
+            if (permission.getUrl().equals("*")) return true; // * 匹配所有
+            if (permission.getUrl().equals(path)) { // 权限url与path匹配
+                if (permission.getStr().equals("*")) return true; // * 匹配所有
+                if (permission.getStr().equals("0")) { // 一般是页面 0 否
                     return false;
-                } else if (permission.getStr().equals("1")) {
+                } else if (permission.getStr().equals("1")) { // 1 是
                     return true;
-                } else {
-                    method = method.substring(1);
-                    String methodType = method.split("/")[1];
-                    char[] methodBinary = methodTypeToBinary(methodType).toCharArray();
-                    char[] permissionStr = permission.getStr().toCharArray();
-                    for (int i = 0; i < 4; i++) {
-                        if (methodBinary[i] == permissionStr[i]) {
-                            return true;
-                        }
-                    }
+                }
+            } else {
+                String url = permission.getUrl().substring(1); // /article/* -> article/*
+                String urlType = url.split("/")[1]; // article/* -> *
+                if (!path.split("/")[0].equals(permission.getUrl().split("/")[0])) {
+                    return false;
+                }
+                if (!urlType.equals("*")) return false;
+            }
+            path = path.substring(1); // /article/list -> article/list
+            String pathType = path.split("/")[1]; // article/list -> list
+            if (permission.getStr().equals("*")) return true;
+            char[] pathCharArray = methodTypeToBinary(pathType).toCharArray(); // list -> 0001
+            char[] permissionCharArray = permission.getStr().toCharArray(); // 0001 / 0010 / 0011 / ...
+            for (int i = 0; i < 4; i++) {
+                if (pathCharArray[i] == permissionCharArray[i]) {
+                    return true;
                 }
             }
         }

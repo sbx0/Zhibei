@@ -14,6 +14,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,7 +25,7 @@ import java.util.Date;
 import java.util.Map;
 
 /**
- * 基础用户 控制层
+ * 用户 控制层
  */
 @Controller
 @RequestMapping("/user")
@@ -66,42 +68,21 @@ public class UserController extends BaseController<User, Integer> {
     }
 
     /**
-     * 进入后台
-     *
-     * @return
-     */
-    @LogRecord
-    @GetMapping("/permission")
-    public String permission(Map<String, Object> map) {
-        User user = userService.getUser();
-        if (user != null) {
-            if (userService.checkPermission(user)) {
-                return "permission";
-            }
-        }
-        map.put("status", "500");
-        map.put("timestamp", new Date());
-        map.put("message", "无权访问");
-        return "error";
-    }
-
-    /**
      * 查看当前登录用户基本信息
      *
-     * @param request
      * @return
      */
     @LogRecord
     @ResponseBody
     @GetMapping("/info")
-    public ObjectNode info(HttpServletRequest request) {
+    public ObjectNode info() {
         mapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION);
         mapper.setConfig(mapper.getSerializationConfig().withView(JsonViewInterface.Normal.class));
         json = mapper.createObjectNode();
         User user = userService.getUser();
         if (user != null) {
-            ObjectNode attr = mapper.convertValue(user, ObjectNode.class);
-            json.set("user", attr);
+            ObjectNode convertValue = mapper.convertValue(user, ObjectNode.class);
+            json.set("user", convertValue);
             json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
         } else {
             json.put(STATUS_NAME, STATUS_CODE_NOT_LOGIN);
@@ -114,13 +95,13 @@ public class UserController extends BaseController<User, Integer> {
      *
      * @param user
      * @param response
-     * @param request
      * @return
      */
     @LogRecord
     @ResponseBody
     @PostMapping(value = "/login")
-    public ObjectNode login(User user, HttpServletResponse response, HttpServletRequest request) {
+    public ObjectNode login(User user, HttpServletResponse response) {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         HttpSession session = request.getSession();
         json = mapper.createObjectNode();
         // 判断是否为空
@@ -180,19 +161,16 @@ public class UserController extends BaseController<User, Integer> {
     /**
      * 注册
      *
-     * @param u
+     * @param user
      * @return
      */
     @LogRecord
     @ResponseBody
     @PostMapping("/register")
-    public ObjectNode register(User u) {
-        u.setBanned(false);
-        u.setRegisterTime(new Date());
+    public ObjectNode register(User user) {
         json = mapper.createObjectNode();
         try {
-            u = userService.encryptPassword(u); // 加密密码
-            if (userService.save(u)) {
+            if (userService.register(user)) {
                 json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
             } else {
                 json.put(STATUS_NAME, STATUS_CODE_FILED);

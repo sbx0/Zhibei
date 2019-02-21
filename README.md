@@ -1,11 +1,15 @@
+# 前端代码已从本库分离  
+## 本库只有管理员的前端界面代码和全部后台实现代码
+### 配套前端项目请查看 [智贝 网页客户端](https://github.com/sbx0/ZhibeiStatic "智贝 网页客户端")  
+  
+------------  
+  
 ### [智贝](http://m.sbx0.cn "智贝")  
   
 ###### 立足于技术商业化  
 ###### 基于Spring Boot和Vue.js的JavaWeb项目  
   
 ------------  
-  
-#### 真 前后端分离的配套前端项目 [智贝 网页客户端](https://github.com/sbx0/ZhibeiStatic "智贝 网页客户端")  
   
 ##### 已完成特性  
 - 通用化后台  
@@ -38,12 +42,3 @@
 JavaScript框架:[Vue.js](https://cn.vuejs.org/index.html "Vue.js")  
   
 ------------  
-  
-**本项目使用的开源项目目录：**  
-[Font-Awesome](https://github.com/FortAwesome/Font-Awesome "Font-Awesome") 图标  
-[WeCenter](http://wenda.wecenter.com "WeCenter") 前端静态界面模版  
-[WebUploader](https://github.com/fex-team/webuploader/ "WebUploader") 上传组件  
-[Messenger](http://github.hubspot.com/messenger/docs/welcome/ "Messenger") 消息提示  
-[Hsiaoming Yang's editor](https://lab.lepture.com/editor/ "Hsiaoming Yang's editor")  Markdown编辑器（被小姐姐魔改过的，依赖下面两个开源项目）  
-> [marked](https://github.com/markedjs/marked "marked")  A markdown parser and compiler. Built for speed.  
-[quill](https://github.com/quilljs/quill "marked")  Quill is a modern WYSIWYG editor built for compatibility and extensibility.  

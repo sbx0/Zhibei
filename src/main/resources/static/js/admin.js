@@ -79,8 +79,8 @@ init();
 
 // 初始化
 function init() {
-    query();
     getUrlVar();
+    query();
 }
 
 // 从链接获取参数
@@ -129,7 +129,7 @@ function build(data) {
     var modal_data = [];
     for (var i = 0; i < main.attribute_data.length; i++) {
         var attribute = main.attribute_data[i];
-        if (attribute.name === 'introduction') {
+        if (attribute.name === 'introduction' || attribute.name === 'content') {
             modal_data[i] = {
                 id: attribute.name,
                 name: i18N["attribute"][main.table][attribute.name],
