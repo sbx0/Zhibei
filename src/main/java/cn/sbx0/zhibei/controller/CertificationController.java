@@ -41,15 +41,14 @@ public class CertificationController extends BaseController<Certification, Integ
     /**
      * 获取当前申请状态
      *
-     * @param request
      * @return
      */
     @LogRecord
     @ResponseBody
     @GetMapping("/status")
-    public ObjectNode status(HttpServletRequest request) {
+    public ObjectNode status() {
         json = mapper.createObjectNode();
-        User user = userService.getUser(request);
+        User user = userService.getUser();
         if (user != null) {
             Certification certification = certificationService.findByUserAndPassed(user.getId());
             if (certification != null) {
@@ -69,15 +68,14 @@ public class CertificationController extends BaseController<Certification, Integ
      * 提交申请
      *
      * @param certification
-     * @param request
      * @return
      */
     @LogRecord
     @ResponseBody
     @PostMapping("/submit")
-    public ObjectNode submit(Certification certification, HttpServletRequest request) {
+    public ObjectNode submit(Certification certification) {
         json = mapper.createObjectNode();
-        User user = userService.getUser(request);
+        User user = userService.getUser();
         if (user != null) {
             if (certificationService.existsByUserAndPassed(user.getId())) {
                 json.put(STATUS_NAME, STATUS_CODE_REPEAT);

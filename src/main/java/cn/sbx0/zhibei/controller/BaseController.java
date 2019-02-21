@@ -59,17 +59,16 @@ public abstract class BaseController<T, ID> {
     /**
      * 获取对象所有的属性名，属性类型
      *
-     * @param request
      * @return 实体
      */
     @LogRecord
     @ResponseBody
     @GetMapping("/attribute")
-    public ObjectNode getAttribute(HttpServletRequest request) {
+    public ObjectNode getAttribute() {
         json = mapper.createObjectNode();
-        User user = userService.getUser(request);
+        User user = userService.getUser();
         if (user != null) {
-            if (userService.checkPermission(request, user)) {
+            if (userService.checkPermission(user)) {
                 List<Map> attributes = getService().getAttribute();
                 ArrayNode jsons = mapper.createArrayNode();
                 for (Map info : attributes) {
@@ -105,9 +104,9 @@ public abstract class BaseController<T, ID> {
         json = mapper.createObjectNode();
         if (page == null) page = 1;
         if (size == null) size = 10;
-        User user = userService.getUser(request);
+        User user = userService.getUser();
         if (user != null) {
-            if (userService.checkPermission(request, user)) {
+            if (userService.checkPermission(user)) {
                 if (attribute == null) attribute = "id";
                 if (direction == null) direction = "desc";
                 Sort sort = BaseService.buildSort(attribute, direction);
@@ -174,13 +173,13 @@ public abstract class BaseController<T, ID> {
     @LogRecord
     @ResponseBody
     @GetMapping("/{id}")
-    public ObjectNode one(@PathVariable("id") ID id, HttpServletRequest request) {
+    public ObjectNode one(@PathVariable("id") ID id) {
         mapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION);
         mapper.setConfig(mapper.getSerializationConfig().withView(JsonViewInterface.All.class));
         json = mapper.createObjectNode();
-        User user = userService.getUser(request);
+        User user = userService.getUser();
         if (user != null) {
-            if (userService.checkPermission(request, user)) {
+            if (userService.checkPermission(user)) {
                 T t = getService().findById(id);
                 if (t == null) t = getService().getEntity();
                 ObjectNode object = mapper.convertValue(t, ObjectNode.class);
@@ -204,12 +203,12 @@ public abstract class BaseController<T, ID> {
     @LogRecord
     @ResponseBody
     @PostMapping("/add")
-    public ObjectNode add(T t, HttpServletRequest request) {
+    public ObjectNode add(T t) {
         json = mapper.createObjectNode();
         try {
-            User user = userService.getUser(request);
+            User user = userService.getUser();
             if (user != null) {
-                if (userService.checkPermission(request, user)) {
+                if (userService.checkPermission(user)) {
                     if (getService().save(t)) {
                         json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
                     } else {
@@ -237,12 +236,12 @@ public abstract class BaseController<T, ID> {
     @LogRecord
     @ResponseBody
     @GetMapping("/delete")
-    public ObjectNode delete(ID id, HttpServletRequest request) {
+    public ObjectNode delete(ID id) {
         json = mapper.createObjectNode();
         try {
-            User user = userService.getUser(request);
+            User user = userService.getUser();
             if (user != null) {
-                if (userService.checkPermission(request, user)) {
+                if (userService.checkPermission(user)) {
                     if (getService().deleteById(id)) {
                         json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
                     } else {

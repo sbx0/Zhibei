@@ -7,6 +7,8 @@ import cn.sbx0.zhibei.tool.CookieTools;
 import cn.sbx0.zhibei.tool.StringTools;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
@@ -57,11 +59,11 @@ public class UserService extends BaseService<User, Integer> {
     /**
      * 检测用户权限
      *
-     * @param request
      * @param user
      * @return
      */
-    public boolean checkPermission(HttpServletRequest request, User user) {
+    public boolean checkPermission(User user) {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String method = request.getServletPath(); // 运行的方法
         if (method == null) return true;
         if (user.getRole() == null) return false;
@@ -160,7 +162,8 @@ public class UserService extends BaseService<User, Integer> {
     /**
      * 根据session或cookie查找User
      */
-    public User getUser(HttpServletRequest request) {
+    public User getUser() {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
         if (user != null && user.getId() != null) {

@@ -44,7 +44,7 @@ public class LogAspect {
         // 获取此次请求的request对象
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String methodName = joinPoint.getSignature().getName(); // 方法名
-        User user = userService.getUser(request);
+        User user = userService.getUser();
         Log log = new Log();
         log.setUser(user);
         log.setMethod(methodName);

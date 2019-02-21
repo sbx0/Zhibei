@@ -45,15 +45,14 @@ public class ArticleController extends BaseController<Article, Integer> {
      * 发布文章
      *
      * @param article
-     * @param request
      * @return
      */
     @LogRecord
     @ResponseBody
     @PostMapping("/post")
-    public ObjectNode post(Article article, HttpServletRequest request) {
+    public ObjectNode post(Article article) {
         json = mapper.createObjectNode();
-        User user = userService.getUser(request);
+        User user = userService.getUser();
         article.setId(null);
         if (!StringTools.checkNullStr(article.getTitle())
                 && !StringTools.checkNullStr(article.getIntroduction())
@@ -71,7 +70,7 @@ public class ArticleController extends BaseController<Article, Integer> {
             article.setAuthor(user);
             article.setPassword(null);
             article.setLastChangeTime(null);
-            json = add(article, request);
+            json = add(article);
         } else {
             json.put(STATUS_NAME, STATUS_CODE_FILED);
         }

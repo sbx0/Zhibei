@@ -52,10 +52,10 @@ public class UserController extends BaseController<User, Integer> {
      */
     @LogRecord
     @GetMapping("/admin")
-    public String admin(HttpServletRequest request, Map<String, Object> map) {
-        User user = userService.getUser(request);
+    public String admin(Map<String, Object> map) {
+        User user = userService.getUser();
         if (user != null) {
-            if (userService.checkPermission(request, user)) {
+            if (userService.checkPermission(user)) {
                 return "admin";
             }
         }
@@ -72,10 +72,10 @@ public class UserController extends BaseController<User, Integer> {
      */
     @LogRecord
     @GetMapping("/permission")
-    public String permission(HttpServletRequest request, Map<String, Object> map) {
-        User user = userService.getUser(request);
+    public String permission(Map<String, Object> map) {
+        User user = userService.getUser();
         if (user != null) {
-            if (userService.checkPermission(request, user)) {
+            if (userService.checkPermission(user)) {
                 return "permission";
             }
         }
@@ -98,7 +98,7 @@ public class UserController extends BaseController<User, Integer> {
         mapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION);
         mapper.setConfig(mapper.getSerializationConfig().withView(JsonViewInterface.Normal.class));
         json = mapper.createObjectNode();
-        User user = userService.getUser(request);
+        User user = userService.getUser();
         if (user != null) {
             ObjectNode attr = mapper.convertValue(user, ObjectNode.class);
             json.set("user", attr);
