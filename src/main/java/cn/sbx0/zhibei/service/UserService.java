@@ -151,18 +151,6 @@ public class UserService extends BaseService<User, Integer> {
     }
 
     /**
-     * 保存
-     * 因为密码需要加密所以重写了
-     *
-     * @param user
-     * @return
-     */
-    @Override
-    public boolean save(User user) {
-        return super.save(user);
-    }
-
-    /**
      * 根据用户名判断用户是否存在
      *
      * @param name

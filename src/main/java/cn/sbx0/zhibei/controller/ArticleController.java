@@ -18,7 +18,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
 
@@ -39,6 +38,42 @@ public class ArticleController extends BaseController<Article, Integer> {
     @Autowired
     public ArticleController(ObjectMapper mapper) {
         this.mapper = mapper;
+    }
+
+    /**
+     * 用户页获取文章
+     *
+     * @param page
+     * @param size
+     * @param attribute
+     * @param direction
+     * @return
+     */
+    @LogRecord
+    @ResponseBody
+    @GetMapping("/user")
+    public ObjectNode user(Integer id, Integer page, Integer size, String attribute, String direction) {
+        mapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION);
+        mapper.setConfig(mapper.getSerializationConfig().withView(JsonViewInterface.Simple.class));
+        json = mapper.createObjectNode();
+        if (page == null) page = 1;
+        if (size == null) size = 10;
+        if (attribute == null) attribute = "id";
+        if (direction == null) direction = "desc";
+        Sort sort = BaseService.buildSort(attribute, direction);
+        Page<Article> tPage = articleService.findByAuthor(id, (BaseService.buildPageable(page, size, sort)));
+        List<Article> tList = tPage.getContent();
+        ArrayNode jsons = mapper.createArrayNode();
+        if (tList != null && tList.size() > 0) {
+            for (Article t : tList) {
+                ObjectNode object = mapper.convertValue(t, ObjectNode.class);
+                jsons.add(object);
+            }
+            json.set("objects", jsons);
+        } else {
+            json.set("objects", null);
+        }
+        return json;
     }
 
     /**
@@ -98,7 +133,7 @@ public class ArticleController extends BaseController<Article, Integer> {
         if (attribute == null) attribute = "id";
         if (direction == null) direction = "desc";
         Sort sort = BaseService.buildSort(attribute, direction);
-        Page<Article> tPage = getService().findAll(BaseService.buildPageable(page, size, sort));
+        Page<Article> tPage = articleService.findAll(BaseService.buildPageable(page, size, sort));
         List<Article> tList = tPage.getContent();
         ArrayNode jsons = mapper.createArrayNode();
         if (tList != null && tList.size() > 0) {
