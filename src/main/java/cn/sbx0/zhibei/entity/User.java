@@ -28,6 +28,10 @@ public class User implements Serializable {
     @Column(nullable = false, unique = true, length = 15)
     private String name; // 用户名
 
+    @JsonView(JsonViewInterface.Simple.class)
+    @Column(length = 30)
+    private String nickname; // 用户名
+
     @JsonView(JsonViewInterface.All.class)
     @Column(nullable = false, length = 100)
     private String password; // 密码
@@ -88,6 +92,7 @@ public class User implements Serializable {
         return "User{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", nickname='" + nickname + '\'' +
                 ", password='" + password + '\'' +
                 ", introduction='" + introduction + '\'' +
                 ", registerTime=" + registerTime +
@@ -123,6 +128,14 @@ public class User implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public String getPassword() {

@@ -1,6 +1,5 @@
 package cn.sbx0.zhibei.service;
 
-import cn.sbx0.zhibei.dao.PermissionDao;
 import cn.sbx0.zhibei.dao.RoleDao;
 import cn.sbx0.zhibei.dao.UserDao;
 import cn.sbx0.zhibei.entity.Permission;
@@ -40,6 +39,28 @@ public class UserService extends BaseService<User, Integer> {
     @Override
     public User getEntity() {
         return new User();
+    }
+
+    /**
+     * 修改当前用户的信息
+     *
+     * @param oldUser
+     * @return
+     */
+    public boolean data(User oldUser) {
+        User user = getUser();
+        user.setNickname(StringTools.killHTML(oldUser.getNickname().trim()));
+        user.setBirthday(oldUser.getBirthday());
+        user.setEmail(oldUser.getEmail());
+        user.setIntroduction(StringTools.killHTML(oldUser.getIntroduction().trim()));
+        user.setPhone(oldUser.getPhone());
+        user.setSex(oldUser.getSex());
+        try {
+            return save(user);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     /**

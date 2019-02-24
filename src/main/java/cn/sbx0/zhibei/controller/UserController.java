@@ -41,10 +41,19 @@ public class UserController extends BaseController<User, Integer> {
         this.mapper = mapper;
     }
 
-    @JsonView(JsonViewInterface.All.class)
-    @Override
-    public ObjectNode list(Integer page, Integer size, String attribute, String direction, HttpServletRequest request) {
-        return super.list(page, size, attribute, direction, request);
+    /**
+     * 修改当前用户的信息
+     *
+     * @return
+     */
+    public ObjectNode data(User oldUser) {
+        json = mapper.createObjectNode();
+        if (userService.data(oldUser)) {
+            json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
+        } else {
+            json.put(STATUS_NAME, STATUS_CODE_FILED);
+        }
+        return json;
     }
 
     /**
