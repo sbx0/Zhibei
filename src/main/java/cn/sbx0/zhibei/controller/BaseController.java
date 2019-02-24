@@ -47,7 +47,7 @@ public abstract class BaseController<T, ID> {
     protected ObjectNode json;
 
     @Resource
-    UserService userService;
+    protected UserService userService;
 
     /**
      * 获取服务层 子类必须重写

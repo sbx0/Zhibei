@@ -72,9 +72,9 @@ public class UserService extends BaseService<User, Integer> {
     public boolean register(User user) {
         // 名称为空
         if (StringTools.checkNullStr(user.getName())) return false;
-        user.setName(StringTools.killHTML(user.getName().trim()));
         // 密码为空
         if (StringTools.checkNullStr(user.getPassword())) return false;
+        user.setName(StringTools.killHTML(user.getName().trim()));
         user = encryptPassword(user); // 加密密码
         user.setBanned(false); // 默认不封禁
         user.setRegisterTime(new Date()); // 注册时间
