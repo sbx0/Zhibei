@@ -148,6 +148,7 @@ var i18N = {
         user: {
             id: "编号",
             name: "用户名称",
+            nickname: "昵称",
             password: "密码",
             introduction: "简介",
             registerTime: "注册时间",

@@ -50,9 +50,9 @@ public class UserService extends BaseService<User, Integer> {
     public boolean data(User oldUser) {
         User user = getUser();
         user.setNickname(StringTools.killHTML(oldUser.getNickname().trim()));
+        user.setIntroduction(StringTools.killHTML(oldUser.getIntroduction().trim()));
         user.setBirthday(oldUser.getBirthday());
         user.setEmail(oldUser.getEmail());
-        user.setIntroduction(StringTools.killHTML(oldUser.getIntroduction().trim()));
         user.setPhone(oldUser.getPhone());
         user.setSex(oldUser.getSex());
         try {

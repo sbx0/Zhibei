@@ -6,7 +6,6 @@ import cn.sbx0.zhibei.entity.User;
 import cn.sbx0.zhibei.service.BaseService;
 import cn.sbx0.zhibei.tool.CookieTools;
 import cn.sbx0.zhibei.tool.StringTools;
-import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -46,6 +45,9 @@ public class UserController extends BaseController<User, Integer> {
      *
      * @return
      */
+    @LogRecord
+    @ResponseBody
+    @PostMapping("/data")
     public ObjectNode data(User oldUser) {
         json = mapper.createObjectNode();
         if (userService.data(oldUser)) {

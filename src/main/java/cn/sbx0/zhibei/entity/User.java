@@ -45,22 +45,22 @@ public class User implements Serializable {
     @Column(nullable = false)
     private Date registerTime; // 注册时间
 
-    @JsonView(JsonViewInterface.All.class)
+    @JsonView(JsonViewInterface.Normal.class)
     @Column(nullable = false)
     private Boolean banned = Boolean.FALSE; // 封禁
 
-    @JsonView(JsonViewInterface.All.class)
+    @JsonView(JsonViewInterface.Normal.class)
     @Column(length = 30)
     private String phone; // 手机
 
-    @JsonView(JsonViewInterface.All.class)
+    @JsonView(JsonViewInterface.Normal.class)
     @Column(length = 50)
     private String email; // 邮箱
 
     @JsonView(JsonViewInterface.Simple.class)
     private String avatar; // 头像
 
-    @JsonView(JsonViewInterface.All.class)
+    @JsonView(JsonViewInterface.Normal.class)
     @Column(columnDefinition = "enum('male','female','')")
     private String sex; // 类型 [男|女|空]
 
@@ -68,10 +68,10 @@ public class User implements Serializable {
     @ManyToOne(cascade = {CascadeType.MERGE}, targetEntity = Role.class)
     private Role role; // 角色
 
-    @JsonView(JsonViewInterface.All.class)
+    @JsonView(JsonViewInterface.Normal.class)
     private Date birthday; // 生日
 
-    @JsonView(JsonViewInterface.All.class)
+    @JsonView(JsonViewInterface.Normal.class)
     @Column(nullable = false, columnDefinition = "Decimal(10,1) default '0.0'")
     private Double integral; // 积分
 
@@ -79,11 +79,11 @@ public class User implements Serializable {
     @Column(nullable = false, columnDefinition = "Int(11) Default '0'")
     private Integer level; // 用户等级
 
-    @JsonView(JsonViewInterface.All.class)
+    @JsonView(JsonViewInterface.Normal.class)
     @Column(nullable = false, columnDefinition = "Decimal(10,1) default '0.0'")
     private Double exp; // 用户经验
 
-    @JsonView(JsonViewInterface.All.class)
+    @JsonView(JsonViewInterface.Normal.class)
     @Column(nullable = false, columnDefinition = "Decimal(10,1) default '100.0'")
     private Double exp_max; // 当前等级的最大经验值，超过清空升级
 
