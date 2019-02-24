@@ -20,6 +20,6 @@ public interface CommentDao extends PagingAndSortingRepository<Comment, Integer>
     @Query(value = "FROM Comment c WHERE c.path = ?1")
     Page<Comment> findByPath(String path, Pageable pageable);
 
-    @Query(value = "FROM Comment c WHERE c.path = ?1 ORDER BY c.floor DESC NULLS FIRST")
-    Comment getFloor(String path);
+    @Query(value = "FROM Comment c WHERE c.path = ?1")
+    Page<Comment> getFloor(String path, Pageable pageable);
 }

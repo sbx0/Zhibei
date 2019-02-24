@@ -68,8 +68,8 @@ public class CommentService extends BaseService<Comment, Integer> {
      * @return
      */
     public Integer getFloor(String path) {
-        Comment comment = commentDao.getFloor(path);
-        if (comment == null) return 1;
-        else return comment.getFloor() + 1;
+        Page<Comment> comments = commentDao.getFloor(path, buildPageable(1, 1, buildSort("floor", "desc")));
+        if (comments.getTotalElements() == 0L) return 1;
+        else return comments.getContent().get(0).getFloor() + 1;
     }
 }
