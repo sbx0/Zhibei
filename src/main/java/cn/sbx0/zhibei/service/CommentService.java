@@ -62,13 +62,25 @@ public class CommentService extends BaseService<Comment, Integer> {
     }
 
     /**
+     * 根据发布者查询评论
+     *
+     * @param user
+     * @param pageable
+     * @return
+     */
+    public Page<Comment> findByPoster(User user, Pageable pageable) {
+        if (user == null) return null;
+        return commentDao.findByPoster(user.getId(), pageable);
+    }
+
+    /**
      * 获取楼层
      *
      * @param path
      * @return
      */
     public Integer getFloor(String path) {
-        Page<Comment> comments = commentDao.getFloor(path, buildPageable(1, 1, buildSort("floor", "desc")));
+        Page<Comment> comments = commentDao.findByPath(path, buildPageable(1, 1, buildSort("floor", "desc")));
         if (comments.getTotalElements() == 0L) return 1;
         else return comments.getContent().get(0).getFloor() + 1;
     }
