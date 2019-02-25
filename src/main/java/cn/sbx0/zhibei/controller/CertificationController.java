@@ -2,10 +2,11 @@ package cn.sbx0.zhibei.controller;
 
 import cn.sbx0.zhibei.annotation.LogRecord;
 import cn.sbx0.zhibei.entity.Certification;
+import cn.sbx0.zhibei.entity.JsonViewInterface;
 import cn.sbx0.zhibei.entity.User;
 import cn.sbx0.zhibei.service.BaseService;
 import cn.sbx0.zhibei.service.CertificationService;
-import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,11 +48,18 @@ public class CertificationController extends BaseController<Certification, Integ
     @ResponseBody
     @GetMapping("/status")
     public ObjectNode status() {
+        mapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION);
+        mapper.setConfig(mapper.getSerializationConfig().withView(JsonViewInterface.Normal.class));
         json = mapper.createObjectNode();
         User user = userService.getUser();
         if (user != null) {
             Certification certification = certificationService.findByUserAndPassed(user.getId());
             if (certification != null) {
+                Date date = new Date();
+                if (certification.getEnd_time() != null && certification.getEnd_time().getTime() < date.getTime()) {
+                    certificationService.delete(certification);
+                    certification.setPassed(false);
+                }
                 ObjectNode object = mapper.convertValue(certification, ObjectNode.class);
                 json.set("certification", object);
                 json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
@@ -81,7 +89,6 @@ public class CertificationController extends BaseController<Certification, Integ
                 json.put(STATUS_NAME, STATUS_CODE_REPEAT);
             } else {
                 certification.setPassed(null);
-                certification.setImg("sdfasdf");
                 certification.setUser(user);
                 certification.setStart_time(new Date());
                 if (certificationService.save(certification)) {

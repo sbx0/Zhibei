@@ -14,7 +14,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "CERTIFICATIONS")
-@JsonView(JsonViewInterface.All.class)
+@JsonView(JsonViewInterface.Normal.class)
 @DynamicInsert
 @DynamicUpdate
 public class Certification implements Serializable {
