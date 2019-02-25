@@ -143,6 +143,7 @@ var i18N = {
         file: "文件表",
         log: "日志表",
         article: "文章表",
+        comment: "评论表",
     },
     attribute: {
         user: {
@@ -230,6 +231,18 @@ var i18N = {
             top: "置顶排序指数",
             author: "作者",
         },
+        comment: {
+            id: '编号',
+            path: '路径',
+            time: '发表时间',
+            floor: '楼层',
+            content: '评论内容',
+            likes: '喜欢数',
+            dislikes: '不喜欢数',
+            top: '置顶排序指数',
+            father: '父亲',
+            poster: '作者'
+        }
     },
     alert: {
         empty: "为空",

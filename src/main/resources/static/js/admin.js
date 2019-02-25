@@ -31,7 +31,8 @@ var main = new Vue({
             certification: {name: i18N.table.certification, value: "certification", data: {}},
             file: {name: i18N.table.file, value: "file", data: {}},
             log: {name: i18N.table.log, value: "log", data: {}},
-            article: {name: i18N.table.article, value: "article", data: {}}
+            article: {name: i18N.table.article, value: "article", data: {}},
+            comment: {name: i18N.table.comment, value: "comment", data: {}},
         }
     },
     components: {
@@ -207,6 +208,7 @@ function build(data) {
             || attribute.type === 'Log'
             || attribute.type === 'UploadFile'
             || attribute.type === 'Article'
+            || attribute.type === 'Comment'
         ) {
             getData(attribute.type.toLowerCase());
             if (data[attribute.name] != null) data[attribute.name] = data[attribute.name]["id"];
