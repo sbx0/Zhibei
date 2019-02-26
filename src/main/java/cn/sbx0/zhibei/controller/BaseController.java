@@ -152,10 +152,10 @@ public abstract class BaseController<T, ID> {
      */
     @LogRecord
     @ResponseBody
-    @GetMapping("/id/{id}")
-    public ObjectNode normalOne(@PathVariable("id") ID id) {
+    @GetMapping("/normal")
+    public ObjectNode normalOne(ID id) {
         mapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION);
-        mapper.setConfig(mapper.getSerializationConfig().withView(JsonViewInterface.Normal.class));
+        mapper.setConfig(mapper.getSerializationConfig().withView(JsonViewInterface.Simple.class));
         json = mapper.createObjectNode();
         T t = getService().findById(id);
         ObjectNode object = mapper.convertValue(t, ObjectNode.class);

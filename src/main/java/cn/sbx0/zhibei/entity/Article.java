@@ -37,7 +37,7 @@ public class Article implements Serializable {
     @Column(length = 250)
     private String introduction; // 简介
 
-    @JsonView(JsonViewInterface.Normal.class)
+    @JsonView(JsonViewInterface.Simple.class)
     @Lob
     @Column(nullable = false)
     private String content; // 内容
