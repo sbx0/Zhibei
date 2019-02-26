@@ -87,60 +87,93 @@ public abstract class BaseController<T, ID> {
     }
 
     /**
-     * 分页查询列表
-     * 返回结果是json
+     * 需要权限的列表
      *
      * @param page
      * @param size
-     * @param request
+     * @param attribute
+     * @param direction
      * @return
      */
     @LogRecord
     @ResponseBody
     @GetMapping("/list")
-    public ObjectNode list(Integer page, Integer size, String attribute, String direction, HttpServletRequest request) {
+    public ObjectNode adminList(Integer page, Integer size, String attribute, String direction) {
         mapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION);
         mapper.setConfig(mapper.getSerializationConfig().withView(JsonViewInterface.All.class));
         json = mapper.createObjectNode();
-        if (page == null) page = 1;
-        if (size == null) size = 10;
         User user = userService.getUser();
         if (user != null) {
             if (userService.checkPermission(user)) {
-                if (attribute == null) attribute = "id";
-                if (direction == null) direction = "desc";
-                Sort sort = BaseService.buildSort(attribute, direction);
-                Page<T> tPage = getService().findAll(BaseService.buildPageable(page, size, sort));
-                List<T> tList = tPage.getContent();
-                ArrayNode jsons = mapper.createArrayNode();
-                if (tList != null && tList.size() > 0) {
-                    for (T t : tList) {
-                        ObjectNode object = mapper.convertValue(t, ObjectNode.class);
-                        jsons.add(object);
-                    }
-//                    json.set(tList.get(0).getClass().getSimpleName().toLowerCase(), jsons);
-                    json.set("objects", jsons);
-                    json.put("total_pages", tPage.getTotalPages());
-                    json.put("total_elements", tPage.getTotalElements());
-                    json.put("page", page);
-                    json.put("size", size);
-                } else {
-                    T t = getService().getEntity();
-                    ObjectNode object = mapper.convertValue(t, ObjectNode.class);
-                    jsons.add(object);
-                    json.set("objects", jsons);
-                    json.put("total_pages", 0);
-                    json.put("total_elements", 0);
-                    json.put("page", 0);
-                    json.put("size", 0);
-                }
-                json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
+                json = list(page, size, attribute, direction);
             } else {
                 json.put(STATUS_NAME, STATUS_CODE_NO_PERMISSION);
             }
         } else {
             json.put(STATUS_NAME, STATUS_CODE_NOT_LOGIN);
         }
+        return json;
+    }
+
+    /**
+     * 无需权限版列表
+     *
+     * @param page
+     * @param size
+     * @param attribute
+     * @param direction
+     * @return
+     */
+    @LogRecord
+    @ResponseBody
+    @GetMapping("/normal/list")
+    public ObjectNode normalList(Integer page, Integer size, String attribute, String direction) {
+        mapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION);
+        mapper.setConfig(mapper.getSerializationConfig().withView(JsonViewInterface.Simple.class));
+        json = mapper.createObjectNode();
+        json = list(page, size, attribute, direction);
+        return json;
+    }
+
+    /**
+     * 分页查询列表
+     * 返回结果是json
+     *
+     * @param page
+     * @param size
+     * @return
+     */
+    public ObjectNode list(Integer page, Integer size, String attribute, String direction) {
+        json = mapper.createObjectNode();
+        if (page == null) page = 1;
+        if (size == null) size = 10;
+        if (attribute == null) attribute = "id";
+        if (direction == null) direction = "desc";
+        Sort sort = BaseService.buildSort(attribute, direction);
+        Page<T> tPage = getService().findAll(BaseService.buildPageable(page, size, sort));
+        List<T> tList = tPage.getContent();
+        ArrayNode jsons = mapper.createArrayNode();
+        if (tList != null && tList.size() > 0) {
+            for (T t : tList) {
+                ObjectNode object = mapper.convertValue(t, ObjectNode.class);
+                jsons.add(object);
+            }
+            json.set("objects", jsons);
+            json.put("total_pages", tPage.getTotalPages());
+            json.put("total_elements", tPage.getTotalElements());
+            json.put("page", page);
+            json.put("size", size);
+        } else {
+            T t = getService().getEntity();
+            ObjectNode object = mapper.convertValue(t, ObjectNode.class);
+            jsons.add(object);
+            json.set("objects", jsons);
+            json.put("total_pages", 0);
+            json.put("total_elements", 0);
+            json.put("page", 0);
+            json.put("size", 0);
+        }
+        json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
         return json;
     }
 
@@ -156,11 +189,32 @@ public abstract class BaseController<T, ID> {
     public ObjectNode normalOne(ID id) {
         mapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION);
         mapper.setConfig(mapper.getSerializationConfig().withView(JsonViewInterface.Simple.class));
-        json = mapper.createObjectNode();
-        T t = getService().findById(id);
-        ObjectNode object = mapper.convertValue(t, ObjectNode.class);
-        json.set("object", object);
-        json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
+        json = one(id);
+        return json;
+    }
+
+    /**
+     * 需要权限版 根据id查询实体
+     *
+     * @param id
+     * @return
+     */
+    @LogRecord
+    @ResponseBody
+    @GetMapping("/{id}")
+    public ObjectNode adminOne(@PathVariable("id") ID id) {
+        mapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION);
+        mapper.setConfig(mapper.getSerializationConfig().withView(JsonViewInterface.All.class));
+        User user = userService.getUser();
+        if (user != null) {
+            if (userService.checkPermission(user)) {
+                json = one(id);
+            } else {
+                json.put(STATUS_NAME, STATUS_CODE_NO_PERMISSION);
+            }
+        } else {
+            json.put(STATUS_NAME, STATUS_CODE_NOT_LOGIN);
+        }
         return json;
     }
 
@@ -170,27 +224,13 @@ public abstract class BaseController<T, ID> {
      * @param id id
      * @return 实体
      */
-    @LogRecord
-    @ResponseBody
-    @GetMapping("/{id}")
-    public ObjectNode one(@PathVariable("id") ID id) {
-        mapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION);
-        mapper.setConfig(mapper.getSerializationConfig().withView(JsonViewInterface.All.class));
+    public ObjectNode one(ID id) {
         json = mapper.createObjectNode();
-        User user = userService.getUser();
-        if (user != null) {
-            if (userService.checkPermission(user)) {
-                T t = getService().findById(id);
-                if (t == null) t = getService().getEntity();
-                ObjectNode object = mapper.convertValue(t, ObjectNode.class);
-                json.set("object", object);
-                json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
-            } else {
-                json.put(STATUS_NAME, STATUS_CODE_NO_PERMISSION);
-            }
-        } else {
-            json.put(STATUS_NAME, STATUS_CODE_NOT_LOGIN);
-        }
+        T t = getService().findById(id);
+        if (t == null) t = getService().getEntity();
+        ObjectNode object = mapper.convertValue(t, ObjectNode.class);
+        json.set("object", object);
+        json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
         return json;
     }
 

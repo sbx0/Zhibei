@@ -112,40 +112,4 @@ public class ArticleController extends BaseController<Article, Integer> {
         return json;
     }
 
-    /**
-     * 首页获取文章
-     *
-     * @param page
-     * @param size
-     * @param attribute
-     * @param direction
-     * @return
-     */
-    @LogRecord
-    @ResponseBody
-    @GetMapping("/index")
-    public ObjectNode index(Integer page, Integer size, String attribute, String direction) {
-        mapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION);
-        mapper.setConfig(mapper.getSerializationConfig().withView(JsonViewInterface.Simple.class));
-        json = mapper.createObjectNode();
-        if (page == null) page = 1;
-        if (size == null) size = 10;
-        if (attribute == null) attribute = "id";
-        if (direction == null) direction = "desc";
-        Sort sort = BaseService.buildSort(attribute, direction);
-        Page<Article> tPage = articleService.findAll(BaseService.buildPageable(page, size, sort));
-        List<Article> tList = tPage.getContent();
-        ArrayNode jsons = mapper.createArrayNode();
-        if (tList != null && tList.size() > 0) {
-            for (Article t : tList) {
-                ObjectNode object = mapper.convertValue(t, ObjectNode.class);
-                jsons.add(object);
-            }
-            json.set("objects", jsons);
-        } else {
-            json.set("objects", null);
-        }
-        return json;
-    }
-
 }
