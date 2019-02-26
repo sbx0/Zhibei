@@ -33,10 +33,10 @@ public class Certification implements Serializable {
     private Boolean passed = Boolean.FALSE; // 是否通过
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
-    private Date start_time; // 开始时间
+    private Date startTime; // 开始时间
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
-    private Date end_time; // 结束时间
+    private Date endTime; // 结束时间
 
     @ManyToOne(cascade = {CascadeType.MERGE}, targetEntity = User.class, optional = false)
     private User user;
@@ -54,8 +54,8 @@ public class Certification implements Serializable {
                 ", info='" + info + '\'' +
                 ", type='" + type + '\'' +
                 ", passed=" + passed +
-                ", start_time=" + start_time +
-                ", end_time=" + end_time +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
                 ", user=" + user +
                 ", license='" + license + '\'' +
                 ", img='" + img + '\'' +
@@ -98,20 +98,20 @@ public class Certification implements Serializable {
         this.passed = passed;
     }
 
-    public Date getStart_time() {
-        return start_time;
+    public Date getStartTime() {
+        return startTime;
     }
 
-    public void setStart_time(Date start_time) {
-        this.start_time = start_time;
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
     }
 
-    public Date getEnd_time() {
-        return end_time;
+    public Date getEndTime() {
+        return endTime;
     }
 
-    public void setEnd_time(Date end_time) {
-        this.end_time = end_time;
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
     }
 
     public User getUser() {

@@ -13,7 +13,7 @@ import java.util.Date;
  * 上传文件 实体类
  */
 @Entity
-@Table(name = "FILES")
+@Table(name = "Files")
 @JsonView(JsonViewInterface.All.class)
 @DynamicInsert
 @DynamicUpdate

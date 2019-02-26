@@ -13,7 +13,7 @@ import java.util.Date;
  * 日志 实体类
  */
 @Entity
-@Table(name = "LOGS")
+@Table(name = "Logs")
 @JsonView(JsonViewInterface.All.class)
 @DynamicInsert
 @DynamicUpdate

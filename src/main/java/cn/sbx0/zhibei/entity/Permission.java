@@ -11,7 +11,7 @@ import java.io.Serializable;
  * 权限 实体类
  */
 @Entity
-@Table(name = "PERMISSIONS")
+@Table(name = "Permissions")
 @JsonView(JsonViewInterface.All.class)
 @DynamicInsert
 @DynamicUpdate

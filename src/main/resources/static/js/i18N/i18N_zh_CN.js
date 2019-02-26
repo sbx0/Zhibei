@@ -137,9 +137,12 @@ var i18N = {
     foot_html: "智贝科技有限公司 2019",
     table: {
         user: "用户表",
+        tag: "标签表",
+        category: "分类表",
+        certification: "申请表",
+        demand: "需求表",
         role: "角色表",
         permission: "权限表",
-        certification: "申请表",
         file: "文件表",
         log: "日志表",
         article: "文章表",
@@ -230,6 +233,7 @@ var i18N = {
             dislikes: "不喜欢数",
             top: "置顶排序指数",
             author: "作者",
+            tags: "标签",
         },
         comment: {
             id: '编号',
@@ -242,6 +246,29 @@ var i18N = {
             top: '置顶排序指数',
             father: '父亲',
             poster: '作者'
+        },
+        category: {
+            id: '编号',
+            name: '名称',
+            introduction: '简介',
+            cover: '封面',
+            father: '父亲',
+        },
+        demand: {
+            id: '编号',
+            title: '标题',
+            time: '发布时间',
+            cover: '封面',
+            content: '内容',
+            endTime: '截止时间',
+            budget: '预算',
+            category: '分类',
+        },
+        tag: {
+            id: '编号',
+            name: '名称',
+            introduction: '简介',
+            cover: '封面',
         }
     },
     alert: {

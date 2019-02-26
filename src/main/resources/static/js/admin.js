@@ -33,6 +33,9 @@ var main = new Vue({
             log: {name: i18N.table.log, value: "log", data: {}},
             article: {name: i18N.table.article, value: "article", data: {}},
             comment: {name: i18N.table.comment, value: "comment", data: {}},
+            category: {name: i18N.table.category, value: "category", data: {}},
+            demand: {name: i18N.table.demand, value: "demand", data: {}},
+            tag: {name: i18N.table.tag, value: "tag", data: {}},
         }
     },
     components: {
@@ -191,12 +194,22 @@ function build(data) {
                     ids.push("" + data[attribute.name][j].id + "");
                 }
             }
-            getData("permission");
+            var table = ''
+            switch (attribute.name) {
+                case 'tags':
+                    table = 'tag'
+                    break
+                case 'permissions':
+                    table = 'permission'
+                    break
+                default:
+            }
+            getData(table);
             modal_data[i] = {
                 id: attribute.name,
                 name: i18N["attribute"][main.table][attribute.name],
                 selected: ids,
-                options: main["table_data"]["permission"]["data"],
+                options: main["table_data"][table]["data"],
                 multiple: "multiple",
                 type: 'select'
             };
@@ -209,6 +222,9 @@ function build(data) {
             || attribute.type === 'UploadFile'
             || attribute.type === 'Article'
             || attribute.type === 'Comment'
+            || attribute.type === 'Category'
+            || attribute.type === 'Tag'
+            || attribute.type === 'Demand'
         ) {
             getData(attribute.type.toLowerCase());
             if (data[attribute.name] != null) data[attribute.name] = data[attribute.name]["id"];

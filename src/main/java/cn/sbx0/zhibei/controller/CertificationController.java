@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 /**
@@ -56,7 +55,7 @@ public class CertificationController extends BaseController<Certification, Integ
             Certification certification = certificationService.findByUserAndPassed(user.getId());
             if (certification != null) {
                 Date date = new Date();
-                if (certification.getEnd_time() != null && certification.getEnd_time().getTime() < date.getTime()) {
+                if (certification.getEndTime() != null && certification.getEndTime().getTime() < date.getTime()) {
                     certificationService.delete(certification);
                     certification.setPassed(false);
                 }
@@ -90,7 +89,7 @@ public class CertificationController extends BaseController<Certification, Integ
             } else {
                 certification.setPassed(null);
                 certification.setUser(user);
-                certification.setStart_time(new Date());
+                certification.setStartTime(new Date());
                 if (certificationService.save(certification)) {
                     json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
                 } else {

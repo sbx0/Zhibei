@@ -8,12 +8,13 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 文章 实体类
  */
 @Entity
-@Table(name = "ARTICLES")
+@Table(name = "Articles")
 @DynamicInsert
 @DynamicUpdate
 public class Article implements Serializable {
@@ -78,6 +79,10 @@ public class Article implements Serializable {
     @ManyToOne(cascade = {CascadeType.MERGE}, targetEntity = User.class, optional = false)
     private User author; // 作者
 
+    @JsonView(JsonViewInterface.Simple.class)
+    @ManyToMany(cascade = {CascadeType.MERGE}, targetEntity = Tag.class)
+    private List<Tag> tags; // 标签
+
     @Override
     public String toString() {
         return "Article{" +
@@ -94,6 +99,7 @@ public class Article implements Serializable {
                 ", dislikes=" + dislikes +
                 ", top=" + top +
                 ", author=" + author +
+                ", tags=" + tags +
                 '}';
     }
 
@@ -203,5 +209,13 @@ public class Article implements Serializable {
 
     public void setAuthor(User author) {
         this.author = author;
+    }
+
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
     }
 }

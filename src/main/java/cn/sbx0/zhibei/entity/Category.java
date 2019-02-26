@@ -6,47 +6,42 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
 
 /**
- * 角色
+ * 分类 实体类
  */
 @Entity
-@Table(name = "Roles")
-@JsonView(JsonViewInterface.All.class)
+@Table(name = "Categories")
 @DynamicInsert
 @DynamicUpdate
-public class Role implements Serializable {
-    private static final long serialVersionUID = -1252665744119242036L;
+@JsonView(JsonViewInterface.Simple.class)
+public class Category implements Serializable {
+    private static final long serialVersionUID = -4517711669778910509L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer id; // 编号
 
     @Column(nullable = false, unique = true, length = 15)
     private String name; // 名称
 
-    @Column(length = 30)
-    private String introduction; // 介绍
+    @Column(length = 250)
+    private String introduction; // 简介
 
     @Column(nullable = false)
-    private Boolean available = Boolean.FALSE; // 是否可用
+    private String cover; // 封面
 
-    @ManyToOne(cascade = {CascadeType.MERGE}, targetEntity = Role.class)
-    private Role father; //  父亲
-
-    @ManyToMany(cascade = {CascadeType.MERGE}, targetEntity = Permission.class)
-    private List<Permission> permissions; // 权限
+    @ManyToOne(cascade = {CascadeType.MERGE}, targetEntity = Category.class)
+    private Category father; // 父亲
 
     @Override
     public String toString() {
-        return "Role{" +
+        return "Category{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", introduction='" + introduction + '\'' +
-                ", available=" + available +
+                ", cover='" + cover + '\'' +
                 ", father=" + father +
-                ", permissions=" + permissions +
                 '}';
     }
 
@@ -78,27 +73,19 @@ public class Role implements Serializable {
         this.introduction = introduction;
     }
 
-    public Boolean getAvailable() {
-        return available;
+    public String getCover() {
+        return cover;
     }
 
-    public void setAvailable(Boolean available) {
-        this.available = available;
+    public void setCover(String cover) {
+        this.cover = cover;
     }
 
-    public Role getFather() {
+    public Category getFather() {
         return father;
     }
 
-    public void setFather(Role father) {
+    public void setFather(Category father) {
         this.father = father;
-    }
-
-    public List<Permission> getPermissions() {
-        return permissions;
-    }
-
-    public void setPermissions(List<Permission> permissions) {
-        this.permissions = permissions;
     }
 }

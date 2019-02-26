@@ -13,7 +13,7 @@ import java.util.Date;
  * 评论 实体类
  */
 @Entity
-@Table(name = "COMMENTS")
+@Table(name = "Comments")
 @DynamicInsert
 @DynamicUpdate
 public class Comment implements Serializable {

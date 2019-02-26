@@ -13,7 +13,7 @@ import java.util.Date;
  * 用户 实体类
  */
 @Entity
-@Table(name = "USERS")
+@Table(name = "Users")
 @DynamicInsert
 @DynamicUpdate
 public class User implements Serializable {
