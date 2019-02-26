@@ -35,7 +35,7 @@ public class Role implements Serializable {
     @ManyToOne(cascade = {CascadeType.MERGE}, targetEntity = Role.class)
     private Role father; //  父亲
 
-    @ManyToMany(cascade = {CascadeType.MERGE}, targetEntity = Permission.class)
+    @ManyToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER, targetEntity = Permission.class)
     private List<Permission> permissions; // 权限
 
     @Override
