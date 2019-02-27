@@ -2,6 +2,8 @@ package cn.sbx0.zhibei.service;
 
 import cn.sbx0.zhibei.dao.DemandDao;
 import cn.sbx0.zhibei.entity.Demand;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,17 @@ public class DemandService extends BaseService<Demand, Integer> {
     @Override
     public Demand getEntity() {
         return new Demand();
+    }
+
+    /**
+     * 根据用户名查询需求
+     *
+     * @param id
+     * @param buildPageable
+     * @return
+     */
+    public Page<Demand> findByPoster(Integer id, Pageable buildPageable) {
+        return demandDao.findByPoster(id, buildPageable);
     }
 
 }

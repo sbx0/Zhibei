@@ -48,6 +48,9 @@ public class Demand implements Serializable {
     @ManyToOne(cascade = {CascadeType.MERGE}, targetEntity = Category.class, optional = false)
     private Category category; // 分类
 
+    @ManyToOne(cascade = {CascadeType.MERGE}, targetEntity = User.class, optional = false)
+    private User poster; // 发布人
+
     @Override
     public String toString() {
         return "Demand{" +
@@ -59,6 +62,7 @@ public class Demand implements Serializable {
                 ", endTime=" + endTime +
                 ", budget=" + budget +
                 ", category=" + category +
+                ", poster=" + poster +
                 '}';
     }
 
@@ -128,6 +132,14 @@ public class Demand implements Serializable {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public User getPoster() {
+        return poster;
+    }
+
+    public void setPoster(User poster) {
+        this.poster = poster;
     }
 }
 
