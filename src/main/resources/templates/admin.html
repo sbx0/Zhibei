@@ -57,7 +57,23 @@
                     <form id="save_or_update_form">
                         <table id="table" style="white-space:nowrap;" class="table table-responsive">
                             <thead>
-                            <tr v-for="(object,index) in query_data" v-if="index == 0">
+                            <tr v-for="(object,index) in query_data" v-if="index === 0">
+                                <th>
+                                    <a
+                                            href="javascript:void(0)"
+                                            v-on:click.capture="update(0)"
+                                            data-toggle="modal"
+                                            :data-target="'#'+table+'Modal'"
+                                            class="text-success"
+                                    >
+                                        {{i18N.add}}
+                                    </a>
+                                </th>
+                                <th v-for="attribute in attribute_data">
+                                    {{i18N['attribute'][table][attribute.name]}}
+                                </th>
+                            </tr>
+                            <tr v-if="query_data === null">
                                 <th>
                                     <a
                                             href="javascript:void(0)"
@@ -193,7 +209,7 @@
                                     <a
                                             class="page-link"
                                             :href="'?table='+table+'&page='+total_pages+'&size='+size+'&attribute='+attribute+'&direction='+direction"
-                                            v-if="page!=total_pages"
+                                            v-if="page!=total_pages&&total_pages>0"
                                             aria-label="Previous"
                                     >
                                         <span aria-hidden="true">{{total_pages}}</span>

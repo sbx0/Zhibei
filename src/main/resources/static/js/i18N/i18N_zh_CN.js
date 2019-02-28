@@ -245,7 +245,7 @@ var i18N = {
             dislikes: '不喜欢数',
             top: '置顶排序指数',
             father: '父亲',
-            poster: '作者'
+            poster: '发布者'
         },
         category: {
             id: '编号',
@@ -263,6 +263,7 @@ var i18N = {
             endTime: '截止时间',
             budget: '预算',
             category: '分类',
+            poster: '发布者',
         },
         tag: {
             id: '编号',

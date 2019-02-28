@@ -99,7 +99,7 @@ var i18N = {
     m_nav_data: [
         {id: 1, text: "發現", path: "/m/index.html", icon: "<i class=\"icon xfind\"></i>"},
         {id: 2, text: "話題", path: "/m/index.html", icon: "<i class=\"icon theme\"></i>"},
-        {id: 3, text: "我的", path: "/m/user.html", icon: "<i class =\"icon my\"></i>"},
+        {id: 3, text: "我的", path: "/m/user.html", icon: "<i class=\"icon my\"></i>"},
     ],
     nav_data: [
         {id: 1, text: "首頁", path: "/index.html", icon: "<i class=\"fas fa-home\"></i>"},
@@ -137,17 +137,22 @@ var i18N = {
     foot_html: "智貝科技有限公司 2019",
     table: {
         user: "用戶表",
+        tag: "標籤表",
+        category: "分類表",
+        certification: "申請表",
+        demand: "需求表",
         role: "角色表",
         permission: "權限表",
-        certification: "申請表",
         file: "文件表",
         log: "日誌表",
         article: "文章表",
+        comment: "評論表",
     },
     attribute: {
         user: {
             id: "編號",
             name: "用戶名稱",
+            nickname: "暱稱",
             password: "密碼",
             introduction: "簡介",
             registerTime: "註冊時間",
@@ -228,7 +233,44 @@ var i18N = {
             dislikes: "不喜歡數",
             top: "置頂排序指數",
             author: "作者",
+            tags: "標籤",
         },
+        comment: {
+            id: '編號',
+            path: '路徑',
+            time: '發表時間',
+            floor: '樓層',
+            content: '評論內容',
+            likes: '喜歡數',
+            dislikes: '不喜歡數',
+            top: '置頂排序指數',
+            father: '父親',
+            poster: '發布者'
+        },
+        category: {
+            id: '編號',
+            name: '名稱',
+            introduction: '簡介',
+            cover: '封面',
+            father: '父親',
+        },
+        demand: {
+            id: '編號',
+            title: '標題',
+            time: '發佈時間',
+            cover: '封面',
+            content: '內容',
+            endTime: '截止時間',
+            budget: '預算',
+            category: '分類',
+            poster: '發布者',
+        },
+        tag: {
+            id: '編號',
+            name: '名稱',
+            introduction: '簡介',
+            cover: '封面',
+        }
     },
     alert: {
         empty: "為空",

@@ -386,11 +386,14 @@ function query() {
             var status = json.status;
             if (statusCodeToBool(status)) {
                 main["table_data"][main.table]["data"] = json.objects;
-                main.query_data = json.objects;
-                main.page = json.page;
-                main.size = json.size;
-                main.total_pages = json.total_pages;
-                main.total_elements = json.total_elements;
+                if (json.objects === undefined) main.query_data = null
+                else {
+                    main.query_data = json.objects;
+                    main.page = json.page;
+                    main.size = json.size;
+                    main.total_pages = json.total_pages;
+                    main.total_elements = json.total_elements;
+                }
                 if (json.objects == null) {
                     alert(i18N.result + i18N.is + i18N.null);
                 }
