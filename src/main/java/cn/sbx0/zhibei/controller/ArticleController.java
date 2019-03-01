@@ -11,15 +11,18 @@ import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.hankcs.hanlp.HanLP;
+import com.hankcs.hanlp.suggest.Suggester;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 文章 控制层
@@ -41,6 +44,76 @@ public class ArticleController extends BaseController<Article, Integer> {
     }
 
     /**
+     * 搜索
+     *
+     * @param keyword
+     * @return
+     */
+    @LogRecord
+    @ResponseBody
+    @GetMapping("/search")
+    public ObjectNode search(String keyword) {
+        int size = 999;
+        List<String> result = buildSuggester(size).suggest(keyword, size / 5);
+        ArrayNode jsons = mapper.createArrayNode();
+        for (String s : result) {
+            jsons.add(s);
+        }
+        json.set("result", jsons);
+        return json;
+    }
+
+    /**
+     * 构建推荐器
+     *
+     * @param size
+     * @return
+     */
+    private Suggester buildSuggester(int size) {
+        json = mapper.createObjectNode();
+        Page<Article> articles = articleService.findAll(BaseService.buildPageable(1, size, "id", "DESC"));
+        List<Article> articleList = articles.getContent();
+        Suggester suggester = new Suggester();
+        for (Article article : articleList) {
+            suggester.addSentence(article.getTitle());
+        }
+        return suggester;
+    }
+
+    /**
+     * 根据关键词推荐
+     *
+     * @param keyword
+     * @return
+     */
+    @LogRecord
+    @ResponseBody
+    @GetMapping("/suggest")
+    public ObjectNode suggest(String keyword) {
+        int size = 999;
+        List<String> result = buildSuggester(size).suggest(keyword, size / 100);
+        ArrayNode jsons = mapper.createArrayNode();
+        List<String> keywordResult = new ArrayList<>();
+        for (String s : result) {
+            List<String> extractKeyword = HanLP.extractKeyword(s, 1);
+            for (String k : extractKeyword) {
+                boolean isRepeat = false;
+                for (String key : keywordResult) {
+                    if (key.equals(k)) {
+                        isRepeat = true;
+                    }
+                }
+                if (!isRepeat) {
+                    keywordResult.add(k);
+                    jsons.add(k);
+                }
+            }
+        }
+        json.set("result", jsons);
+        return json;
+    }
+
+    /**
      * 用户页获取文章
      *
      * @param page
@@ -56,12 +129,7 @@ public class ArticleController extends BaseController<Article, Integer> {
         mapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION);
         mapper.setConfig(mapper.getSerializationConfig().withView(JsonViewInterface.Simple.class));
         json = mapper.createObjectNode();
-        if (page == null) page = 1;
-        if (size == null) size = 10;
-        if (attribute == null) attribute = "id";
-        if (direction == null) direction = "desc";
-        Sort sort = BaseService.buildSort(attribute, direction);
-        Page<Article> tPage = articleService.findByAuthor(id, (BaseService.buildPageable(page, size, sort)));
+        Page<Article> tPage = articleService.findByAuthor(id, (BaseService.buildPageable(page, size, attribute, direction)));
         List<Article> tList = tPage.getContent();
         ArrayNode jsons = mapper.createArrayNode();
         if (tList != null && tList.size() > 0) {

@@ -1,6 +1,6 @@
-# 前端代码已从本库分离  
-## 本库只有管理员的前端界面代码和全部后台实现代码
-### 配套前端项目请查看 [智贝 网页客户端](https://github.com/sbx0/ZhibeiStatic "智贝 网页客户端")  
+> #### 前端代码已从本库分离  
+> #### 本库只有管理员的前端界面代码和全部后台实现代码
+> #### 配套前端项目请查看 [智贝 网页客户端](https://github.com/sbx0/ZhibeiStatic "智贝 网页客户端")  
   
 ------------  
   
@@ -40,5 +40,6 @@
 前端框架:[Bootstrap](https://getbootstrap.com/ "Bootstrap")  
 后端框架:[Spring Boot](https://spring.io/projects/spring-boot "Spring Boot")  
 JavaScript框架:[Vue.js](https://cn.vuejs.org/index.html "Vue.js")  
+自然语言处理:[HanLP](https://github.com/hankcs/HanLP "HanLP")
   
 ------------  

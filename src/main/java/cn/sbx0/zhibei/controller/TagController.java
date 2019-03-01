@@ -46,12 +46,7 @@ public class TagController extends BaseController<Tag, Integer> {
         mapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION);
         mapper.setConfig(mapper.getSerializationConfig().withView(JsonViewInterface.Simple.class));
         json = mapper.createObjectNode();
-        if (page == null) page = 1;
-        if (size == null) size = 10;
-        if (attribute == null) attribute = "id";
-        if (direction == null) direction = "desc";
-        Sort sort = BaseService.buildSort(attribute, direction);
-        Page<Tag> tPage = tagService.findByName(name, (BaseService.buildPageable(page, size, sort)));
+        Page<Tag> tPage = tagService.findByName(name, (BaseService.buildPageable(page, size, attribute, direction)));
         List<Tag> tList = tPage.getContent();
         ArrayNode jsons = mapper.createArrayNode();
         if (tList != null && tList.size() > 0) {

@@ -144,12 +144,7 @@ public abstract class BaseController<T, ID> {
      */
     public ObjectNode list(Integer page, Integer size, String attribute, String direction) {
         json = mapper.createObjectNode();
-        if (page == null) page = 1;
-        if (size == null) size = 10;
-        if (attribute == null) attribute = "id";
-        if (direction == null) direction = "desc";
-        Sort sort = BaseService.buildSort(attribute, direction);
-        Page<T> tPage = getService().findAll(BaseService.buildPageable(page, size, sort));
+        Page<T> tPage = getService().findAll(BaseService.buildPageable(page, size, attribute, direction));
         List<T> tList = tPage.getContent();
         ArrayNode jsons = mapper.createArrayNode();
         if (tList != null && tList.size() > 0) {

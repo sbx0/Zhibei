@@ -274,18 +274,22 @@ public abstract class BaseService<T, ID> {
     /**
      * 拼接Pageable
      *
-     * @param page 页码
-     * @param size 条数
-     * @param sort 排序
-     * @return Pageable
+     * @param page
+     * @param size
+     * @param attribute
+     * @param direction
+     * @return
      */
-    public static Pageable buildPageable(Integer page, Integer size, Sort sort) {
+    public static Pageable buildPageable(Integer page, Integer size, String attribute, String direction) {
+        if (page == null) page = 1;
+        if (size == null) size = 10;
+        if (attribute == null) attribute = "id";
+        if (direction == null) direction = "desc";
+        Sort sort = buildSort(attribute, direction);
         // 页数控制
-        if (page == null) page = 0;
-        else if ((page - 1) >= 0) page = page - 1;
+        if ((page - 1) >= 0) page = page - 1;
         else page = 0;
         // 条数控制
-        if (size == null) size = PAGE_SIZE;
         if (size > 999) size = 999;
         if (size < 1) size = PAGE_SIZE;
         // 分页配置

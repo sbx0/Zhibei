@@ -80,7 +80,7 @@ public class CommentService extends BaseService<Comment, Integer> {
      * @return
      */
     public Integer getFloor(String path) {
-        Page<Comment> comments = commentDao.findByPath(path, buildPageable(1, 1, buildSort("floor", "desc")));
+        Page<Comment> comments = commentDao.findByPath(path, buildPageable(1, 1, "floor", "desc"));
         if (comments.getTotalElements() == 0L) return 1;
         else return comments.getContent().get(0).getFloor() + 1;
     }
