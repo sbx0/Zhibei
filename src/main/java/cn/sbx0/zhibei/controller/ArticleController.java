@@ -53,14 +53,36 @@ public class ArticleController extends BaseController<Article, Integer> {
     @ResponseBody
     @GetMapping("/search")
     public ObjectNode search(String keyword) {
+        json = mapper.createObjectNode();
         int size = 999;
+        List<Article> articleList = getData(size);
+        Suggester suggester = new Suggester();
+        for (Article article : articleList) {
+            suggester.addSentence(article.getTitle());
+        }
         List<String> result = buildSuggester(size).suggest(keyword, size / 5);
         ArrayNode jsons = mapper.createArrayNode();
         for (String s : result) {
-            jsons.add(s);
+            for (Article article : articleList) {
+                if (article.getTitle().equals(s)) {
+                    ObjectNode object = mapper.convertValue(article, ObjectNode.class);
+                    jsons.add(object);
+                }
+            }
         }
         json.set("result", jsons);
         return json;
+    }
+
+    /**
+     * 获取数据
+     *
+     * @param size
+     * @return
+     */
+    private List<Article> getData(int size) {
+        Page<Article> articles = articleService.findAll(BaseService.buildPageable(1, size, "id", "DESC"));
+        return articles.getContent();
     }
 
     /**
@@ -70,9 +92,7 @@ public class ArticleController extends BaseController<Article, Integer> {
      * @return
      */
     private Suggester buildSuggester(int size) {
-        json = mapper.createObjectNode();
-        Page<Article> articles = articleService.findAll(BaseService.buildPageable(1, size, "id", "DESC"));
-        List<Article> articleList = articles.getContent();
+        List<Article> articleList = getData(size);
         Suggester suggester = new Suggester();
         for (Article article : articleList) {
             suggester.addSentence(article.getTitle());
@@ -90,6 +110,7 @@ public class ArticleController extends BaseController<Article, Integer> {
     @ResponseBody
     @GetMapping("/suggest")
     public ObjectNode suggest(String keyword) {
+        json = mapper.createObjectNode();
         int size = 999;
         List<String> result = buildSuggester(size).suggest(keyword, size / 100);
         ArrayNode jsons = mapper.createArrayNode();
