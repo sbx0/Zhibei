@@ -22,7 +22,6 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 文章 控制层
@@ -53,7 +52,6 @@ public class ArticleController extends BaseController<Article, Integer> {
     @ResponseBody
     @GetMapping("/search")
     public ObjectNode search(String keyword) {
-        json = mapper.createObjectNode();
         int size = 999;
         List<Article> articleList = getData(size);
         Suggester suggester = new Suggester();
@@ -70,6 +68,7 @@ public class ArticleController extends BaseController<Article, Integer> {
                 }
             }
         }
+        json = mapper.createObjectNode();
         json.set("result", jsons);
         return json;
     }
@@ -110,7 +109,6 @@ public class ArticleController extends BaseController<Article, Integer> {
     @ResponseBody
     @GetMapping("/suggest")
     public ObjectNode suggest(String keyword) {
-        json = mapper.createObjectNode();
         int size = 999;
         List<String> result = buildSuggester(size).suggest(keyword, size / 100);
         ArrayNode jsons = mapper.createArrayNode();
@@ -130,7 +128,8 @@ public class ArticleController extends BaseController<Article, Integer> {
                 }
             }
         }
-        json.set("result", jsons);
+        json = mapper.createObjectNode();
+        json.set("suggest", jsons);
         return json;
     }
 
