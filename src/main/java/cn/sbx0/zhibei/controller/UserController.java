@@ -68,7 +68,7 @@ public class UserController extends BaseController<User, Integer> {
             verify.setType("password");
             verify.setUsed(false);
             if (verifyService.save(verify)) {
-                String url = "http://m.sbx0.cn/verify/" + verify.getMd5();
+                String url = "http://m.sbx0.cn/#/verify/" + verify.getMd5();
                 if (emailService.sendEmail(user, "安全提醒：正在修改密码。", "<p>您的账号" + user.getNickname() + "[@" + user.getName() + "]于" + new Date() + "尝试修改密码。</p><p>请点击<a href=" + url + ">修改密码</a></p>")) {
                     json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
                 } else {
