@@ -12,6 +12,9 @@ import java.util.List;
  * 基础用户 数据层
  */
 public interface UserDao extends PagingAndSortingRepository<User, Integer> {
+    @Query(value = "FROM User WHERE email = ?1")
+    User findByEmail(String email);
+
     /**
      * 重写分页查询版查询全部
      *

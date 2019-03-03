@@ -41,6 +41,8 @@ public abstract class BaseController<T, ID> {
     static final int STATUS_CODE_NOT_FOUND = 5; // 不存在
     static final int STATUS_CODE_NO_PERMISSION = 6; // 无权限
     static final int STATUS_CODE_REPEAT = 7; // 重复操作
+    static final int STATUS_CODE_TIME_OUT = 8; // 超时
+    static final int STATUS_CODE_PARAMETER_ERROR = 9; // 参数错误
     // JSON返回操作状态一览 End
     ObjectMapper mapper;
     protected ObjectNode json;

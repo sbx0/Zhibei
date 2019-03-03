@@ -54,7 +54,7 @@ public class User implements Serializable {
     private String phone; // 手机
 
     @JsonView(JsonViewInterface.Normal.class)
-    @Column(length = 50)
+    @Column(length = 50, unique = true)
     private String email; // 邮箱
 
     @JsonView(JsonViewInterface.Simple.class)

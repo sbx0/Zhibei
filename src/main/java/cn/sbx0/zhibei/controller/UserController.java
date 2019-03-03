@@ -3,7 +3,10 @@ package cn.sbx0.zhibei.controller;
 import cn.sbx0.zhibei.annotation.LogRecord;
 import cn.sbx0.zhibei.entity.JsonViewInterface;
 import cn.sbx0.zhibei.entity.User;
+import cn.sbx0.zhibei.entity.Verify;
 import cn.sbx0.zhibei.service.BaseService;
+import cn.sbx0.zhibei.service.EmailService;
+import cn.sbx0.zhibei.service.VerifyService;
 import cn.sbx0.zhibei.tool.CookieTools;
 import cn.sbx0.zhibei.tool.StringTools;
 import com.fasterxml.jackson.databind.MapperFeature;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -29,6 +33,10 @@ import java.util.Map;
 @Controller
 @RequestMapping("/user")
 public class UserController extends BaseController<User, Integer> {
+    @Resource
+    EmailService emailService;
+    @Resource
+    VerifyService verifyService;
 
     @Override
     public BaseService<User, Integer> getService() {
@@ -38,6 +46,87 @@ public class UserController extends BaseController<User, Integer> {
     @Autowired
     public UserController(ObjectMapper mapper) {
         this.mapper = mapper;
+    }
+
+    /**
+     * 忘记密码
+     *
+     * @param email
+     * @return
+     */
+    @LogRecord
+    @ResponseBody
+    @GetMapping("/lostPassword")
+    public ObjectNode lostPassword(String email) {
+        json = mapper.createObjectNode();
+        User user = userService.findByEmail(email);
+        if (user != null) {
+            Verify verify = new Verify();
+            verify.setMd5(StringTools.getHash(new Date() + user.getEmail(), "MD5"));
+            verify.setTime(new Date());
+            verify.setParameter("user:" + user.getId());
+            verify.setType("password");
+            verify.setUsed(false);
+            if (verifyService.save(verify)) {
+                String url = "http://m.sbx0.cn/verify/" + verify.getMd5();
+                if (emailService.sendEmail(user, "安全提醒：正在修改密码。", "<p>您的账号" + user.getNickname() + "[@" + user.getName() + "]于" + new Date() + "尝试修改密码。</p><p>请点击<a href=" + url + ">修改密码</a></p>")) {
+                    json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
+                } else {
+                    json.put(STATUS_NAME, STATUS_CODE_FILED);
+                }
+            } else {
+                json.put(STATUS_NAME, STATUS_CODE_FILED);
+            }
+        } else {
+            json.put(STATUS_NAME, STATUS_CODE_NOT_FOUND);
+        }
+        return json;
+    }
+
+    /**
+     * 修改密码
+     *
+     * @param password
+     * @return
+     */
+    @LogRecord
+    @ResponseBody
+    @GetMapping("/changePassword")
+    public ObjectNode changePassword(String password, String md5) {
+        json = mapper.createObjectNode();
+        Verify verify = verifyService.existsByMd5(md5);
+        if (verify == null) {
+            json.put(STATUS_NAME, STATUS_CODE_NOT_FOUND);
+        } else {
+            if (verify.getTime().getTime() + 30 * 60 * 1000 < new Date().getTime()) {
+                json.put(STATUS_NAME, STATUS_CODE_TIME_OUT);
+            } else {
+                if (!verify.getType().equals("password")) {
+                    json.put(STATUS_NAME, STATUS_CODE_PARAMETER_ERROR);
+                } else {
+                    String parameter = verify.getParameter();
+                    String[] key = parameter.split(":");
+                    if (key[0].equals("user")) {
+                        User user = userService.findById(Integer.parseInt(key[1]));
+                        if (user != null) {
+                            user.setPassword(StringTools.encryptPassword(password));
+                            if (userService.save(user)) {
+                                emailService.sendEmail(user, "安全提醒：您的密码修改成功。", "<p>您的账号" + user.getNickname() + "[@" + user.getName() + "]于" + new Date() + "成功修改了密码。</p>");
+                                json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
+                            } else {
+                                emailService.sendEmail(user, "安全提醒：有人尝试修改您的密码。", "<p>您的账号" + user.getNickname() + "[@" + user.getName() + "]于" + new Date() + "尝试修改密码失败。</p>");
+                                json.put(STATUS_NAME, STATUS_CODE_FILED);
+                            }
+                        } else {
+                            json.put(STATUS_NAME, STATUS_CODE_NOT_FOUND);
+                        }
+                    } else {
+                        json.put(STATUS_NAME, STATUS_CODE_PARAMETER_ERROR);
+                    }
+                }
+            }
+        }
+        return json;
     }
 
     /**

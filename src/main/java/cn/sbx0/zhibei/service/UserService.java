@@ -42,6 +42,16 @@ public class UserService extends BaseService<User, Integer> {
     }
 
     /**
+     * 根据邮箱查找用户
+     *
+     * @param email
+     * @return
+     */
+    public User findByEmail(String email) {
+        return userDao.findByEmail(email);
+    }
+
+    /**
      * 修改当前用户的信息
      *
      * @param oldUser
