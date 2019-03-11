@@ -13,7 +13,7 @@ public class ZhibeiApplication {
     void started() {
         // 设置时区为东八区
         TimeZone.setDefault(TimeZone.getTimeZone("Asia/Shanghai"));
-//        TimeZone.setDefault(TimeZone.getTimeZone("GMT+8"));
+        // TimeZone.setDefault(TimeZone.getTimeZone("GMT+8"));
     }
 
     public static void main(String[] args) {
