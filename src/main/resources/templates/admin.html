@@ -49,7 +49,9 @@
                     <h6>{{i18N.admin_message}}</h6>
                     <div class="btn-toolbar mb-2 mb-md-0">
                         <select id="table_select" class="form-control-sm">
-                            <option :value="table.value" v-for="table in table_data">{{table.name}}</option>
+                            <option :value="key" v-for="(table,key) in i18N.table">
+                                {{key}} {{table}}{{i18N.table_init}}
+                            </option>
                         </select>
                     </div>
                 </div>

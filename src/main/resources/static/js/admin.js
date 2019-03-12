@@ -36,6 +36,7 @@ var main = new Vue({
             category: {name: i18N.table.category, value: "category", data: {}},
             demand: {name: i18N.table.demand, value: "demand", data: {}},
             tag: {name: i18N.table.tag, value: "tag", data: {}},
+            verify: {name: i18N.table.verify, value: "verify", data: {}},
         }
     },
     components: {
@@ -225,6 +226,7 @@ function build(data) {
             || attribute.type === 'Category'
             || attribute.type === 'Tag'
             || attribute.type === 'Demand'
+            || attribute.type === 'Verify'
         ) {
             getData(attribute.type.toLowerCase());
             if (data[attribute.name] != null) data[attribute.name] = data[attribute.name]["id"];
