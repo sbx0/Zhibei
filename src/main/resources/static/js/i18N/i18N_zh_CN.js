@@ -149,6 +149,7 @@ var i18N = {
         article: "文章",
         comment: "评论",
         verify: "验证",
+        message: "消息",
     },
     attribute: {
         user: {
@@ -280,6 +281,16 @@ var i18N = {
             used: '是否使用过',
             parameter: '参数',
             time: '发布时间',
+        },
+        message: {
+            id: "编号",
+            content: "内容",
+            ip: "IP地址",
+            sendUser: "发送者",
+            receiveUser: "接收者",
+            sendTime: "发送时间",
+            receiveTime: "接收时间",
+            type: "种类",
         }
     },
     alert: {
