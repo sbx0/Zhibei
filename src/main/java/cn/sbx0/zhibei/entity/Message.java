@@ -33,7 +33,7 @@ public class Message implements Serializable {
     private String ip; // IP
 
     @JsonView(JsonViewInterface.Normal.class)
-    @ManyToOne(cascade = {CascadeType.MERGE}, targetEntity = User.class)
+    @ManyToOne(cascade = {CascadeType.MERGE}, targetEntity = User.class, optional = false)
     private User sendUser; // 发送者
 
     @JsonView(JsonViewInterface.Normal.class)

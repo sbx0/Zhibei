@@ -1,15 +1,18 @@
 package cn.sbx0.zhibei.tool;
 
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
 import javax.servlet.http.HttpServletRequest;
 
 public class RequestTools {
     /**
      * 获取用户的IP地址
      *
-     * @param request request
      * @return ip
      */
-    public static String getIpAddress(HttpServletRequest request) {
+    public static String getIpAddress() {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         // 获取请求主机IP地址,如果通过代理进来，则透过防火墙获取真实IP地址
         String ip = request.getHeader("X-Forwarded-For");
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {

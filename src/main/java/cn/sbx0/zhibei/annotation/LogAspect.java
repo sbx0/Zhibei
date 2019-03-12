@@ -48,7 +48,7 @@ public class LogAspect {
         Log log = new Log();
         log.setUser(user);
         log.setMethod(methodName);
-        log.setIp(RequestTools.getIpAddress(request));
+        log.setIp(RequestTools.getIpAddress());
         log.setClassName(className);
         if (request.getQueryString() != null) {
             log.setArgs(request.getQueryString());
