@@ -1,12 +1,14 @@
 package cn.sbx0.zhibei.controller;
 
 import cn.sbx0.zhibei.annotation.LogRecord;
+import cn.sbx0.zhibei.entity.JsonViewInterface;
 import cn.sbx0.zhibei.entity.Message;
 import cn.sbx0.zhibei.entity.User;
 import cn.sbx0.zhibei.service.BaseService;
 import cn.sbx0.zhibei.service.MessageService;
 import cn.sbx0.zhibei.tool.RequestTools;
 import cn.sbx0.zhibei.tool.StringTools;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -66,6 +68,7 @@ public class MessageController extends BaseController<Message, Integer> {
         message.setSendTime(new Date());
         message.setIp(RequestTools.getIpAddress());
         message.setSendUser(user);
+        message.setType("msg");
         if (messageService.save(message)) {
             json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
         } else {
@@ -77,14 +80,16 @@ public class MessageController extends BaseController<Message, Integer> {
     @LogRecord
     @ResponseBody
     @GetMapping(value = "/receive")
-    public ObjectNode receive(Integer id, Integer page, Integer size, String attribute, String direction) {
+    public ObjectNode receive(Integer id, Integer page, Integer size) {
+        mapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION);
+        mapper.setConfig(mapper.getSerializationConfig().withView(JsonViewInterface.Normal.class));
         json = mapper.createObjectNode();
         User user = userService.getUser();
         if (user == null) {
             json.put(STATUS_NAME, STATUS_CODE_NOT_LOGIN);
             return json;
         }
-        Page<Message> tPage = messageService.findBySenderAndReceiver(user.getId(), id, BaseService.buildPageable(page, size, attribute, direction));
+        Page<Message> tPage = messageService.findBySenderAndReceiver(user.getId(), id, BaseService.buildPageable(1, 1000, "id", "ASC"));
         List<Message> tList = tPage.getContent();
         ArrayNode jsons = mapper.createArrayNode();
         if (tList != null && tList.size() > 0) {
@@ -93,6 +98,7 @@ public class MessageController extends BaseController<Message, Integer> {
                 jsons.add(object);
             }
             json.set("objects", jsons);
+            json.put("user_id", user.getId());
             json.put("total_pages", tPage.getTotalPages());
             json.put("total_elements", tPage.getTotalElements());
             json.put("page", page);
