@@ -60,6 +60,10 @@ public class MessageController extends BaseController<Message, Integer> {
             json.put(STATUS_NAME, STATUS_CODE_PARAMETER_ERROR);
             return json;
         }
+        if (message.getReceiveUser().getId().equals(user.getId())) {
+            json.put(STATUS_NAME, STATUS_CODE_FILED);
+            return json;
+        }
         if (StringTools.checkNullStr(message.getContent())) {
             json.put(STATUS_NAME, STATUS_CODE_FILED);
             return json;

@@ -22,7 +22,7 @@ public interface MessageDao extends PagingAndSortingRepository<Message, Integer>
      * @param pageable
      * @return
      */
-    @Query(value = "FROM Message m WHERE (m.sendUser.id = ?1 OR m.receiveUser.id = ?1) AND (m.sendUser.id = ?2 OR m.receiveUser.id = ?2)")
+    @Query(value = "FROM Message m WHERE (m.sendUser.id = ?1 AND m.receiveUser.id = ?2) OR (m.sendUser.id = ?2 AND m.receiveUser.id = ?1)")
     Page<Message> findBySenderAndReceiver(Integer sendUserId, Integer receiverId, Pageable pageable);
 
     /**
