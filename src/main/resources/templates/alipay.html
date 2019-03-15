@@ -44,6 +44,11 @@
     <div class="container">
         <h1 class="mt-5" th:text="${status}"></h1>
         <p>
+            尊敬的：
+            <span th:text="${nickname}"></span>
+            #<span th:text="${username}"></span>
+        </p>
+        <p>
             平台交易单号：
             <span th:text="${out_trade_no}"></span>
         </p>
@@ -62,6 +67,10 @@
         <p>
             实际交付金额：
             <span th:text="${total_amount}"></span>
+        </p>
+        <p>
+            账户余额：
+            <span th:text="${wallet_money}"></span>
         </p>
         <p>回到 <a href="/index.html">首页</a></p>
     </div>

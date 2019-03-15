@@ -14,7 +14,7 @@ public class AlipayConfig {
     @Value("${pay.alipay.appId}")
     private String appId;
     @Value("${pay.alipay.appPrivateKey}")
-    private String appPrivateKey;
+    private String merchantPrivateKey;
     @Value("${pay.alipay.alipayPublicKey}")
     private String alipayPublicKey;
     @Value("${pay.alipay.returnUrl}")
@@ -44,8 +44,8 @@ public class AlipayConfig {
         return appId;
     }
 
-    public String getAppPrivateKey() {
-        return appPrivateKey;
+    public String getMerchantPrivateKey() {
+        return merchantPrivateKey;
     }
 
     public String getAlipayPublicKey() {
