@@ -150,6 +150,9 @@ var i18N = {
         comment: '評論',
         verify: '驗證',
         message: '消息',
+        alipay: '支付宝',
+        product: '商品',
+        wallet: '钱包',
     },
     attribute: {
         user: {
@@ -291,7 +294,31 @@ var i18N = {
             sendTime: '發送時間',
             receiveTime: '接收時間',
             type: '種類',
-        }
+        },
+        alipay: {
+            id: '编号',
+            outTradeNo: '平台订单号',
+            tradeNo: '支付宝订单号',
+            createTime: '创建时间',
+            endTime: '结束时间',
+            buyer: '购买者',
+            type: '种类',
+            products: '商品列表',
+            amount: '实付金额',
+        },
+        product: {
+            id: '编号',
+            name: '名称',
+            price: '金额',
+            startTime: '开卖时间',
+            endTime: '结束时间',
+            seller: '买家',
+        },
+        wallet: {
+            id: '编号',
+            money: '拥有的钱',
+            owner: '谁的',
+        },
     },
     alert: {
         empty: '為空',

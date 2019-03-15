@@ -38,7 +38,10 @@ var main = new Vue({
             tag: {name: i18N.table.tag, value: "tag", data: {}},
             verify: {name: i18N.table.verify, value: "verify", data: {}},
             message: {name: i18N.table.message, value: "message", data: {}},
-        }
+            alipay: {name: i18N.table.alipay, value: "alipay", data: {}},
+            product: {name: i18N.table.product, value: "product", data: {}},
+            wallet: {name: i18N.table.wallet, value: "wallet", data: {}},
+        },
     },
     components: {
         "base-modal": base_modal // 基本模态框模版
@@ -53,6 +56,134 @@ var main = new Vue({
 
     }
 });
+
+// 通用拼装模版数据
+function build(data) {
+    main.modal_data = [];
+    var modal_data = [];
+    for (var i = 0; i < main.attribute_data.length; i++) {
+        var attribute = main.attribute_data[i];
+        if (
+            attribute.type === 'Role'
+            || attribute.type === 'User'
+            || attribute.type === 'Permission'
+            || attribute.type === 'Certification'
+            || attribute.type === 'Log'
+            || attribute.type === 'UploadFile'
+            || attribute.type === 'Article'
+            || attribute.type === 'Comment'
+            || attribute.type === 'Category'
+            || attribute.type === 'Tag'
+            || attribute.type === 'Demand'
+            || attribute.type === 'Verify'
+            || attribute.type === 'Message'
+            || attribute.type === 'Alipay'
+            || attribute.type === 'Product'
+            || attribute.type === 'Wallet'
+        ) {
+            getData(attribute.type.toLowerCase());
+            if (data[attribute.name] != null) data[attribute.name] = data[attribute.name]["id"];
+            modal_data[i] = {
+                id: attribute.name,
+                name: i18N["attribute"][main.table][attribute.name],
+                selected: data[attribute.name],
+                options: main["table_data"][attribute.type.toLowerCase()]["data"],
+                type: 'select'
+            };
+        } else if (attribute.name === 'introduction' || attribute.name === 'content') {
+            modal_data[i] = {
+                id: attribute.name,
+                name: i18N["attribute"][main.table][attribute.name],
+                value: data[attribute.name],
+                type: 'textarea'
+            };
+        } else if (attribute.name === 'email') {
+            modal_data[i] = {
+                id: attribute.name,
+                name: i18N["attribute"][main.table][attribute.name],
+                value: data[attribute.name],
+                type: 'email'
+            };
+        } else if (attribute.name === 'id') {
+            modal_data[i] = {
+                id: attribute.name,
+                name: i18N["attribute"][main.table][attribute.name],
+                value: data[attribute.name],
+                type: 'text',
+                readonly: 'readonly'
+            };
+        } else if (attribute.type === 'String') {
+            modal_data[i] = {
+                id: attribute.name,
+                name: i18N["attribute"][main.table][attribute.name],
+                value: data[attribute.name],
+                type: 'text'
+            };
+        } else if (attribute.type === 'Date') {
+            var time = "";
+            if (data[attribute.name] != null) {
+                time = Format(getDate(data[attribute.name].toString()), "yyyy-MM-dd")
+            }
+            modal_data[i] = {
+                id: attribute.name,
+                name: i18N["attribute"][main.table][attribute.name],
+                value: time,
+                type: 'date'
+            };
+        } else if (attribute.type === 'Double' || attribute.type === 'Integer') {
+            modal_data[i] = {
+                id: attribute.name,
+                name: i18N["attribute"][main.table][attribute.name],
+                value: data[attribute.name],
+                type: 'number'
+            };
+        } else if (attribute.type === 'Boolean') {
+            modal_data[i] = {
+                id: attribute.name,
+                name: i18N["attribute"][main.table][attribute.name],
+                value: data[attribute.name],
+                type: 'checkbox'
+            };
+        } else if (attribute.type === 'List') {
+            var ids = [];
+            if (data[attribute.name] != null) {
+                for (var j = 0; j < data[attribute.name].length; j++) {
+                    ids.push("" + data[attribute.name][j].id + "");
+                }
+            }
+            var table = ''
+            switch (attribute.name) {
+                case 'tags':
+                    table = 'tag'
+                    break
+                case 'permissions':
+                    table = 'permission'
+                    break
+                case 'products':
+                    table = 'product'
+                default:
+            }
+            getData(table);
+            modal_data[i] = {
+                id: attribute.name,
+                name: i18N["attribute"][main.table][attribute.name],
+                selected: ids,
+                options: main["table_data"][table]["data"],
+                multiple: "multiple",
+                type: 'select'
+            };
+        } else {
+            modal_data[i] = {
+                id: attribute.name,
+                name: i18N["attribute"][main.table][attribute.name],
+                value: data[attribute.name],
+                type: 'text'
+            };
+        }
+    }
+    main.modal_data = modal_data;
+    bind();
+}
 
 // 下拉选择表
 var table_select = $("#table_select");
@@ -127,129 +258,6 @@ function bind() {
     modalSubmitBtn.on('click', function () {
         saveOne(main.table + "_form");
     });
-}
-
-// 通用拼装模版数据
-function build(data) {
-    main.modal_data = [];
-    var modal_data = [];
-    for (var i = 0; i < main.attribute_data.length; i++) {
-        var attribute = main.attribute_data[i];
-        if (attribute.name === 'introduction' || attribute.name === 'content') {
-            modal_data[i] = {
-                id: attribute.name,
-                name: i18N["attribute"][main.table][attribute.name],
-                value: data[attribute.name],
-                type: 'textarea'
-            };
-        } else if (attribute.name === 'email') {
-            modal_data[i] = {
-                id: attribute.name,
-                name: i18N["attribute"][main.table][attribute.name],
-                value: data[attribute.name],
-                type: 'email'
-            };
-        } else if (attribute.name === 'id') {
-            modal_data[i] = {
-                id: attribute.name,
-                name: i18N["attribute"][main.table][attribute.name],
-                value: data[attribute.name],
-                type: 'text',
-                readonly: 'readonly'
-            };
-        } else if (attribute.type === 'String') {
-            modal_data[i] = {
-                id: attribute.name,
-                name: i18N["attribute"][main.table][attribute.name],
-                value: data[attribute.name],
-                type: 'text'
-            };
-        } else if (attribute.type === 'Date') {
-            var time = "";
-            if (data[attribute.name] != null) {
-                time = Format(getDate(data[attribute.name].toString()), "yyyy-MM-dd")
-            }
-            modal_data[i] = {
-                id: attribute.name,
-                name: i18N["attribute"][main.table][attribute.name],
-                value: time,
-                type: 'date'
-            };
-        } else if (attribute.type === 'Double' || attribute.type === 'Integer') {
-            modal_data[i] = {
-                id: attribute.name,
-                name: i18N["attribute"][main.table][attribute.name],
-                value: data[attribute.name],
-                type: 'number'
-            };
-        } else if (attribute.type === 'Boolean') {
-            modal_data[i] = {
-                id: attribute.name,
-                name: i18N["attribute"][main.table][attribute.name],
-                value: data[attribute.name],
-                type: 'checkbox'
-            };
-        } else if (attribute.type === 'List') {
-            var ids = [];
-            if (data[attribute.name] != null) {
-                for (var j = 0; j < data[attribute.name].length; j++) {
-                    ids.push("" + data[attribute.name][j].id + "");
-                }
-            }
-            var table = ''
-            switch (attribute.name) {
-                case 'tags':
-                    table = 'tag'
-                    break
-                case 'permissions':
-                    table = 'permission'
-                    break
-                default:
-            }
-            getData(table);
-            modal_data[i] = {
-                id: attribute.name,
-                name: i18N["attribute"][main.table][attribute.name],
-                selected: ids,
-                options: main["table_data"][table]["data"],
-                multiple: "multiple",
-                type: 'select'
-            };
-        } else if (
-            attribute.type === 'Role'
-            || attribute.type === 'User'
-            || attribute.type === 'Permission'
-            || attribute.type === 'Certification'
-            || attribute.type === 'Log'
-            || attribute.type === 'UploadFile'
-            || attribute.type === 'Article'
-            || attribute.type === 'Comment'
-            || attribute.type === 'Category'
-            || attribute.type === 'Tag'
-            || attribute.type === 'Demand'
-            || attribute.type === 'Verify'
-            || attribute.type === 'Message'
-        ) {
-            getData(attribute.type.toLowerCase());
-            if (data[attribute.name] != null) data[attribute.name] = data[attribute.name]["id"];
-            modal_data[i] = {
-                id: attribute.name,
-                name: i18N["attribute"][main.table][attribute.name],
-                selected: data[attribute.name],
-                options: main["table_data"][attribute.type.toLowerCase()]["data"],
-                type: 'select'
-            };
-        } else {
-            modal_data[i] = {
-                id: attribute.name,
-                name: i18N["attribute"][main.table][attribute.name],
-                value: data[attribute.name],
-                type: 'text'
-            };
-        }
-    }
-    main.modal_data = modal_data;
-    bind();
 }
 
 // 通用保存

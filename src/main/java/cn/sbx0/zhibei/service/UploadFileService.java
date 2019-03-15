@@ -45,6 +45,12 @@ public class UploadFileService extends BaseService<UploadFile, Integer> {
         this.path = path;
     }
 
+    /**
+     * 删除文件
+     *
+     * @param uploadFile
+     * @return
+     */
     public boolean deleteFile(UploadFile uploadFile) {
         try {
             File file = new File(path + "/" + uploadFile.getType() + "/" + uploadFile.getName());

@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en" class="h-100" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v3.8.5">
+    <title>Alipay</title>
+
+    <link rel="stylesheet" th:href="@{/css/lib/bootstrap-4.0.0.min.css}">
+
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+
+        .container {
+            width: auto;
+            max-width: 680px;
+            padding: 0 15px;
+        }
+
+        .footer {
+            background-color: #f5f5f5;
+        }
+    </style>
+
+</head>
+<body class="d-flex flex-column h-100">
+<!-- Begin page content -->
+<main role="main" class="flex-shrink-0">
+    <div class="container">
+        <h1 class="mt-5" th:text="${status}"></h1>
+        <p>
+            平台交易单号：
+            <span th:text="${out_trade_no}"></span>
+        </p>
+        <p>
+            支付宝交易单号：
+            <span th:text="${trade_no}"></span>
+        </p>
+        <p>
+            开始交易时间：
+            <span th:text="${create_time}"></span>
+        </p>
+        <p>
+            交易完成时间：
+            <span th:text="${end_time}"></span>
+        </p>
+        <p>
+            实际交付金额：
+            <span th:text="${total_amount}"></span>
+        </p>
+        <p>回到 <a href="/index.html">首页</a></p>
+    </div>
+</main>
+
+<footer class="footer mt-auto py-3">
+    <div class="container">
+        <span class="text-muted">智贝科技有限公司</span>
+    </div>
+</footer>
+</body>
+</html>
