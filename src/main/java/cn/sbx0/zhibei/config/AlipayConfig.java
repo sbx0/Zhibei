@@ -13,7 +13,7 @@ public class AlipayConfig {
     private String gatewayUrl;
     @Value("${pay.alipay.appId}")
     private String appId;
-    @Value("${pay.alipay.appPrivateKey}")
+    @Value("${pay.alipay.merchantPrivateKey}")
     private String merchantPrivateKey;
     @Value("${pay.alipay.alipayPublicKey}")
     private String alipayPublicKey;

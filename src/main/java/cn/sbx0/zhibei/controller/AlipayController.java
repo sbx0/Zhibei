@@ -154,7 +154,6 @@ public class AlipayController extends BaseController<Alipay, Integer> {
             }
             params.put(name, valueStr);
         }
-        Map<String, Object> result = new HashMap<>();
         try {
             // 调用SDK验证签名
             boolean signVerified = AlipaySignature.rsaCheckV1(params, alipayConfig.getAlipayPublicKey(), alipayConfig.getCharset(), alipayConfig.getSignType());
@@ -176,28 +175,28 @@ public class AlipayController extends BaseController<Alipay, Integer> {
                     Wallet wallet = walletService.getUserWallet(user);
                     wallet.setMoney(wallet.getMoney() + Double.parseDouble(totalAmount));
                     if (walletService.save(wallet)) {
-                        result.put("status", "success");
+                        params.put("status", "success");
                     } else {
-                        result.put("status", "failed");
+                        params.put("status", "failed");
                     }
-                    result.put("username", user.getName());
-                    result.put("nickname", user.getNickname());
-                    result.put("out_trade_no", alipay.getOutTradeNo());
-                    result.put("trade_no", alipay.getTradeNo());
-                    result.put("total_amount", alipay.getAmount());
-                    result.put("wallet_money", wallet.getMoney());
+                    params.put("username", user.getName());
+                    params.put("nickname", user.getNickname());
+                    params.put("out_trade_no", alipay.getOutTradeNo());
+                    params.put("trade_no", alipay.getTradeNo());
+                    params.put("total_amount", alipay.getAmount().toString());
+                    params.put("wallet_money", wallet.getMoney().toString());
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd-HH mm:ss");
-                    result.put("create_time", simpleDateFormat.format(alipay.getCreateTime()));
-                    result.put("end_time", simpleDateFormat.format(alipay.getEndTime()));
+                    params.put("create_time", simpleDateFormat.format(alipay.getCreateTime()));
+                    params.put("end_time", simpleDateFormat.format(alipay.getEndTime()));
                 } else {
-                    result.put("status", "failed");
+                    params.put("status", "failed");
                 }
             } else {
-                result.put("status", "failed");
+                params.put("status", "failed");
             }
         } catch (Exception e) {
-            result.put("status", "failed");
-            result.put("e_msg", e.getMessage());
+            params.put("status", "failed");
+            params.put("e_msg", e.getMessage());
         }
         return "alipay";
     }
