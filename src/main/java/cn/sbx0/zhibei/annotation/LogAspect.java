@@ -55,7 +55,10 @@ public class LogAspect {
                 log.setArgs(request.getQueryString().substring(0, 99));
             else
                 log.setArgs(request.getQueryString());
-            log.setUrl(request.getRequestURL().toString() + "?" + request.getQueryString());
+            String url = request.getRequestURL().toString() + "?" + request.getQueryString();
+            if (url.length() > 200)
+                url = url.substring(0, 200);
+            log.setUrl(url);
         } else {
             log.setUrl(request.getRequestURL().toString());
         }
