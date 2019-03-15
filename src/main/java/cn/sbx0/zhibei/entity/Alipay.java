@@ -66,7 +66,7 @@ public class Alipay implements Serializable {
      */
     public void addProduct(Product product) {
         List<Product> products = getProducts();
-        if (product == null) {
+        if (products == null) {
             products = new ArrayList<>();
         }
         products.add(product);

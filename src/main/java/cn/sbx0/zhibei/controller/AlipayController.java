@@ -88,6 +88,7 @@ public class AlipayController extends BaseController<Alipay, Integer> {
         alipay.setCreateTime(new Date());
         alipay.setBuyer(user);
         alipay.setCreateTime(new Date());
+        alipay.setType("alipay");
         // 获得初始化的AlipayClient
         AlipayClient alipayClient = new DefaultAlipayClient(alipayConfig.getGatewayUrl(), alipayConfig.getAppId(), alipayConfig.getAppPrivateKey(), "json", alipayConfig.getCharset(), alipayConfig.getAlipayPublicKey(), alipayConfig.getSignType());
         // 设置请求参数
