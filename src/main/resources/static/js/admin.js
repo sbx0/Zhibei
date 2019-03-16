@@ -410,7 +410,20 @@ function query() {
                 main["table_data"][main.table]["data"] = json.objects;
                 if (json.objects === undefined) main.query_data = null
                 else {
-                    main.query_data = json.objects;
+                    var objects = json.objects;
+                    for (var i = 0; i < objects.length; i++) {
+                        for (var key in objects[i]) {
+                            if (objects[i][key] == null) continue;
+                            if (objects[i][key] instanceof Object) {
+                                objects[i][key] = objects[i]['id'];
+                            } else {
+                                if (objects[i][key].length != null && objects[i][key].length > 50) {
+                                    objects[i][key] = objects[i][key].substr(0, 50);
+                                }
+                            }
+                        }
+                    }
+                    main.query_data = objects;
                     main.page = json.page;
                     main.size = json.size;
                     main.total_pages = json.total_pages;
@@ -422,7 +435,8 @@ function query() {
             } else {
                 alert(statusCodeToAlert(status))
             }
-        },
+        }
+        ,
         error: function () {
             alert(i18N.network + i18N.alert.error);
         }

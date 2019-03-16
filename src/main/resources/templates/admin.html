@@ -138,10 +138,9 @@
                                     >{{i18N.update}}</a>
                                 </td>
                                 <td v-for="o in object">
-                                    <span v-if="o instanceof Object">
-                                        {{o.id}}
+                                    <span>
+                                        {{o}}
                                     </span>
-                                    <span v-else>{{o}}</span>
                                 </td>
                             </tr>
                             </tbody>
