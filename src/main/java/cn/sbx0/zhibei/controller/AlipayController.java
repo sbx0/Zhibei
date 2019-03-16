@@ -16,7 +16,6 @@ import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradePagePayRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.hibernate.event.spi.SaveOrUpdateEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,7 +30,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -92,23 +90,14 @@ public class AlipayController extends BaseController<Alipay, Integer> {
         alipay.setCreateTime(new Date());
         alipay.setType("alipay");
         // 获得初始化的AlipayClient
-        AlipayClient alipayClient =
-                new DefaultAlipayClient(
-                        alipayConfig.getGatewayUrl(),
-                        alipayConfig.getAppId(),
-                        alipayConfig.getMerchantPrivateKey(),
-                        "json",
-                        alipayConfig.getCharset(),
-                        alipayConfig.getAlipayPublicKey(),
-                        alipayConfig.getSignType()
-                );
+        AlipayClient alipayClient = new DefaultAlipayClient(alipayConfig.getGatewayUrl(), alipayConfig.getAppId(), alipayConfig.getMerchantPrivateKey(), "json", alipayConfig.getCharset(), alipayConfig.getAlipayPublicKey(), alipayConfig.getSignType());
         // 设置请求参数
         AlipayTradePagePayRequest alipayRequest = new AlipayTradePagePayRequest();
         alipayRequest.setReturnUrl(alipayConfig.getReturnUrl());
         alipayRequest.setNotifyUrl(alipayConfig.getNotifyUrl());
         try {
             alipayRequest.setBizContent("{\"out_trade_no\":\"" + alipay.getOutTradeNo() + "\","
-                    + "\"total_amount\":\"" + alipay.getTotal() + "\","
+                    + "\"total_amount\":\"" + alipay.getRealPay() + "\","
                     + "\"subject\":\"" + alipay.getName() + "\","
                     + "\"body\":\"" + alipay.getDesc() + "\","
                     + "\"product_code\":\"FAST_INSTANT_TRADE_PAY\"}");
@@ -173,7 +162,7 @@ public class AlipayController extends BaseController<Alipay, Integer> {
                 alipay.setEndTime(new Date());
                 if (alipayService.save(alipay)) {
                     Wallet wallet = walletService.getUserWallet(user);
-                    wallet.setMoney(wallet.getMoney() + Double.parseDouble(totalAmount));
+                    wallet.setMoney(wallet.getMoney() + alipay.getRealTotal());
                     if (walletService.save(wallet)) {
                         params.put("status", "success");
                     } else {

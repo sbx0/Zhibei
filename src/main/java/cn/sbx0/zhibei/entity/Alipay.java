@@ -55,9 +55,13 @@ public class Alipay implements Serializable {
     @ManyToMany(cascade = {CascadeType.MERGE}, targetEntity = Product.class)
     private List<Product> products; // 商品列表
 
-    @JsonView(JsonViewInterface.Simple.class)
+    @JsonView(JsonViewInterface.All.class)
     @Column(nullable = false, columnDefinition = "Decimal(10,2) default '0.00'")
     private Double amount; // 实付金额
+
+    @JsonView(JsonViewInterface.All.class)
+    @Column(nullable = false)
+    private Boolean finished = Boolean.FALSE; // 是否完成
 
     /**
      * 添加商品进入
@@ -74,11 +78,26 @@ public class Alipay implements Serializable {
     }
 
     /**
-     * 获取商品总价 不是实际付款价格
+     * 实际付款价格 打折后
      *
      * @return
      */
-    public double getTotal() {
+    public double getRealPay() {
+        double total = 0.00;
+        for (Product p : getProducts()) {
+            if (p.getDiscount() != null)
+                p.setPrice(p.getPrice() * p.getDiscount());
+            total += p.getPrice();
+        }
+        return total;
+    }
+
+    /**
+     * 总体实际价格
+     *
+     * @return
+     */
+    public double getRealTotal() {
         double total = 0.00;
         for (Product p : getProducts()) {
             total += p.getPrice();
@@ -128,6 +147,7 @@ public class Alipay implements Serializable {
                 ", type='" + type + '\'' +
                 ", products=" + products +
                 ", amount=" + amount +
+                ", finished=" + finished +
                 '}';
     }
 
@@ -205,5 +225,13 @@ public class Alipay implements Serializable {
 
     public void setAmount(Double amount) {
         this.amount = amount;
+    }
+
+    public Boolean getFinished() {
+        return finished;
+    }
+
+    public void setFinished(Boolean finished) {
+        this.finished = finished;
     }
 }

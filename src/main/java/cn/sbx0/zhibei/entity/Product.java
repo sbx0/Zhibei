@@ -33,6 +33,10 @@ public class Product implements Serializable {
     private Double price; // 金额
 
     @JsonView(JsonViewInterface.Simple.class)
+    @Column(columnDefinition = "Decimal(10,2) default '0.00'")
+    private Double discount; // 折扣
+
+    @JsonView(JsonViewInterface.Simple.class)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     @Column(nullable = false)
     private Date startTime; // 开卖时间
@@ -51,6 +55,7 @@ public class Product implements Serializable {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", price=" + price +
+                ", discount=" + discount +
                 ", startTime=" + startTime +
                 ", endTime=" + endTime +
                 ", seller=" + seller +
@@ -83,6 +88,14 @@ public class Product implements Serializable {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public Double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Double discount) {
+        this.discount = discount;
     }
 
     public Date getStartTime() {
