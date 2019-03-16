@@ -13,7 +13,7 @@
 </head>
 <body>
 <div id="main" v-cloak>
-
+    <!--导航条-->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="/user/admin">
             {{i18N.website_name}}
@@ -25,6 +25,7 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
+                <!--导航条链接列表-->
                 <li class="nav-item" v-for="url in i18N.nav_data">
                     <a class="nav-link" :href="url.path">
                         {{url.text}}
@@ -41,12 +42,13 @@
             </form>
         </div>
     </nav>
-
+    <!--主体-->
     <div class="container">
         <div class="row">
             <main role="main" class="col-md-12 ml-sm-auto col-lg-12 pt-3 px-4">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
                     <h6>{{i18N.admin_message}}</h6>
+                    <!--选择表的下拉栏-->
                     <div class="btn-toolbar mb-2 mb-md-0">
                         <select id="table_select" class="form-control-sm">
                             <option :value="key" v-for="(table,key) in i18N.table">
@@ -71,8 +73,23 @@
                                         {{i18N.add}}
                                     </a>
                                 </th>
+                                <!--表头-->
                                 <th v-for="attribute in attribute_data">
-                                    {{i18N['attribute'][table][attribute.name]}}
+                                    <span
+                                            v-if="i18N['attribute'][table] != undefined"
+                                    >
+                                        {{i18N['attribute'][table][attribute.name]}}
+                                    </span>
+                                    <span
+                                            v-else-if="i18N['attribute'][table][attribute.name] != undefined"
+                                    >
+                                        {{i18N['attribute'][table][attribute.name]}}
+                                    </span>
+                                    <span
+                                            v-else
+                                    >
+                                        {{attribute.name}}
+                                    </span>
                                 </th>
                             </tr>
                             <tr v-if="query_data === null">
@@ -87,8 +104,23 @@
                                         {{i18N.add}}
                                     </a>
                                 </th>
+                                <!--表头-->
                                 <th v-for="attribute in attribute_data">
-                                    {{i18N['attribute'][table][attribute.name]}}
+                                    <span
+                                            v-if="i18N['attribute'][table] != undefined && i18N['attribute'][table][attribute.name] != undefined"
+                                    >
+                                        {{i18N['attribute'][table][attribute.name]}}
+                                    </span>
+                                    <span
+                                            v-else-if="i18N['attribute'][table][attribute.name] != undefined"
+                                    >
+                                        {{i18N['attribute'][table][attribute.name]}}
+                                    </span>
+                                    <span
+                                            v-else
+                                    >
+                                        {{attribute.name}}
+                                    </span>
                                 </th>
                             </tr>
                             </thead>
@@ -141,7 +173,16 @@
                                     v-for="attribute in attribute_data"
                                     :value="attribute.name"
                             >
-                                {{i18N['attribute'][table][attribute.name]}}
+                                <span
+                                        v-if="i18N['attribute'][table] != undefined"
+                                >
+                                    {{i18N['attribute'][table][attribute.name]}}
+                                </span>
+                                <span
+                                        v-else
+                                >
+                                    {{attribute.name}}
+                                </span>
                             </option>
                         </select>
                         {{i18N.direction}}：
@@ -237,14 +278,12 @@
             </main>
         </div>
     </div>
-
     <!--自动批量生成管理模态框-->
     <base-modal
             :name="table"
             :title="i18N['table'][table]+i18N.management"
             :body="modal_data"
     ></base-modal>
-
 </div>
 
 <script th:src="@{/js/lib/jquery-3.2.1.slim.min.js}"></script>
