@@ -154,32 +154,38 @@ public class AlipayController extends BaseController<Alipay, Integer> {
                 // 付款金额
                 String totalAmount = new String(request.getParameter("total_amount").getBytes("ISO-8859-1"), "UTF-8");
                 Alipay alipay = alipayService.findByOutTradeNo(outTradeNo);
+                Wallet wallet = new Wallet();
                 if (alipay == null) {
                     return "error";
-                }
-                alipay.setTradeNo(tradeNo);
-                alipay.setAmount(Double.parseDouble(totalAmount));
-                alipay.setEndTime(new Date());
-                if (alipayService.save(alipay)) {
-                    Wallet wallet = walletService.getUserWallet(user);
-                    wallet.setMoney(wallet.getMoney() + alipay.getRealTotal());
-                    if (walletService.save(wallet)) {
-                        params.put("status", "success");
+                } else if (!alipay.getFinished()) {
+                    alipay.setTradeNo(tradeNo);
+                    alipay.setAmount(Double.parseDouble(totalAmount));
+                    alipay.setEndTime(new Date());
+                    alipay.setFinished(true);
+                    if (alipayService.save(alipay)) {
+                        wallet = walletService.getUserWallet(user);
+                        wallet.setMoney(wallet.getMoney() + alipay.getRealTotal());
+                        if (walletService.save(wallet)) {
+                            params.put("status", "success");
+                        } else {
+                            params.put("status", "failed");
+                        }
                     } else {
                         params.put("status", "failed");
                     }
-                    params.put("username", user.getName());
-                    params.put("nickname", user.getNickname());
-                    params.put("out_trade_no", alipay.getOutTradeNo());
-                    params.put("trade_no", alipay.getTradeNo());
-                    params.put("total_amount", alipay.getAmount().toString());
-                    params.put("wallet_money", wallet.getMoney().toString());
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd-HH mm:ss");
-                    params.put("create_time", simpleDateFormat.format(alipay.getCreateTime()));
-                    params.put("end_time", simpleDateFormat.format(alipay.getEndTime()));
                 } else {
-                    params.put("status", "failed");
+                    wallet = walletService.getUserWallet(user);
                 }
+                params.put("username", user.getName());
+                params.put("nickname", user.getNickname());
+                params.put("out_trade_no", alipay.getOutTradeNo());
+                params.put("trade_no", alipay.getTradeNo());
+                params.put("total_amount", alipay.getAmount().toString());
+                params.put("wallet_money", wallet.getMoney().toString());
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd-HH mm:ss");
+                params.put("create_time", simpleDateFormat.format(alipay.getCreateTime()));
+                params.put("end_time", simpleDateFormat.format(alipay.getEndTime()));
+                params.put("status", "success");
             } else {
                 params.put("status", "failed");
             }
