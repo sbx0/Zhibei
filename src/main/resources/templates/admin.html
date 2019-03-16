@@ -76,12 +76,7 @@
                                 <!--表头-->
                                 <th v-for="attribute in attribute_data">
                                     <span
-                                            v-if="i18N['attribute'][table] != undefined"
-                                    >
-                                        {{i18N['attribute'][table][attribute.name]}}
-                                    </span>
-                                    <span
-                                            v-else-if="i18N['attribute'][table][attribute.name] != undefined"
+                                            v-if="i18N['attribute'][table] != undefined && i18N['attribute'][table][attribute.name] != undefined"
                                     >
                                         {{i18N['attribute'][table][attribute.name]}}
                                     </span>
@@ -108,11 +103,6 @@
                                 <th v-for="attribute in attribute_data">
                                     <span
                                             v-if="i18N['attribute'][table] != undefined && i18N['attribute'][table][attribute.name] != undefined"
-                                    >
-                                        {{i18N['attribute'][table][attribute.name]}}
-                                    </span>
-                                    <span
-                                            v-else-if="i18N['attribute'][table][attribute.name] != undefined"
                                     >
                                         {{i18N['attribute'][table][attribute.name]}}
                                     </span>
