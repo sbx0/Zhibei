@@ -85,9 +85,10 @@ public class Alipay implements Serializable {
     public double getRealPay() {
         double total = 0.00;
         for (Product p : getProducts()) {
+            double price = p.getPrice();
             if (p.getDiscount() != null)
-                p.setPrice(p.getPrice() * p.getDiscount());
-            total += p.getPrice();
+                price = price * p.getDiscount();
+            total += price;
         }
         return total;
     }
