@@ -35,6 +35,52 @@ public class WalletController extends BaseController<Wallet, Integer> {
     }
 
     /**
+     * 支持某人 为其打钱
+     *
+     * @param id
+     * @param money
+     * @return
+     */
+    @LogRecord
+    @ResponseBody
+    @GetMapping("/support")
+    public ObjectNode support(Integer id, Double money) {
+        json = mapper.createObjectNode();
+        User to = userService.findById(id);
+        User user = userService.getUser();
+        if (user == null) {
+            json.put(STATUS_NAME, STATUS_CODE_NOT_LOGIN);
+            return json;
+        }
+        if (to == null) {
+            json.put(STATUS_NAME, STATUS_CODE_NOT_FOUND);
+            return json;
+        }
+        if (money < 1 || money > 10000) {
+            json.put(STATUS_NAME, STATUS_CODE_PARAMETER_ERROR);
+            return json;
+        }
+        Wallet userWallet = walletService.getUserWallet(user);
+        if (userWallet.getMoney() < money) {
+            json.put(STATUS_NAME, STATUS_CODE_FILED);
+            return json;
+        }
+        Wallet toWallet = walletService.getUserWallet(to);
+        userWallet.setMoney(userWallet.getMoney() - money);
+        if (walletService.save(userWallet)) {
+            toWallet.setMoney(toWallet.getMoney() + money);
+            if (walletService.save(toWallet)) {
+                json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
+            } else {
+                json.put(STATUS_NAME, STATUS_CODE_FILED);
+            }
+        } else {
+            json.put(STATUS_NAME, STATUS_CODE_FILED);
+        }
+        return json;
+    }
+
+    /**
      * 获取钱包余额
      *
      * @return
