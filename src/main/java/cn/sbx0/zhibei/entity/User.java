@@ -36,7 +36,7 @@ public class User implements Serializable {
     @Column(nullable = false, length = 100)
     private String password; // 密码
 
-    @JsonView(JsonViewInterface.Normal.class)
+    @JsonView(JsonViewInterface.Simple.class)
     @Column(length = 30)
     private String introduction;
 

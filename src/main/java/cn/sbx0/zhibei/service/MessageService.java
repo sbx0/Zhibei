@@ -35,4 +35,27 @@ public class MessageService extends BaseService<Message, Integer> {
     public Page<Message> findBySenderAndReceiver(Integer sendUserId, Integer receiverId, Pageable pageable) {
         return messageDao.findBySenderAndReceiver(sendUserId, receiverId, pageable);
     }
+
+    /**
+     * 获取消息
+     *
+     * @param id
+     * @param buildPageable
+     * @return
+     */
+    public Page<Message> findByReceiver(Integer id, Pageable buildPageable) {
+        return messageDao.findByReceiver(id, buildPageable);
+    }
+
+    /**
+     * 获取消息
+     *
+     * @param id
+     * @return
+     */
+    public Integer countByReceiver(Integer id) {
+        Integer count = messageDao.countByReceiver(id);
+        if (count != null) return count;
+        else return 0;
+    }
 }

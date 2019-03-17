@@ -41,6 +41,59 @@ public class MessageController extends BaseController<Message, Integer> {
     }
 
     /**
+     * 消息计数
+     *
+     * @return
+     */
+    @LogRecord
+    @ResponseBody
+    @GetMapping(value = "/count")
+    public ObjectNode count() {
+        json = mapper.createObjectNode();
+        User user = userService.getUser();
+        if (user == null) {
+            json.put(STATUS_NAME, STATUS_CODE_NOT_LOGIN);
+            return json;
+        }
+        json.put("count", messageService.countByReceiver(user.getId()).toString());
+        return json;
+    }
+
+    /**
+     * 获取私信
+     *
+     * @return
+     */
+    @LogRecord
+    @ResponseBody
+    @GetMapping(value = "/msg")
+    public ObjectNode list() {
+        mapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION);
+        mapper.setConfig(mapper.getSerializationConfig().withView(JsonViewInterface.Normal.class));
+        json = mapper.createObjectNode();
+        User user = userService.getUser();
+        if (user == null) {
+            json.put(STATUS_NAME, STATUS_CODE_NOT_LOGIN);
+            return json;
+        }
+        Page<Message> tPage = messageService.findByReceiver(user.getId(), BaseService.buildPageable(1, 50, "id", "ASC"));
+        List<Message> tList = tPage.getContent();
+        ArrayNode jsons = mapper.createArrayNode();
+        if (tList != null && tList.size() > 0) {
+            for (Message t : tList) {
+                ObjectNode object = mapper.convertValue(t, ObjectNode.class);
+                jsons.add(object);
+            }
+            json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
+            json.set("objects", jsons);
+            json.put("user_id", user.getId());
+            json.put("total_pages", tPage.getTotalPages());
+            json.put("total_elements", tPage.getTotalElements());
+        }
+        return json;
+    }
+
+    /**
      * 发送消息
      *
      * @param message
@@ -81,10 +134,16 @@ public class MessageController extends BaseController<Message, Integer> {
         return json;
     }
 
+    /**
+     * 获取与某用户间的聊天记录
+     *
+     * @param id
+     * @return
+     */
     @LogRecord
     @ResponseBody
     @GetMapping(value = "/receive")
-    public ObjectNode receive(Integer id, Integer page, Integer size) {
+    public ObjectNode receive(Integer id) {
         mapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION);
         mapper.setConfig(mapper.getSerializationConfig().withView(JsonViewInterface.Normal.class));
         json = mapper.createObjectNode();
@@ -105,8 +164,6 @@ public class MessageController extends BaseController<Message, Integer> {
             json.put("user_id", user.getId());
             json.put("total_pages", tPage.getTotalPages());
             json.put("total_elements", tPage.getTotalElements());
-            json.put("page", page);
-            json.put("size", size);
         }
         return json;
     }
