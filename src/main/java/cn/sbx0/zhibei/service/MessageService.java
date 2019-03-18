@@ -8,7 +8,11 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Date;
 
+/**
+ * 消息 服务层
+ */
 @Service
 public class MessageService extends BaseService<Message, Integer> {
     @Resource
@@ -57,5 +61,15 @@ public class MessageService extends BaseService<Message, Integer> {
         Integer count = messageDao.countByReceiver(id);
         if (count != null) return count;
         else return 0;
+    }
+
+    /**
+     * 已读某用户的全部消息
+     *
+     * @param sendUserId
+     * @param receiveUserId
+     */
+    public void readByUser(Integer sendUserId, Integer receiveUserId) {
+        messageDao.readByUser(sendUserId, receiveUserId);
     }
 }

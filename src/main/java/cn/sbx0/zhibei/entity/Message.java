@@ -49,7 +49,7 @@ public class Message implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     private Date receiveTime; // 接收时间
 
-    @JsonView(JsonViewInterface.All.class)
+    @JsonView(JsonViewInterface.Normal.class)
     @Column(nullable = false, length = 100)
     private String type; // 种类 私聊 群聊 群发 系统通知
 

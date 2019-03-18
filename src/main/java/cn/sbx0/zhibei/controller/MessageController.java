@@ -41,11 +41,47 @@ public class MessageController extends BaseController<Message, Integer> {
     }
 
     /**
+     * 已阅
+     *
+     * @return
+     */
+    @ResponseBody
+    @GetMapping(value = "/read")
+    public ObjectNode read(Integer id, String type) {
+        json = mapper.createObjectNode();
+        User user = userService.getUser();
+        if (user == null) {
+            json.put(STATUS_NAME, STATUS_CODE_NOT_LOGIN);
+            return json;
+        }
+        if (type.equals("one")) {
+            Message message = messageService.findById(id);
+            if (!message.getReceiveUser().getId().equals(user.getId())) {
+                json.put(STATUS_NAME, STATUS_CODE_NO_PERMISSION);
+                return json;
+            }
+            if (message.getReceiveTime() == null && message.getType().equals("msg")) {
+                message.setReceiveTime(new Date());
+                if (messageService.save(message)) {
+                    json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
+                } else {
+                    json.put(STATUS_NAME, STATUS_CODE_FILED);
+                }
+            } else {
+                json.put(STATUS_NAME, STATUS_CODE_FILED);
+            }
+        } else if (type.equals("user")) {
+            messageService.readByUser(id, user.getId());
+            json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
+        }
+        return json;
+    }
+
+    /**
      * 消息计数
      *
      * @return
      */
-    @LogRecord
     @ResponseBody
     @GetMapping(value = "/count")
     public ObjectNode count() {
@@ -76,7 +112,7 @@ public class MessageController extends BaseController<Message, Integer> {
             json.put(STATUS_NAME, STATUS_CODE_NOT_LOGIN);
             return json;
         }
-        Page<Message> tPage = messageService.findByReceiver(user.getId(), BaseService.buildPageable(1, 50, "id", "ASC"));
+        Page<Message> tPage = messageService.findByReceiver(user.getId(), BaseService.buildPageable(1, 50, "id", "DESC"));
         List<Message> tList = tPage.getContent();
         ArrayNode jsons = mapper.createArrayNode();
         if (tList != null && tList.size() > 0) {
