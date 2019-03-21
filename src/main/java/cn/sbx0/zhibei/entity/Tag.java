@@ -31,6 +31,9 @@ public class Tag implements Serializable {
     @Column(nullable = false)
     private String cover; // 封面
 
+    @ManyToOne(cascade = {CascadeType.MERGE}, targetEntity = Tag.class)
+    private Tag father; // 父亲
+
     @Override
     public String toString() {
         return "Tag{" +
@@ -38,6 +41,7 @@ public class Tag implements Serializable {
                 ", name='" + name + '\'' +
                 ", introduction='" + introduction + '\'' +
                 ", cover='" + cover + '\'' +
+                ", father=" + father +
                 '}';
     }
 
@@ -75,5 +79,13 @@ public class Tag implements Serializable {
 
     public void setCover(String cover) {
         this.cover = cover;
+    }
+
+    public Tag getFather() {
+        return father;
+    }
+
+    public void setFather(Tag father) {
+        this.father = father;
     }
 }

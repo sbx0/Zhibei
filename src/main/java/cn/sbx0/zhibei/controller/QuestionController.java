@@ -1,0 +1,67 @@
+package cn.sbx0.zhibei.controller;
+
+import cn.sbx0.zhibei.annotation.LogRecord;
+import cn.sbx0.zhibei.entity.Question;
+import cn.sbx0.zhibei.entity.User;
+import cn.sbx0.zhibei.service.BaseService;
+import cn.sbx0.zhibei.service.QuestionService;
+import cn.sbx0.zhibei.tool.StringTools;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import java.util.Date;
+
+/**
+ * 问题 控制层
+ */
+@Controller
+@RequestMapping(value = "/question")
+public class QuestionController extends BaseController<Question, Integer> {
+    @Resource
+    private QuestionService questionService;
+
+    @Override
+    public BaseService<Question, Integer> getService() {
+        return questionService;
+    }
+
+    @Autowired
+    public QuestionController(ObjectMapper mapper) {
+        this.mapper = mapper;
+    }
+
+    /**
+     * 发布问题
+     *
+     * @param question
+     * @return
+     */
+    @LogRecord
+    @ResponseBody
+    @PostMapping("/post")
+    public ObjectNode post(Question question) {
+        json = mapper.createObjectNode();
+        User user = userService.getUser();
+        question.setId(null);
+        if (!StringTools.checkNullStr(question.getTitle())
+                && !StringTools.checkNullStr(question.getDescription())
+        ) {
+            question.setTitle(StringTools.killHTML(question.getTitle().trim()));
+            question.setDescription(question.getDescription().trim());
+            question.setTime(new Date());
+            question.setQuizzer(user);
+            if (question.getPrice() != null && question.getPrice() < 0)
+                question.setPrice(0.00);
+            json = add(question);
+        } else {
+            json.put(STATUS_NAME, STATUS_CODE_FILED);
+        }
+        return json;
+    }
+}
