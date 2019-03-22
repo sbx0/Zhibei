@@ -415,7 +415,10 @@ function query() {
                         for (var key in objects[i]) {
                             if (objects[i][key] == null) continue;
                             if (objects[i][key] instanceof Object) {
-                                objects[i][key] = objects[i]['id'];
+                                if (objects[i][key]['name'] != undefined)
+                                    objects[i][key] = objects[i][key]['name'];
+                                else
+                                    objects[i][key] = objects[i][key]['id'];
                             } else {
                                 if (objects[i][key].length != null && objects[i][key].length > 50) {
                                     objects[i][key] = objects[i][key].substr(0, 50);
