@@ -59,12 +59,18 @@ public class UserService extends BaseService<User, Integer> {
      */
     public boolean data(User oldUser) {
         User user = getUser();
-        user.setNickname(StringTools.killHTML(oldUser.getNickname().trim()));
-        user.setIntroduction(StringTools.killHTML(oldUser.getIntroduction().trim()));
-        user.setBirthday(oldUser.getBirthday());
-        user.setEmail(oldUser.getEmail());
-        user.setPhone(oldUser.getPhone());
-        user.setSex(oldUser.getSex());
+        if (oldUser.getNickname() != null)
+            user.setNickname(StringTools.killHTML(oldUser.getNickname().trim()));
+        if (oldUser.getIntroduction() != null)
+            user.setIntroduction(StringTools.killHTML(oldUser.getIntroduction().trim()));
+        if (oldUser.getBirthday() != null)
+            user.setBirthday(oldUser.getBirthday());
+        if (oldUser.getEmail() != null)
+            user.setEmail(oldUser.getEmail());
+        if (oldUser.getPhone() != null)
+            user.setPhone(oldUser.getPhone());
+        if (oldUser.getSex() != null)
+            user.setSex(oldUser.getSex());
         try {
             return save(user);
         } catch (Exception e) {
