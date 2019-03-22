@@ -43,6 +43,11 @@ public class PermissionController extends BaseController<Permission, Integer> {
     @Autowired
     WebApplicationContext applicationContext;
 
+    /**
+     * 初始化权限字符串
+     *
+     * @return
+     */
     @LogRecord
     @ResponseBody
     @GetMapping(value = "/initialize")

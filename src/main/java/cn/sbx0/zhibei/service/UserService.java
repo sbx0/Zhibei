@@ -160,27 +160,24 @@ public class UserService extends BaseService<User, Integer> {
             if (permission.getUrl().equals("*")) return true; // * 匹配所有
             if (permission.getUrl().equals(path)) { // 权限url与path匹配
                 if (permission.getStr().equals("*")) return true; // * 匹配所有
-                if (permission.getStr().equals("0")) { // 一般是页面 0 否
-                    return false;
-                } else if (permission.getStr().equals("1")) { // 1 是
+                if (permission.getStr().equals("1111")) { // 1111 是
                     return true;
+                }
+                path = path.substring(1); // /article/list -> article/list
+                String pathType = path.split("/")[1]; // article/list -> list
+                if (permission.getStr().equals("*")) return true;
+                char[] pathCharArray = methodTypeToBinary(pathType).toCharArray(); // list -> 0001
+                char[] permissionCharArray = permission.getStr().toCharArray(); // 0001 / 0010 / 0011 / ...
+                for (int i = 0; i < 4; i++) {
+                    if (pathCharArray[i] == permissionCharArray[i]) {
+                        return true;
+                    }
                 }
             } else {
                 String url = permission.getUrl().substring(1); // /article/* -> article/*
                 String urlType = url.split("/")[1]; // article/* -> *
-                if (!path.split("/")[0].equals(permission.getUrl().split("/")[0])) {
-                    return false;
-                }
-                if (!urlType.equals("*")) return false;
-            }
-            path = path.substring(1); // /article/list -> article/list
-            String pathType = path.split("/")[1]; // article/list -> list
-            if (permission.getStr().equals("*")) return true;
-            char[] pathCharArray = methodTypeToBinary(pathType).toCharArray(); // list -> 0001
-            char[] permissionCharArray = permission.getStr().toCharArray(); // 0001 / 0010 / 0011 / ...
-            for (int i = 0; i < 4; i++) {
-                if (pathCharArray[i] != permissionCharArray[i]) {
-                    return false;
+                if (path.split("/")[0].equals(permission.getUrl().split("/")[0]) && urlType.equals("*")) {
+                    return true;
                 }
             }
         }
