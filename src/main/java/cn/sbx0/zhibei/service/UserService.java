@@ -173,8 +173,8 @@ public class UserService extends BaseService<User, Integer> {
             char[] pathCharArray = methodTypeToBinary(pathType).toCharArray(); // list -> 0001
             char[] permissionCharArray = permission.getStr().toCharArray(); // 0001 / 0010 / 0011 / ...
             for (int i = 0; i < 4; i++) {
-                if (pathCharArray[i] == permissionCharArray[i]) {
-                    return true;
+                if (pathCharArray[i] != permissionCharArray[i]) {
+                    return false;
                 }
             }
         }
