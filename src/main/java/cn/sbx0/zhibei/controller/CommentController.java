@@ -96,6 +96,16 @@ public class CommentController extends BaseController<Comment, Integer> {
         return json;
     }
 
+    /**
+     * 根据用户查询评论
+     *
+     * @param id
+     * @param page
+     * @param size
+     * @param attribute
+     * @param direction
+     * @return
+     */
     @LogRecord
     @ResponseBody
     @GetMapping("/load/user")

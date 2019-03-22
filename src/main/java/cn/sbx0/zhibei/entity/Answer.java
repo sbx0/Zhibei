@@ -1,11 +1,13 @@
 package cn.sbx0.zhibei.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 回答 实体类
@@ -28,6 +30,12 @@ public class Answer implements Serializable {
     @Lob
     @Column(nullable = false)
     private String content; // 内容
+
+
+    @JsonView(JsonViewInterface.Simple.class)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
+    @Column(nullable = false)
+    private Date time; // 时间
 
     @JsonView(JsonViewInterface.Simple.class)
     @ManyToOne(cascade = {CascadeType.MERGE}, targetEntity = User.class, optional = false)
@@ -58,6 +66,7 @@ public class Answer implements Serializable {
         return "Answer{" +
                 "id=" + id +
                 ", content='" + content + '\'' +
+                ", time=" + time +
                 ", answerer=" + answerer +
                 ", question=" + question +
                 ", likes=" + likes +
@@ -84,6 +93,14 @@ public class Answer implements Serializable {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public Date getTime() {
+        return time;
+    }
+
+    public void setTime(Date time) {
+        this.time = time;
     }
 
     public User getAnswerer() {
