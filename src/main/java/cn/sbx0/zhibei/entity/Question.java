@@ -41,7 +41,7 @@ public class Question implements Serializable {
 
     @JsonView(JsonViewInterface.Simple.class)
     @Column(columnDefinition = "Decimal(10,2) default '0.00'")
-    private Double price; // 金额 付给指定回答的人 或者 最佳答案的人
+    private Double price; // 赏金 付给指定回答的人 或者 最佳答案的人
 
     @JsonView(JsonViewInterface.Simple.class)
     @ManyToOne(cascade = {CascadeType.MERGE}, targetEntity = User.class, optional = false)

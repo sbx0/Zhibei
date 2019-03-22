@@ -49,7 +49,12 @@
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
                     <h6>{{i18N.admin_message}}</h6>
                     <!--选择表的下拉栏-->
-                    <div class="btn-toolbar mb-2 mb-md-0">
+                    <div class="btn-toolbar mb-md-0">
+                        <select id="i18N_select" class="form-control-sm container mb-3">
+                            <option :value="option.name" v-for="option in i18N.lib">{{option.value}}</option>
+                        </select>
+                    </div>
+                    <div class="btn-toolbar mb-md-0">
                         <select id="table_select" class="form-control-sm">
                             <option :value="key" v-for="(table,key) in i18N.table">
                                 {{key}} {{table}}{{i18N.table_init}}
@@ -261,9 +266,6 @@
                         </nav>
                     </div>
                 </div>
-                <select id="i18N_select" class="form-control-sm container mb-3">
-                    <option :value="option.name" v-for="option in i18N.lib">{{option.value}}</option>
-                </select>
             </main>
         </div>
     </div>

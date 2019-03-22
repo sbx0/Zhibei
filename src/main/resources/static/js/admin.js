@@ -15,7 +15,7 @@ var main = new Vue({
         table: "user", // 默认表
         index: 1, // 用于分页显示逻辑
         page: 1, // 当前页数
-        size: 10, // 每页条数
+        size: 100, // 每页条数
         attribute: "id", // 默认按编号属性排序
         direction: "ASC", // 默认正序
         total_pages: 0, // 结果一共有多少页
@@ -25,21 +25,23 @@ var main = new Vue({
         modal_data: [], // 用于模版显示的数据
         // 表数据
         table_data: {
-            user: {name: i18N.table.user, value: "user", data: {}},
-            role: {name: i18N.table.role, value: "role", data: {}},
-            permission: {name: i18N.table.permission, value: "permission", data: {}},
-            certification: {name: i18N.table.certification, value: "certification", data: {}},
-            file: {name: i18N.table.file, value: "file", data: {}},
-            log: {name: i18N.table.log, value: "log", data: {}},
-            article: {name: i18N.table.article, value: "article", data: {}},
-            comment: {name: i18N.table.comment, value: "comment", data: {}},
-            category: {name: i18N.table.category, value: "category", data: {}},
-            demand: {name: i18N.table.demand, value: "demand", data: {}},
-            tag: {name: i18N.table.tag, value: "tag", data: {}},
-            verify: {name: i18N.table.verify, value: "verify", data: {}},
-            message: {name: i18N.table.message, value: "message", data: {}},
             alipay: {name: i18N.table.alipay, value: "alipay", data: {}},
+            answer: {name: i18N.table.answer, value: "answer", data: {}},
+            article: {name: i18N.table.article, value: "article", data: {}},
+            category: {name: i18N.table.category, value: "category", data: {}},
+            certification: {name: i18N.table.certification, value: "certification", data: {}},
+            comment: {name: i18N.table.comment, value: "comment", data: {}},
+            demand: {name: i18N.table.demand, value: "demand", data: {}},
+            log: {name: i18N.table.log, value: "log", data: {}},
+            message: {name: i18N.table.message, value: "message", data: {}},
+            permission: {name: i18N.table.permission, value: "permission", data: {}},
             product: {name: i18N.table.product, value: "product", data: {}},
+            question: {name: i18N.table.question, value: "question", data: {}},
+            role: {name: i18N.table.role, value: "role", data: {}},
+            tag: {name: i18N.table.tag, value: "tag", data: {}},
+            file: {name: i18N.table.file, value: "file", data: {}},
+            user: {name: i18N.table.user, value: "user", data: {}},
+            verify: {name: i18N.table.verify, value: "verify", data: {}},
             wallet: {name: i18N.table.wallet, value: "wallet", data: {}},
         },
     },
@@ -53,7 +55,6 @@ var main = new Vue({
         }
     },
     create: function () {
-
     }
 });
 
@@ -74,22 +75,24 @@ function build(data) {
             }
         }
         if (
-            attribute.type === 'Role'
-            || attribute.type === 'User'
-            || attribute.type === 'Permission'
-            || attribute.type === 'Certification'
-            || attribute.type === 'Log'
-            || attribute.type === 'UploadFile'
-            || attribute.type === 'Article'
-            || attribute.type === 'Comment'
-            || attribute.type === 'Category'
-            || attribute.type === 'Tag'
-            || attribute.type === 'Demand'
-            || attribute.type === 'Verify'
-            || attribute.type === 'Message'
-            || attribute.type === 'Alipay'
-            || attribute.type === 'Product'
-            || attribute.type === 'Wallet'
+            attribute.type.toLowerCase() === 'alipay'
+            || attribute.type.toLowerCase() === 'answer'
+            || attribute.type.toLowerCase() === 'article'
+            || attribute.type.toLowerCase() === 'category'
+            || attribute.type.toLowerCase() === 'certification'
+            || attribute.type.toLowerCase() === 'comment'
+            || attribute.type.toLowerCase() === 'demand'
+            || attribute.type.toLowerCase() === 'log'
+            || attribute.type.toLowerCase() === 'message'
+            || attribute.type.toLowerCase() === 'permission'
+            || attribute.type.toLowerCase() === 'product'
+            || attribute.type.toLowerCase() === 'question'
+            || attribute.type.toLowerCase() === 'role'
+            || attribute.type.toLowerCase() === 'tag'
+            || attribute.type.toLowerCase() === 'file'
+            || attribute.type.toLowerCase() === 'user'
+            || attribute.type.toLowerCase() === 'verify'
+            || attribute.type.toLowerCase() === 'wallet'
         ) {
             getData(attribute.type.toLowerCase());
             if (data[attribute.name] != null) data[attribute.name] = data[attribute.name]["id"];
@@ -371,10 +374,10 @@ function query() {
         main.page = 1;
     }
     if (main.size == null) {
-        main.size = 10;
+        main.size = 100;
     }
     if (main.size < 1 || main.size > 1000) {
-        main.size = 10;
+        main.size = 100;
     }
     // 获取表头
     $.ajax({
