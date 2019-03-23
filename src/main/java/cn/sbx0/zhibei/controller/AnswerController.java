@@ -2,8 +2,7 @@ package cn.sbx0.zhibei.controller;
 
 import cn.sbx0.zhibei.annotation.LogRecord;
 import cn.sbx0.zhibei.entity.*;
-import cn.sbx0.zhibei.service.AnswerService;
-import cn.sbx0.zhibei.service.BaseService;
+import cn.sbx0.zhibei.service.*;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -17,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -27,6 +28,12 @@ import java.util.List;
 public class AnswerController extends BaseController<Answer, Integer> {
     @Resource
     private AnswerService answerService;
+    @Resource
+    private QuestionService questionService;
+    @Resource
+    private WalletService walletService;
+    @Resource
+    private MessageService messageService;
 
     @Override
     public BaseService<Answer, Integer> getService() {
@@ -52,9 +59,30 @@ public class AnswerController extends BaseController<Answer, Integer> {
         json = mapper.createObjectNode();
         User user = userService.getUser();
         if (user != null) {
+            // 同一问题只能回答一次
             if (answerService.existsByQuestionAndAnswerer(q_id, user.getId())) {
                 json.put(STATUS_NAME, STATUS_CODE_REPEAT);
                 return json;
+            }
+            Question question = questionService.findById(q_id);
+            // 指定用户问题只能指定用户回答
+            if (question.getAppoint() != null && !question.getAppoint().getId().equals(user.getId())) {
+                json.put(STATUS_NAME, STATUS_CODE_NO_PERMISSION);
+                return json;
+            }
+            // 指定用户回答即可获得奖励
+            if (question.getAppoint() != null && question.getAppoint().getId().equals(user.getId())) {
+                Wallet wallet = walletService.getUserWallet(question.getAppoint());
+                wallet.setMoney(wallet.getMoney() + question.getPrice());
+                if (walletService.save(wallet)) {
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
+                    if (messageService.sendNotice("系统通知：您已于 " + sdf.format(new Date()) + " 收到付费问答 <" + question.getTitle() + "> 的回答奖励 " + question.getPrice() + "￥，账户余额" + (int) (wallet.getMoney() * 100) / 100.0 + "￥。", question.getAppoint())) {
+                        json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
+                    } else {
+                        json.put(STATUS_NAME, STATUS_CODE_FILED);
+                        return json;
+                    }
+                }
             }
             if (answerService.post(answer, q_id, user)) {
                 json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
