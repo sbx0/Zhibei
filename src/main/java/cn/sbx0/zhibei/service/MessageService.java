@@ -2,10 +2,13 @@ package cn.sbx0.zhibei.service;
 
 import cn.sbx0.zhibei.dao.MessageDao;
 import cn.sbx0.zhibei.entity.Message;
+import cn.sbx0.zhibei.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -17,6 +20,8 @@ import java.util.Date;
 public class MessageService extends BaseService<Message, Integer> {
     @Resource
     private MessageDao messageDao;
+    @Resource
+    private UserService userService;
 
     @Override
     public PagingAndSortingRepository<Message, Integer> getDao() {
@@ -26,6 +31,32 @@ public class MessageService extends BaseService<Message, Integer> {
     @Override
     public Message getEntity() {
         return new Message();
+    }
+
+    /**
+     * 向用户发送通知
+     *
+     * @param msg
+     * @param user
+     * @return
+     */
+    @Transactional
+    public boolean sendNotice(String msg, User user) {
+        Message message = new Message();
+        message.setType("msg");
+        message.setSendTime(new Date());
+        message.setIp("0.0.0.0");
+        message.setContent(msg);
+        message.setSendUser(userService.findByName("admin"));
+        message.setReceiveUser(user);
+        try {
+            messageDao.save(message);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return false;
+        }
     }
 
     /**

@@ -18,9 +18,6 @@ import java.util.Date;
 @DynamicUpdate
 public class Answer implements Serializable {
     private static final long serialVersionUID = -5728248622466922136L;
-    /**
-     * TODO Answer
-     */
     @JsonView(JsonViewInterface.Simple.class)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

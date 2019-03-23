@@ -43,6 +43,7 @@ public abstract class BaseController<T, ID> {
     static final int STATUS_CODE_REPEAT = 7; // 重复操作
     static final int STATUS_CODE_TIME_OUT = 8; // 超时
     static final int STATUS_CODE_PARAMETER_ERROR = 9; // 参数错误
+    static final int STATUS_CODE_INSUFFICIENT_BALANCE = 10; // 余额不足
     // JSON返回操作状态一览 End
     ObjectMapper mapper;
     protected ObjectNode json;

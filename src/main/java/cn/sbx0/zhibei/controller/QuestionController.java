@@ -4,8 +4,11 @@ import cn.sbx0.zhibei.annotation.LogRecord;
 import cn.sbx0.zhibei.entity.JsonViewInterface;
 import cn.sbx0.zhibei.entity.Question;
 import cn.sbx0.zhibei.entity.User;
+import cn.sbx0.zhibei.entity.Wallet;
 import cn.sbx0.zhibei.service.BaseService;
+import cn.sbx0.zhibei.service.MessageService;
 import cn.sbx0.zhibei.service.QuestionService;
+import cn.sbx0.zhibei.service.WalletService;
 import cn.sbx0.zhibei.tool.StringTools;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -31,6 +35,11 @@ import java.util.List;
 public class QuestionController extends BaseController<Question, Integer> {
     @Resource
     private QuestionService questionService;
+    @Resource
+    private WalletService walletService;
+    @Resource
+    private MessageService messageService;
+
 
     @Override
     public BaseService<Question, Integer> getService() {
@@ -62,8 +71,38 @@ public class QuestionController extends BaseController<Question, Integer> {
             question.setDescription(question.getDescription().trim());
             question.setTime(new Date());
             question.setQuizzer(user);
-            if (question.getPrice() != null && question.getPrice() < 0)
-                question.setPrice(0.00);
+            if (question.getPrice() != null) {
+                if (question.getPrice() < 0) {
+                    question.setPrice(0.00);
+                } else if (question.getPrice() > 0) {
+                    Wallet wallet = walletService.getUserWallet(user);
+                    if (wallet.getMoney() > question.getPrice()) {
+                        wallet.setMoney(wallet.getMoney() - question.getPrice());
+                        if (walletService.save(wallet)) {
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
+                            if (messageService.sendNotice("系统通知：您于 " + sdf.format(question.getTime()) + " 花费" + question.getPrice() + "￥发布一篇付费提问，系统自动扣款，余额" + wallet.getMoney() + "￥，如有问题请回复。", user)) {
+                                json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
+                            } else {
+                                json.put(STATUS_NAME, STATUS_CODE_FILED);
+                            }
+                        } else {
+                            json.put(STATUS_NAME, STATUS_CODE_FILED);
+                        }
+                    } else {
+                        json.put(STATUS_NAME, STATUS_CODE_INSUFFICIENT_BALANCE);
+                        return json;
+                    }
+                }
+            }
+            if (question.getAppoint() != null) {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
+                if (messageService.sendNotice("系统通知：您于 " + sdf.format(question.getTime()) + " 收到一篇付费问答 <" + question.getTitle() + "> ，回答即可获得 " + question.getPrice() + "￥。", question.getAppoint())) {
+                    json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
+                } else {
+                    json.put(STATUS_NAME, STATUS_CODE_FILED);
+                    return json;
+                }
+            }
             json = add(question);
         } else {
             json.put(STATUS_NAME, STATUS_CODE_FILED);

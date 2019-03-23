@@ -1,9 +1,7 @@
 package cn.sbx0.zhibei.controller;
 
 import cn.sbx0.zhibei.annotation.LogRecord;
-import cn.sbx0.zhibei.entity.Answer;
-import cn.sbx0.zhibei.entity.JsonViewInterface;
-import cn.sbx0.zhibei.entity.User;
+import cn.sbx0.zhibei.entity.*;
 import cn.sbx0.zhibei.service.AnswerService;
 import cn.sbx0.zhibei.service.BaseService;
 import com.fasterxml.jackson.databind.MapperFeature;
@@ -54,6 +52,10 @@ public class AnswerController extends BaseController<Answer, Integer> {
         json = mapper.createObjectNode();
         User user = userService.getUser();
         if (user != null) {
+            if (answerService.existsByQuestionAndAnswerer(q_id, user.getId())) {
+                json.put(STATUS_NAME, STATUS_CODE_REPEAT);
+                return json;
+            }
             if (answerService.post(answer, q_id, user)) {
                 json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
             } else {

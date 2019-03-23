@@ -36,6 +36,17 @@ public class AnswerService extends BaseService<Answer, Integer> {
     }
 
     /**
+     * 判断该用户是否已经回答过该问题了
+     *
+     * @param p_id
+     * @return
+     */
+    public boolean existsByQuestionAndAnswerer(Integer p_id, Integer u_id) {
+        String result = answerDao.existsByQuestionAndAnswerer(p_id, u_id);
+        return result != null;
+    }
+
+    /**
      * 发布回答
      *
      * @param answer
