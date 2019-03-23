@@ -60,6 +60,6 @@ public interface MessageDao extends PagingAndSortingRepository<Message, Integer>
      */
     @Modifying
     @Transactional
-    @Query(value = "UPDATE Message m SET m.receiveTime = CURRENT_DATE WHERE m.sendUser.id = ?1 AND m.receiveUser.id = ?2 AND m.receiveTime = null")
+    @Query(value = "UPDATE Message m SET m.receiveTime = CURRENT_TIMESTAMP WHERE m.sendUser.id = ?1 AND m.receiveUser.id = ?2 AND m.receiveTime = null")
     void readByUser(Integer sendUserId, Integer receiveUserId);
 }

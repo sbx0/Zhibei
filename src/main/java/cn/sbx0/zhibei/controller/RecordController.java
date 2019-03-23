@@ -35,6 +35,8 @@ public class RecordController extends BaseController<Record, Integer> {
     private UserService userService;
     @Resource
     private MessageService messageService;
+    @Resource
+    private AnswerService answerService;
 
     @Override
     public BaseService<Record, Integer> getService() {
@@ -114,6 +116,10 @@ public class RecordController extends BaseController<Record, Integer> {
                     return json;
                 }
             }
+            if (!answerService.existsByQuestionAndAnswerer(question.getId(), question.getAppoint().getId())) {
+                json.put(STATUS_NAME, STATUS_CODE_NOT_FOUND);
+                return json;
+            }
             Record oldRecord = recordService.findByPathAndUser(url, user.getId());
             if (oldRecord != null) {
                 json.put(STATUS_NAME, STATUS_CODE_REPEAT);
@@ -168,7 +174,12 @@ public class RecordController extends BaseController<Record, Integer> {
             record.setTime(new Date());
             record.setPath(url);
             if (recordService.save(record)) {
-                json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
+                if (!messageService.sendNotice("系统通知：您已于 " + sdf.format(new Date()) + " 成功购买 <" + question.getTitle() + "> 的查看权力，花费 " + money + "￥，账户余额" + (int) (quizzerWallet.getMoney() * 100) / 100.0 + "￥。", record.getUser())) {
+                    json.put(STATUS_NAME, STATUS_CODE_FILED);
+                    return json;
+                } else {
+                    json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
+                }
             } else {
                 json.put(STATUS_NAME, STATUS_CODE_FILED);
             }

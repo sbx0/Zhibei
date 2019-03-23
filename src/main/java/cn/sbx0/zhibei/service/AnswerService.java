@@ -68,7 +68,6 @@ public class AnswerService extends BaseService<Answer, Integer> {
         answer.setTime(new Date());
         answer.setDislikes(0);
         answer.setLikes(0);
-        answer.setTop(0);
         answer.setAnswerer(user);
         answer.setQuestion(q);
         return save(answer);

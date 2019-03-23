@@ -74,6 +74,7 @@ public class AnswerController extends BaseController<Answer, Integer> {
             if (question.getAppoint() != null && question.getAppoint().getId().equals(user.getId())) {
                 Wallet wallet = walletService.getUserWallet(question.getAppoint());
                 wallet.setMoney(wallet.getMoney() + question.getPrice());
+                answer.setTop(1);
                 if (walletService.save(wallet)) {
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
                     if (messageService.sendNotice("系统通知：您已于 " + sdf.format(new Date()) + " 收到付费问答 <" + question.getTitle() + "> 的回答奖励 " + question.getPrice() + "￥，账户余额" + (int) (wallet.getMoney() * 100) / 100.0 + "￥。", question.getAppoint())) {
@@ -83,6 +84,8 @@ public class AnswerController extends BaseController<Answer, Integer> {
                         return json;
                     }
                 }
+            } else {
+                answer.setTop(0);
             }
             if (answerService.post(answer, q_id, user)) {
                 json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
