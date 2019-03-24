@@ -14,36 +14,44 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "CERTIFICATIONS")
-@JsonView(JsonViewInterface.Normal.class)
 @DynamicInsert
 @DynamicUpdate
 public class Certification implements Serializable {
     private static final long serialVersionUID = -6064596742915995996L;
 
+    @JsonView(JsonViewInterface.Simple.class)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id; // id
 
+    @JsonView(JsonViewInterface.Simple.class)
     @Column(nullable = false, unique = true, length = 30)
     private String info; // 认证信息
 
+    @JsonView(JsonViewInterface.Simple.class)
     @Column(columnDefinition = "enum('personal','admin','enterprise','university','mechanism')")
     private String type; // 类型 [个人|管理员|企业|院校|机构]
 
+    @JsonView(JsonViewInterface.Simple.class)
     private Boolean passed = Boolean.FALSE; // 是否通过
 
+    @JsonView(JsonViewInterface.Simple.class)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     private Date startTime; // 开始时间
 
+    @JsonView(JsonViewInterface.Simple.class)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     private Date endTime; // 结束时间
 
+    @JsonView(JsonViewInterface.Simple.class)
     @ManyToOne(cascade = {CascadeType.MERGE}, targetEntity = User.class, optional = false)
     private User user;
 
+    @JsonView(JsonViewInterface.Normal.class)
     @Column(nullable = false)
     private String license; // 营业执照 或 机构名称 或 身份证信息
 
+    @JsonView(JsonViewInterface.Normal.class)
     @Column(nullable = false)
     private String img; // 申请文件
 

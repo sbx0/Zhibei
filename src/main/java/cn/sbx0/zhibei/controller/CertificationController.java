@@ -49,7 +49,7 @@ public class CertificationController extends BaseController<Certification, Integ
     @GetMapping("/user")
     public ObjectNode user(Integer id) {
         mapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION);
-        mapper.setConfig(mapper.getSerializationConfig().withView(JsonViewInterface.Normal.class));
+        mapper.setConfig(mapper.getSerializationConfig().withView(JsonViewInterface.Simple.class));
         json = mapper.createObjectNode();
         Certification certification = certificationService.findByUserAndPassed(id);
         if (certification != null && certification.getPassed() != null && certification.getPassed()) {
