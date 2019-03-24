@@ -8,6 +8,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 需求 实体类
@@ -45,8 +46,9 @@ public class Demand implements Serializable {
     @Column(nullable = false, columnDefinition = "Decimal(65,2) default '0.0'")
     private Double budget; // 预算
 
-    @ManyToOne(cascade = {CascadeType.MERGE}, targetEntity = Category.class, optional = false)
-    private Category category; // 分类
+    @JsonView(JsonViewInterface.Simple.class)
+    @ManyToMany(cascade = {CascadeType.MERGE}, targetEntity = Tag.class)
+    private List<Tag> tags; // 标签
 
     @ManyToOne(cascade = {CascadeType.MERGE}, targetEntity = User.class, optional = false)
     private User poster; // 发布人
@@ -61,7 +63,7 @@ public class Demand implements Serializable {
                 ", content='" + content + '\'' +
                 ", endTime=" + endTime +
                 ", budget=" + budget +
-                ", category=" + category +
+                ", tags=" + tags +
                 ", poster=" + poster +
                 '}';
     }
@@ -126,12 +128,12 @@ public class Demand implements Serializable {
         this.budget = budget;
     }
 
-    public Category getCategory() {
-        return category;
+    public List<Tag> getTags() {
+        return tags;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
     }
 
     public User getPoster() {
