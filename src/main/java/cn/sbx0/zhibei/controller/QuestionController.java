@@ -1,5 +1,6 @@
 package cn.sbx0.zhibei.controller;
 
+import cn.sbx0.zhibei.annotation.ExpFunction;
 import cn.sbx0.zhibei.annotation.LogRecord;
 import cn.sbx0.zhibei.entity.JsonViewInterface;
 import cn.sbx0.zhibei.entity.Question;
@@ -57,6 +58,7 @@ public class QuestionController extends BaseController<Question, Integer> {
      * @param question
      * @return
      */
+    @ExpFunction(value = "10")
     @LogRecord
     @ResponseBody
     @PostMapping("/post")

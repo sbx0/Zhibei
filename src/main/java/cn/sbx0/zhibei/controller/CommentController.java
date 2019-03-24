@@ -1,5 +1,6 @@
 package cn.sbx0.zhibei.controller;
 
+import cn.sbx0.zhibei.annotation.ExpFunction;
 import cn.sbx0.zhibei.annotation.LogRecord;
 import cn.sbx0.zhibei.entity.Comment;
 import cn.sbx0.zhibei.entity.JsonViewInterface;
@@ -47,6 +48,7 @@ public class CommentController extends BaseController<Comment, Integer> {
      * @param comment
      * @return
      */
+    @ExpFunction(value = "5")
     @LogRecord
     @ResponseBody
     @PostMapping("/post")

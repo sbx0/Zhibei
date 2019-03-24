@@ -1,5 +1,6 @@
 package cn.sbx0.zhibei.controller;
 
+import cn.sbx0.zhibei.annotation.ExpFunction;
 import cn.sbx0.zhibei.annotation.LogRecord;
 import cn.sbx0.zhibei.entity.Demand;
 import cn.sbx0.zhibei.entity.JsonViewInterface;
@@ -112,6 +113,7 @@ public class DemandController extends BaseController<Demand, Integer> {
      * @param demand
      * @return
      */
+    @ExpFunction(value = "25")
     @LogRecord
     @ResponseBody
     @PostMapping("/post")
