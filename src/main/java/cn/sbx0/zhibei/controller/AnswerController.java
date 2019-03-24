@@ -45,6 +45,61 @@ public class AnswerController extends BaseController<Answer, Integer> {
         this.mapper = mapper;
     }
 
+    @LogRecord
+    @ResponseBody
+    @GetMapping("/best")
+    public ObjectNode choseTheBest(Integer id) {
+        json = mapper.createObjectNode();
+
+        User user = userService.getUser();
+
+        if (user == null) {
+            json.put(STATUS_NAME, STATUS_CODE_NOT_LOGIN);
+            return json;
+        }
+
+        Answer answer = answerService.findById(id);
+
+        if (!user.getId().equals(answer.getQuestion().getQuizzer().getId())) {
+            json.put(STATUS_NAME, STATUS_CODE_NO_PERMISSION);
+            return json;
+        }
+
+        answer.setTop(1);
+
+        Question question = answer.getQuestion();
+        question.setStatus(1);
+
+        Wallet wallet = walletService.getUserWallet(answer.getAnswerer());
+        wallet.setMoney(wallet.getMoney() + question.getPrice());
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        if (messageService.sendNotice("系统通知：您在问题 <" + question.getTitle() + "> 中的回答于 " + sdf.format(new Date()) + " 被评为“全场最佳”，获得奖励 " + question.getPrice() + "￥。", answer.getAnswerer())) {
+            json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
+        } else {
+            json.put(STATUS_NAME, STATUS_CODE_FILED);
+        }
+
+        question.setPrice(0.0);
+
+        if (!questionService.save(question)) {
+            json.put(STATUS_NAME, STATUS_CODE_FILED);
+            return json;
+        }
+
+        if (!answerService.save(answer)) {
+            json.put(STATUS_NAME, STATUS_CODE_FILED);
+            return json;
+        }
+
+        if (!walletService.save(wallet)) {
+            json.put(STATUS_NAME, STATUS_CODE_FILED);
+            return json;
+        }
+
+        return json;
+    }
+
     /**
      * 回答问题
      *
@@ -118,9 +173,15 @@ public class AnswerController extends BaseController<Answer, Integer> {
         Page<Answer> tPage = answerService.findByQuestion(id, (BaseService.buildPageable(page, size, attribute, direction)));
         List<Answer> tList = tPage.getContent();
         ArrayNode jsons = mapper.createArrayNode();
+        User user = userService.getUser();
         if (tList != null && tList.size() > 0) {
-            for (Answer c : tList) {
-                ObjectNode object = mapper.convertValue(c, ObjectNode.class);
+            for (Answer answer : tList) {
+                ObjectNode object = mapper.convertValue(answer, ObjectNode.class);
+                if (user != null) {
+                    if (user.getId().equals(answer.getQuestion().getQuizzer().getId())) {
+                        object.put("is_quizzer", true);
+                    }
+                }
                 jsons.add(object);
             }
             json.set("objects", jsons);

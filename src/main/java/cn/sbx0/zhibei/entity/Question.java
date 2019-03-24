@@ -56,12 +56,8 @@ public class Question implements Serializable {
     private List<Tag> tags; // 标签
 
     @JsonView(JsonViewInterface.Simple.class)
-    @ManyToOne(cascade = {CascadeType.MERGE}, targetEntity = Answer.class)
-    private Answer bestAnswer; // 全场最佳
-
-    @JsonView(JsonViewInterface.Simple.class)
     @Column(nullable = false)
-    private Integer status; // 状态 0 刚提交 1 有答案 2 有最佳 -1 关闭
+    private Integer status; // 状态 0 刚提交 1 有最佳 -1 关闭
 
     @Override
     public String toString() {
@@ -74,7 +70,6 @@ public class Question implements Serializable {
                 ", quizzer=" + quizzer +
                 ", appoint=" + appoint +
                 ", tags=" + tags +
-                ", bestAnswer=" + bestAnswer +
                 ", status=" + status +
                 '}';
     }
@@ -145,14 +140,6 @@ public class Question implements Serializable {
 
     public void setTags(List<Tag> tags) {
         this.tags = tags;
-    }
-
-    public Answer getBestAnswer() {
-        return bestAnswer;
-    }
-
-    public void setBestAnswer(Answer bestAnswer) {
-        this.bestAnswer = bestAnswer;
     }
 
     public Integer getStatus() {

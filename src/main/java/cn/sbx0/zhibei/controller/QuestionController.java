@@ -64,6 +64,7 @@ public class QuestionController extends BaseController<Question, Integer> {
         json = mapper.createObjectNode();
         User user = userService.getUser();
         question.setId(null);
+        question.setStatus(0);
         if (!StringTools.checkNullStr(question.getTitle())
                 && !StringTools.checkNullStr(question.getDescription())
         ) {
@@ -95,12 +96,14 @@ public class QuestionController extends BaseController<Question, Integer> {
                 }
             }
             if (question.getAppoint() != null) {
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
-                if (messageService.sendNotice("系统通知：您于 " + sdf.format(question.getTime()) + " 收到一篇付费问答 <" + question.getTitle() + "> ，回答即可获得 " + question.getPrice() + "￥。", question.getAppoint())) {
-                    json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
-                } else {
-                    json.put(STATUS_NAME, STATUS_CODE_FILED);
-                    return json;
+                if (question.getPrice() > 1) {
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
+                    if (messageService.sendNotice("系统通知：您于 " + sdf.format(question.getTime()) + " 收到一篇付费问答 <" + question.getTitle() + "> ，回答即可获得 " + question.getPrice() + "￥。", question.getAppoint())) {
+                        json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
+                    } else {
+                        json.put(STATUS_NAME, STATUS_CODE_FILED);
+                        return json;
+                    }
                 }
             }
             json = add(question);
