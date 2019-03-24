@@ -149,7 +149,7 @@ public class ArticleController extends BaseController<Article, Integer> {
         mapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION);
         mapper.setConfig(mapper.getSerializationConfig().withView(JsonViewInterface.Simple.class));
         json = mapper.createObjectNode();
-        Page<Article> tPage = articleService.findByTag(id, (BaseService.buildPageable(page, size, attribute, direction)));
+        Page<Article> tPage = articleService.findByTag(id, (BaseService.buildPageable(page, size, "a.time", direction)));
         List<Article> tList = tPage.getContent();
         ArrayNode jsons = mapper.createArrayNode();
         if (tList != null && tList.size() > 0) {

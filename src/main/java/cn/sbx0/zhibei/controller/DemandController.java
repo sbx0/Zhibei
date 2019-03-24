@@ -43,6 +43,47 @@ public class DemandController extends BaseController<Demand, Integer> {
         this.mapper = mapper;
     }
 
+    /**
+     * 标签页获取需求
+     *
+     * @param page
+     * @param size
+     * @param attribute
+     * @param direction
+     * @return
+     */
+    @LogRecord
+    @ResponseBody
+    @GetMapping("/tag")
+    public ObjectNode tag(Integer id, Integer page, Integer size, String attribute, String direction) {
+        mapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION);
+        mapper.setConfig(mapper.getSerializationConfig().withView(JsonViewInterface.Simple.class));
+        json = mapper.createObjectNode();
+        Page<Demand> tPage = demandService.findByTag(id, (BaseService.buildPageable(page, size, "d.time", direction)));
+        List<Demand> tList = tPage.getContent();
+        ArrayNode jsons = mapper.createArrayNode();
+        if (tList != null && tList.size() > 0) {
+            for (Demand t : tList) {
+                ObjectNode object = mapper.convertValue(t, ObjectNode.class);
+                jsons.add(object);
+            }
+            json.set("objects", jsons);
+        } else {
+            json.set("objects", null);
+        }
+        return json;
+    }
+
+    /**
+     * 用户页获取需求
+     *
+     * @param id
+     * @param page
+     * @param size
+     * @param attribute
+     * @param direction
+     * @return
+     */
     @LogRecord
     @ResponseBody
     @GetMapping("/user")

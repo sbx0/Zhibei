@@ -28,6 +28,6 @@ public interface DemandDao extends PagingAndSortingRepository<Demand, Integer> {
      * @param pageable
      * @return
      */
-    @Query(value = "select * from demands d1 where d1.id in (select dt1.demand_id from demands_tags dt1 where dt1.tags_id = ?1) union select * from demands d2 where d2.id in (select dt2.demand_id from demands_tags dt2 where dt2.tags_id in (select t2.id from tags t2 where t2.father_id = ?1))", nativeQuery = true)
+    @Query(value = "select * from (select * from demands d1 where d1.id in (select dt1.demand_id from demands_tags dt1 where dt1.tags_id = ?1) union select * from demands d2 where d2.id in (select dt2.demand_id from demands_tags dt2 where dt2.tags_id in (select t2.id from tags t2 where t2.father_id = ?1))) as d order by d.time", nativeQuery = true)
     Page<Demand> findByTag(Integer t_id, Pageable pageable);
 }

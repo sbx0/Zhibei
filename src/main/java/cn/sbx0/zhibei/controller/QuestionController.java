@@ -129,7 +129,7 @@ public class QuestionController extends BaseController<Question, Integer> {
         mapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION);
         mapper.setConfig(mapper.getSerializationConfig().withView(JsonViewInterface.Simple.class));
         json = mapper.createObjectNode();
-        Page<Question> tPage = questionService.findByTag(id, (BaseService.buildPageable(page, size, attribute, direction)));
+        Page<Question> tPage = questionService.findByTag(id, (BaseService.buildPageable(page, size, "q.time", direction)));
         List<Question> tList = tPage.getContent();
         ArrayNode jsons = mapper.createArrayNode();
         if (tList != null && tList.size() > 0) {

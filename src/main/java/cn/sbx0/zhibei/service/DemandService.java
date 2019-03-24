@@ -38,4 +38,14 @@ public class DemandService extends BaseService<Demand, Integer> {
         return demandDao.findByPoster(id, buildPageable);
     }
 
+    /**
+     * 根据标签查询需求
+     *
+     * @param id
+     * @param buildPageable
+     * @return
+     */
+    public Page<Demand> findByTag(Integer id, Pageable buildPageable) {
+        return demandDao.findByTag(id, buildPageable);
+    }
 }
