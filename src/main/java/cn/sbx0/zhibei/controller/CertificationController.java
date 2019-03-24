@@ -39,6 +39,34 @@ public class CertificationController extends BaseController<Certification, Integ
     }
 
     /**
+     * 查看某用户的认证状态
+     *
+     * @param id
+     * @return
+     */
+    @LogRecord
+    @ResponseBody
+    @GetMapping("/user")
+    public ObjectNode user(Integer id) {
+        mapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION);
+        mapper.setConfig(mapper.getSerializationConfig().withView(JsonViewInterface.Normal.class));
+        json = mapper.createObjectNode();
+        Certification certification = certificationService.findByUserAndPassed(id);
+        if (certification != null && certification.getPassed() != null && certification.getPassed()) {
+            Date date = new Date();
+            if (certification.getEndTime() != null && certification.getEndTime().getTime() < date.getTime()) {
+                certificationService.delete(certification);
+            }
+            ObjectNode object = mapper.convertValue(certification, ObjectNode.class);
+            json.set("certification", object);
+            json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
+        } else {
+            json.put(STATUS_NAME, STATUS_CODE_NOT_FOUND);
+        }
+        return json;
+    }
+
+    /**
      * 获取当前申请状态
      *
      * @return
@@ -57,7 +85,6 @@ public class CertificationController extends BaseController<Certification, Integ
                 Date date = new Date();
                 if (certification.getEndTime() != null && certification.getEndTime().getTime() < date.getTime()) {
                     certificationService.delete(certification);
-                    certification.setPassed(false);
                 }
                 ObjectNode object = mapper.convertValue(certification, ObjectNode.class);
                 json.set("certification", object);

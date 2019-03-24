@@ -11,7 +11,7 @@ public interface CertificationDao extends PagingAndSortingRepository<Certificati
      * @param userId 用户ID
      * @return 有结果则存在 无则不存在
      */
-    @Query(value = "SELECT 1 FROM Certification c WHERE c.user.id = ?1 AND c.passed = NULL OR c.passed = true")
+    @Query(value = "SELECT 1 FROM Certification c WHERE c.user.id = ?1 AND (c.passed = NULL OR c.passed = true)")
     String existsByUserAndPassed(Integer userId);
 
     /**
@@ -20,6 +20,6 @@ public interface CertificationDao extends PagingAndSortingRepository<Certificati
      * @param userId 用户ID
      * @return 有结果则存在 无则不存在
      */
-    @Query(value = "FROM Certification c WHERE c.user.id = ?1 AND c.passed = NULL OR c.passed = true")
+    @Query(value = "FROM Certification c WHERE c.user.id = ?1 AND (c.passed = NULL OR c.passed = true)")
     Certification findByUserAndPassed(Integer userId);
 }

@@ -43,7 +43,6 @@ public class CertificationService extends BaseService<Certification, Integer> {
      * @return
      */
     public Certification findByUserAndPassed(Integer userId) {
-        Certification certification = certificationDao.findByUserAndPassed(userId);
-        return certification;
+        return certificationDao.findByUserAndPassed(userId);
     }
 }
