@@ -144,6 +144,37 @@ public class ArticleController extends BaseController<Article, Integer> {
      */
     @LogRecord
     @ResponseBody
+    @GetMapping("/tag")
+    public ObjectNode tag(Integer id, Integer page, Integer size, String attribute, String direction) {
+        mapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION);
+        mapper.setConfig(mapper.getSerializationConfig().withView(JsonViewInterface.Simple.class));
+        json = mapper.createObjectNode();
+        Page<Article> tPage = articleService.findByTag(id, (BaseService.buildPageable(page, size, attribute, direction)));
+        List<Article> tList = tPage.getContent();
+        ArrayNode jsons = mapper.createArrayNode();
+        if (tList != null && tList.size() > 0) {
+            for (Article t : tList) {
+                ObjectNode object = mapper.convertValue(t, ObjectNode.class);
+                jsons.add(object);
+            }
+            json.set("objects", jsons);
+        } else {
+            json.set("objects", null);
+        }
+        return json;
+    }
+
+    /**
+     * 用户页获取文章
+     *
+     * @param page
+     * @param size
+     * @param attribute
+     * @param direction
+     * @return
+     */
+    @LogRecord
+    @ResponseBody
     @GetMapping("/user")
     public ObjectNode user(Integer id, Integer page, Integer size, String attribute, String direction) {
         mapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION);

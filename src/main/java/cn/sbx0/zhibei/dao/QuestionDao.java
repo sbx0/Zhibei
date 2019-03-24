@@ -1,6 +1,7 @@
 package cn.sbx0.zhibei.dao;
 
 import cn.sbx0.zhibei.entity.Question;
+import cn.sbx0.zhibei.entity.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
@@ -16,4 +17,14 @@ public interface QuestionDao extends PagingAndSortingRepository<Question, Intege
      */
     @Query(value = "FROM Question q WHERE q.quizzer.id = ?1")
     Page<Question> findByQuizzer(Integer u_id, Pageable pageable);
+
+    /**
+     * 根据标签查询问题
+     *
+     * @param t_id
+     * @param pageable
+     * @return
+     */
+    @Query(value = "select * from questions q where q.id in (select question_id from questions_tags qt where qt.tags_id = ?1)", nativeQuery = true)
+    Page<Question> findByTag(Integer t_id, Pageable pageable);
 }

@@ -174,7 +174,7 @@ public class RecordController extends BaseController<Record, Integer> {
             record.setTime(new Date());
             record.setPath(url);
             if (recordService.save(record)) {
-                if (!messageService.sendNotice("系统通知：您已于 " + sdf.format(new Date()) + " 成功购买 <" + question.getTitle() + "> 的查看权力，花费 " + money + "￥，账户余额" + (int) (quizzerWallet.getMoney() * 100) / 100.0 + "￥。", record.getUser())) {
+                if (!messageService.sendNotice("系统通知：您已于 " + sdf.format(new Date()) + " 成功购买 <" + question.getTitle() + "> 的查看权力，花费 " + money + "￥，账户余额" + (int) (userWallet.getMoney() * 100) / 100.0 + "￥。", record.getUser())) {
                     json.put(STATUS_NAME, STATUS_CODE_FILED);
                     return json;
                 } else {

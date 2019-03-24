@@ -38,4 +38,15 @@ public class ArticleService extends BaseService<Article, Integer> {
         Page<Article> articles = articleDao.findByAuthor(userId, pageable);
         return articles;
     }
+
+    /**
+     * 根据标签查找文章
+     *
+     * @param id
+     * @param pageable
+     * @return
+     */
+    public Page<Article> findByTag(Integer id, Pageable pageable) {
+        return articleDao.findByTag(id, pageable);
+    }
 }

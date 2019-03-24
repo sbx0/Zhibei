@@ -18,4 +18,14 @@ public interface ArticleDao extends PagingAndSortingRepository<Article, Integer>
      */
     @Query(value = "FROM Article a WHERE a.author.id = ?1")
     Page<Article> findByAuthor(Integer userId, Pageable pageable);
+
+    /**
+     * 根据标签查询问题
+     *
+     * @param t_id
+     * @param pageable
+     * @return
+     */
+    @Query(value = "select * from articles a where a.id in (select article_id from articles_tags at where at.tags_id = ?1)", nativeQuery = true)
+    Page<Article> findByTag(Integer t_id, Pageable pageable);
 }

@@ -19,4 +19,23 @@ public interface TagDao extends PagingAndSortingRepository<Tag, Integer> {
      */
     @Query(value = "FROM Tag t WHERE t.name LIKE ?1")
     Page<Tag> findByName(String name, Pageable pageable);
+
+    /**
+     * 查找所有根标签
+     *
+     * @param pageable
+     * @return
+     */
+    @Query(value = "FROM Tag t WHERE t.father = null")
+    Page<Tag> findFather(Pageable pageable);
+
+    /**
+     * 根据父标签查询子标签
+     *
+     * @param f_id
+     * @param pageable
+     * @return
+     */
+    @Query(value = "FROM Tag t WHERE t.father.id = ?1")
+    Page<Tag> findByFather(Integer f_id, Pageable pageable);
 }

@@ -28,6 +28,27 @@ public class TagService extends BaseService<Tag, Integer> {
     }
 
     /**
+     * 查找所有一级标签
+     *
+     * @param pageable
+     * @return
+     */
+    public Page<Tag> findFather(Pageable pageable) {
+        return tagDao.findFather(pageable);
+    }
+
+    /**
+     * 根据父标签查找子标签
+     *
+     * @param f_id
+     * @param pageable
+     * @return
+     */
+    public Page<Tag> findByFather(Integer f_id, Pageable pageable) {
+        return tagDao.findByFather(f_id, pageable);
+    }
+
+    /**
      * 根据名称查询
      *
      * @param name

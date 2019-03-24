@@ -3,6 +3,7 @@ package cn.sbx0.zhibei.controller;
 import cn.sbx0.zhibei.annotation.LogRecord;
 import cn.sbx0.zhibei.entity.Tag;
 import cn.sbx0.zhibei.entity.JsonViewInterface;
+import cn.sbx0.zhibei.entity.User;
 import cn.sbx0.zhibei.service.BaseService;
 import cn.sbx0.zhibei.service.TagService;
 import com.fasterxml.jackson.databind.MapperFeature;
@@ -39,6 +40,66 @@ public class TagController extends BaseController<Tag, Integer> {
         this.mapper = mapper;
     }
 
+    /**
+     * 查找所有一级标签
+     *
+     * @return
+     */
+    @LogRecord
+    @ResponseBody
+    @GetMapping("/father")
+    public ObjectNode father() {
+        mapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION);
+        mapper.setConfig(mapper.getSerializationConfig().withView(JsonViewInterface.Simple.class));
+        json = mapper.createObjectNode();
+        Page<Tag> tagPage = tagService.findFather(BaseService.buildPageable(1, 999, "id", "DESC"));
+        List<Tag> tagList = tagPage.getContent();
+        ArrayNode jsons = mapper.createArrayNode();
+        if (tagList != null && tagList.size() > 0) {
+            for (Tag t : tagList) {
+                ObjectNode object = mapper.convertValue(t, ObjectNode.class);
+                jsons.add(object);
+            }
+            json.set("objects", jsons);
+        }
+        return json;
+    }
+
+    /**
+     * 根据父标签查找子标签
+     *
+     * @return
+     */
+    @LogRecord
+    @ResponseBody
+    @GetMapping("/child")
+    public ObjectNode child(Integer id) {
+        mapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION);
+        mapper.setConfig(mapper.getSerializationConfig().withView(JsonViewInterface.Simple.class));
+        json = mapper.createObjectNode();
+        Page<Tag> tagPage = tagService.findByFather(id, BaseService.buildPageable(1, 999, "id", "DESC"));
+        List<Tag> tagList = tagPage.getContent();
+        ArrayNode jsons = mapper.createArrayNode();
+        if (tagList != null && tagList.size() > 0) {
+            for (Tag t : tagList) {
+                ObjectNode object = mapper.convertValue(t, ObjectNode.class);
+                jsons.add(object);
+            }
+            json.set("objects" + id, jsons);
+        }
+        return json;
+    }
+
+    /**
+     * 根据名称搜索
+     *
+     * @param name
+     * @param page
+     * @param size
+     * @param attribute
+     * @param direction
+     * @return
+     */
     @LogRecord
     @ResponseBody
     @GetMapping(value = "/name")
