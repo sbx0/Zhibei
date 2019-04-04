@@ -43,4 +43,13 @@ public interface FunctionDao extends PagingAndSortingRepository<Function, Intege
      */
     @Query(value = "FROM Function f WHERE f.path = ?1 AND f.user.id = ?2")
     Page<Function> findByPathAndUser(String path, Integer u_id, Pageable pageable);
+
+    /**
+     * 统计次数
+     *
+     * @param path
+     * @return
+     */
+    @Query(value = "SELECT COUNT (f) FROM Function f WHERE f.path = ?1 AND f.type = ?2")
+    Integer countByPath(String path, String type);
 }

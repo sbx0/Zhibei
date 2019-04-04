@@ -63,4 +63,14 @@ public class FunctionService extends BaseService<Function, Integer> {
     public Page<Function> findByPathAndUser(String path, Integer u_id, Pageable pageable) {
         return functionDao.findByPathAndUser(path, u_id, pageable);
     }
+
+    /**
+     * 统计次数
+     *
+     * @param path
+     * @return
+     */
+    public Integer countByPath(String path, String type) {
+        return functionDao.countByPath(path, type);
+    }
 }

@@ -66,6 +66,9 @@ public class FunctionController extends BaseController<Function, Integer> {
                 }
                 json.set("objects", jsons);
             }
+            json.put("likeTimes", functionService.countByPath(path, "like"));
+            json.put("dislikeTimes", functionService.countByPath(path, "dislike"));
+            json.put("collectTimes", functionService.countByPath(path, "collect"));
         } else {
             json.put(STATUS_NAME, STATUS_CODE_NOT_LOGIN);
         }
