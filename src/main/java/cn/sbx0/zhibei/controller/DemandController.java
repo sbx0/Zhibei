@@ -12,9 +12,9 @@ import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.hankcs.hanlp.HanLP;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,6 +42,28 @@ public class DemandController extends BaseController<Demand, Integer> {
     @Autowired
     public DemandController(ObjectMapper mapper) {
         this.mapper = mapper;
+    }
+
+    /**
+     * 分析提取关键词
+     *
+     * @param id
+     * @return
+     */
+    @LogRecord
+    @ResponseBody
+    @GetMapping("/analysis")
+    public ObjectNode analysis(Integer id) {
+        json = mapper.createObjectNode();
+        Demand demand = demandService.findById(id);
+        String pool = demand.getContent();
+        List<String> keywords = HanLP.extractPhrase(pool, 5);
+        ArrayNode jsons = mapper.createArrayNode();
+        for (String keyword : keywords) {
+            jsons.add(keyword);
+        }
+        json.set("keywords", jsons);
+        return json;
     }
 
     /**

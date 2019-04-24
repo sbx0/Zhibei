@@ -44,6 +44,28 @@ public class ArticleController extends BaseController<Article, Integer> {
     }
 
     /**
+     * 分析提取关键词
+     *
+     * @param id
+     * @return
+     */
+    @LogRecord
+    @ResponseBody
+    @GetMapping("/analysis")
+    public ObjectNode analysis(Integer id) {
+        json = mapper.createObjectNode();
+        Article article = articleService.findById(id);
+        String pool = article.getContent();
+        List<String> keywords = HanLP.extractPhrase(pool, 5);
+        ArrayNode jsons = mapper.createArrayNode();
+        for (String keyword : keywords) {
+            jsons.add(keyword);
+        }
+        json.set("keywords", jsons);
+        return json;
+    }
+
+    /**
      * 搜索
      *
      * @param keyword

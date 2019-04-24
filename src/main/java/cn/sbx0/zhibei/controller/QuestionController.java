@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.hankcs.hanlp.HanLP;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -41,7 +42,6 @@ public class QuestionController extends BaseController<Question, Integer> {
     @Resource
     private MessageService messageService;
 
-
     @Override
     public BaseService<Question, Integer> getService() {
         return questionService;
@@ -50,6 +50,28 @@ public class QuestionController extends BaseController<Question, Integer> {
     @Autowired
     public QuestionController(ObjectMapper mapper) {
         this.mapper = mapper;
+    }
+
+    /**
+     * 分析提取关键词
+     *
+     * @param id
+     * @return
+     */
+    @LogRecord
+    @ResponseBody
+    @GetMapping("/analysis")
+    public ObjectNode analysis(Integer id) {
+        json = mapper.createObjectNode();
+        Question question = questionService.findById(id);
+        String pool = question.getDescription();
+        List<String> keywords = HanLP.extractPhrase(pool, 5);
+        ArrayNode jsons = mapper.createArrayNode();
+        for (String keyword : keywords) {
+            jsons.add(keyword);
+        }
+        json.set("keywords", jsons);
+        return json;
     }
 
     /**
