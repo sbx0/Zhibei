@@ -13,6 +13,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.hankcs.hanlp.HanLP;
+import com.hankcs.hanlp.suggest.Suggester;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -42,6 +43,63 @@ public class DemandController extends BaseController<Demand, Integer> {
     @Autowired
     public DemandController(ObjectMapper mapper) {
         this.mapper = mapper;
+    }
+
+    /**
+     * 搜索
+     *
+     * @param keyword
+     * @return
+     */
+    @LogRecord
+    @ResponseBody
+    @GetMapping("/search")
+    public ObjectNode search(String keyword) {
+        int size = 999;
+        List<Demand> demandList = getData(size);
+        Suggester suggester = new Suggester();
+        for (Demand demand : demandList) {
+            suggester.addSentence(demand.getTitle() + "。" + demand.getContent());
+        }
+        List<String> result = buildSuggester(size).suggest(keyword, size / 5);
+        ArrayNode jsons = mapper.createArrayNode();
+        for (String s : result) {
+            for (Demand demand : demandList) {
+                if (demand.getTitle().equals(s)) {
+                    ObjectNode object = mapper.convertValue(demand, ObjectNode.class);
+                    jsons.add(object);
+                }
+            }
+        }
+        json = mapper.createObjectNode();
+        json.set("result", jsons);
+        return json;
+    }
+
+    /**
+     * 获取数据
+     *
+     * @param size
+     * @return
+     */
+    private List<Demand> getData(int size) {
+        Page<Demand> demands = demandService.findAll(BaseService.buildPageable(1, size, "id", "DESC"));
+        return demands.getContent();
+    }
+
+    /**
+     * 构建推荐器
+     *
+     * @param size
+     * @return
+     */
+    private Suggester buildSuggester(int size) {
+        List<Demand> demandList = getData(size);
+        Suggester suggester = new Suggester();
+        for (Demand demand : demandList) {
+            suggester.addSentence(demand.getTitle());
+        }
+        return suggester;
     }
 
     /**

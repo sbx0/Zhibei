@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.hankcs.hanlp.HanLP;
+import com.hankcs.hanlp.suggest.Suggester;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -50,6 +51,63 @@ public class QuestionController extends BaseController<Question, Integer> {
     @Autowired
     public QuestionController(ObjectMapper mapper) {
         this.mapper = mapper;
+    }
+
+    /**
+     * 搜索
+     *
+     * @param keyword
+     * @return
+     */
+    @LogRecord
+    @ResponseBody
+    @GetMapping("/search")
+    public ObjectNode search(String keyword) {
+        int size = 999;
+        List<Question> questionList = getData(size);
+        Suggester suggester = new Suggester();
+        for (Question question : questionList) {
+            suggester.addSentence(question.getTitle() + "。" + question.getDescription());
+        }
+        List<String> result = buildSuggester(size).suggest(keyword, size / 5);
+        ArrayNode jsons = mapper.createArrayNode();
+        for (String s : result) {
+            for (Question question : questionList) {
+                if (question.getTitle().equals(s)) {
+                    ObjectNode object = mapper.convertValue(question, ObjectNode.class);
+                    jsons.add(object);
+                }
+            }
+        }
+        json = mapper.createObjectNode();
+        json.set("result", jsons);
+        return json;
+    }
+
+    /**
+     * 获取数据
+     *
+     * @param size
+     * @return
+     */
+    private List<Question> getData(int size) {
+        Page<Question> questions = questionService.findAll(BaseService.buildPageable(1, size, "id", "DESC"));
+        return questions.getContent();
+    }
+
+    /**
+     * 构建推荐器
+     *
+     * @param size
+     * @return
+     */
+    private Suggester buildSuggester(int size) {
+        List<Question> questionList = getData(size);
+        Suggester suggester = new Suggester();
+        for (Question question : questionList) {
+            suggester.addSentence(question.getTitle());
+        }
+        return suggester;
     }
 
     /**

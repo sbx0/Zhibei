@@ -79,7 +79,7 @@ public class ArticleController extends BaseController<Article, Integer> {
         List<Article> articleList = getData(size);
         Suggester suggester = new Suggester();
         for (Article article : articleList) {
-            suggester.addSentence(article.getTitle());
+            suggester.addSentence(article.getTitle() + "。" + article.getContent());
         }
         List<String> result = buildSuggester(size).suggest(keyword, size / 5);
         ArrayNode jsons = mapper.createArrayNode();
