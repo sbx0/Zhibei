@@ -24,13 +24,10 @@ public class ProjectService extends BaseService<Project, Integer> {
         return new Project();
     }
 
-    /**
-     * 根据申请人查询
-     *
-     * @param id
-     * @param pageable
-     * @return
-     */
+    public Page<Project> findBySponsor(Integer id, Pageable pageable) {
+        return projectDao.findBySponsor(id, pageable);
+    }
+
     public Page<Project> findByApplicant(Integer id, Pageable pageable) {
         return projectDao.findByApplicant(id, pageable);
     }

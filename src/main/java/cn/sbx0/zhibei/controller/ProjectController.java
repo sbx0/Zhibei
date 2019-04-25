@@ -46,6 +46,42 @@ public class ProjectController extends BaseController<Project, Integer> {
     }
 
     /**
+     * 申请列表
+     *
+     * @param page
+     * @param size
+     * @param attribute
+     * @param direction
+     * @return
+     */
+    @LogRecord
+    @ResponseBody
+    @GetMapping("/applyList")
+    public ObjectNode applyList(Integer page, Integer size, String attribute, String direction) {
+        mapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION);
+        mapper.setConfig(mapper.getSerializationConfig().withView(JsonViewInterface.All.class));
+        json = mapper.createObjectNode();
+        User user = userService.getUser();
+        if (user == null) {
+            json.put(STATUS_NAME, STATUS_CODE_NOT_LOGIN);
+            return json;
+        }
+        Page<Project> tPage = projectService.findBySponsor(user.getId(), (BaseService.buildPageable(page, size, attribute, direction)));
+        List<Project> tList = tPage.getContent();
+        ArrayNode jsons = mapper.createArrayNode();
+        if (tList != null && tList.size() > 0) {
+            for (Project t : tList) {
+                ObjectNode object = mapper.convertValue(t, ObjectNode.class);
+                jsons.add(object);
+            }
+            json.set("objects", jsons);
+        } else {
+            json.set("objects", null);
+        }
+        return json;
+    }
+
+    /**
      * 我的项目
      *
      * @param page
