@@ -35,8 +35,7 @@ public class ArticleService extends BaseService<Article, Integer> {
      * @return
      */
     public Page<Article> findByAuthor(Integer userId, Pageable pageable) {
-        Page<Article> articles = articleDao.findByAuthor(userId, pageable);
-        return articles;
+        return articleDao.findByAuthor(userId, pageable);
     }
 
     /**
