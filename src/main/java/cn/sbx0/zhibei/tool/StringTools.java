@@ -14,6 +14,18 @@ import java.util.regex.Pattern;
 @Component
 public class StringTools {
     private static String KEY; // KEY
+    public static final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+
+    /**
+     * 验证邮箱格式
+     *
+     * @param emailStr 邮箱
+     * @return 是否正确
+     */
+    public static boolean checkNotEmail(String email) {
+        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(email);
+        return !matcher.find();
+    }
 
     /**
      * 设置KEY 用于加密
