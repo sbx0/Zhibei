@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -155,12 +156,12 @@ public abstract class BaseController<T, ID> {
                 ObjectNode object = mapper.convertValue(t, ObjectNode.class);
                 jsons.add(object);
             }
-            json.set("objects", jsons);
-            json.put("total_pages", tPage.getTotalPages());
-            json.put("total_elements", tPage.getTotalElements());
-            json.put("page", page);
-            json.put("size", size);
         }
+        json.set("objects", jsons);
+        json.put("total_pages", tPage.getTotalPages());
+        json.put("total_elements", tPage.getTotalElements());
+        json.put("page", page);
+        json.put("size", size);
         json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
         return json;
     }
