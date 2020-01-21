@@ -1,6 +1,5 @@
 package cn.sbx0.zhibei.controller;
 
-import cn.sbx0.zhibei.annotation.LogRecord;
 import cn.sbx0.zhibei.entity.Permission;
 import cn.sbx0.zhibei.service.BaseService;
 import cn.sbx0.zhibei.service.PermissionService;
@@ -48,7 +47,6 @@ public class PermissionController extends BaseController<Permission, Integer> {
      *
      * @return
      */
-    @LogRecord
     @ResponseBody
     @GetMapping(value = "/initialize")
     public ObjectNode initialize() {

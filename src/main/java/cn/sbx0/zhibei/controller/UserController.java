@@ -1,6 +1,5 @@
 package cn.sbx0.zhibei.controller;
 
-import cn.sbx0.zhibei.annotation.LogRecord;
 import cn.sbx0.zhibei.entity.JsonViewInterface;
 import cn.sbx0.zhibei.entity.User;
 import cn.sbx0.zhibei.entity.Verify;
@@ -54,7 +53,6 @@ public class UserController extends BaseController<User, Integer> {
      * @param email
      * @return
      */
-    @LogRecord
     @ResponseBody
     @GetMapping("/lostPassword")
     public ObjectNode lostPassword(String email) {
@@ -89,7 +87,6 @@ public class UserController extends BaseController<User, Integer> {
      * @param password
      * @return
      */
-    @LogRecord
     @ResponseBody
     @GetMapping("/changePassword")
     public ObjectNode changePassword(String password, String md5) {
@@ -134,7 +131,6 @@ public class UserController extends BaseController<User, Integer> {
      *
      * @return
      */
-    @LogRecord
     @ResponseBody
     @PostMapping("/data")
     public ObjectNode data(User oldUser) {
@@ -152,7 +148,6 @@ public class UserController extends BaseController<User, Integer> {
      *
      * @return
      */
-    @LogRecord
     @GetMapping("/admin")
     public String admin(Map<String, Object> map) {
         User user = userService.getUser();
@@ -172,7 +167,6 @@ public class UserController extends BaseController<User, Integer> {
      *
      * @return
      */
-    @LogRecord
     @ResponseBody
     @GetMapping("/info")
     public ObjectNode info() {
@@ -197,7 +191,6 @@ public class UserController extends BaseController<User, Integer> {
      * @param response
      * @return
      */
-    @LogRecord
     @ResponseBody
     @PostMapping(value = "/login")
     public ObjectNode login(User user, HttpServletResponse response) {
@@ -239,7 +232,6 @@ public class UserController extends BaseController<User, Integer> {
      * @param response
      * @return
      */
-    @LogRecord
     @ResponseBody
     @GetMapping(value = "/logout")
     public ObjectNode logout(HttpServletRequest request, HttpServletResponse response) {
@@ -264,7 +256,6 @@ public class UserController extends BaseController<User, Integer> {
      * @param user
      * @return
      */
-    @LogRecord
     @ResponseBody
     @PostMapping("/register")
     public ObjectNode register(User user) {

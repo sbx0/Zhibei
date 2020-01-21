@@ -1,7 +1,6 @@
 package cn.sbx0.zhibei.controller;
 
 import cn.sbx0.zhibei.annotation.ExpFunction;
-import cn.sbx0.zhibei.annotation.LogRecord;
 import cn.sbx0.zhibei.entity.Demand;
 import cn.sbx0.zhibei.entity.JsonViewInterface;
 import cn.sbx0.zhibei.entity.User;
@@ -51,7 +50,6 @@ public class DemandController extends BaseController<Demand, Integer> {
      * @param keyword
      * @return
      */
-    @LogRecord
     @ResponseBody
     @GetMapping("/search")
     public ObjectNode search(String keyword) {
@@ -108,7 +106,6 @@ public class DemandController extends BaseController<Demand, Integer> {
      * @param id
      * @return
      */
-    @LogRecord
     @ResponseBody
     @GetMapping("/analysis")
     public ObjectNode analysis(Integer id) {
@@ -133,7 +130,6 @@ public class DemandController extends BaseController<Demand, Integer> {
      * @param direction
      * @return
      */
-    @LogRecord
     @ResponseBody
     @GetMapping("/tag")
     public ObjectNode tag(Integer id, Integer page, Integer size, String attribute, String direction) {
@@ -165,7 +161,6 @@ public class DemandController extends BaseController<Demand, Integer> {
      * @param direction
      * @return
      */
-    @LogRecord
     @ResponseBody
     @GetMapping("/user")
     public ObjectNode user(Integer id, Integer page, Integer size, String attribute, String direction) {
@@ -194,7 +189,6 @@ public class DemandController extends BaseController<Demand, Integer> {
      * @return
      */
     @ExpFunction(value = "25")
-    @LogRecord
     @ResponseBody
     @PostMapping("/post")
     public ObjectNode post(Demand demand) {

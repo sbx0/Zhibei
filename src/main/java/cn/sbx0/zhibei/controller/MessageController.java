@@ -1,7 +1,6 @@
 package cn.sbx0.zhibei.controller;
 
 import cn.sbx0.zhibei.annotation.ExpFunction;
-import cn.sbx0.zhibei.annotation.LogRecord;
 import cn.sbx0.zhibei.entity.JsonViewInterface;
 import cn.sbx0.zhibei.entity.Message;
 import cn.sbx0.zhibei.entity.User;
@@ -101,7 +100,6 @@ public class MessageController extends BaseController<Message, Integer> {
      *
      * @return
      */
-    @LogRecord
     @ResponseBody
     @GetMapping(value = "/msg")
     public ObjectNode list() {
@@ -137,7 +135,6 @@ public class MessageController extends BaseController<Message, Integer> {
      * @return
      */
     @ExpFunction(value = "1")
-    @LogRecord
     @ResponseBody
     @PostMapping(value = "/send")
     public ObjectNode send(Message message) {
@@ -178,7 +175,6 @@ public class MessageController extends BaseController<Message, Integer> {
      * @param id
      * @return
      */
-    @LogRecord
     @ResponseBody
     @GetMapping(value = "/receive")
     public ObjectNode receive(Integer id) {

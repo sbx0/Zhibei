@@ -1,6 +1,5 @@
 package cn.sbx0.zhibei.controller;
 
-import cn.sbx0.zhibei.annotation.LogRecord;
 import cn.sbx0.zhibei.entity.Question;
 import cn.sbx0.zhibei.entity.Record;
 import cn.sbx0.zhibei.entity.User;
@@ -51,7 +50,6 @@ public class RecordController extends BaseController<Record, Integer> {
     /**
      * 检查记录
      */
-    @LogRecord
     @ResponseBody
     @GetMapping("/check")
     public ObjectNode check(String url) {
@@ -97,7 +95,6 @@ public class RecordController extends BaseController<Record, Integer> {
      * @param money
      * @return
      */
-    @LogRecord
     @ResponseBody
     @GetMapping("/pay")
     public ObjectNode pay(String url, double money) {

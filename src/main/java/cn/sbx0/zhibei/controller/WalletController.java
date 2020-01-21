@@ -1,6 +1,5 @@
 package cn.sbx0.zhibei.controller;
 
-import cn.sbx0.zhibei.annotation.LogRecord;
 import cn.sbx0.zhibei.entity.User;
 import cn.sbx0.zhibei.entity.Wallet;
 import cn.sbx0.zhibei.service.BaseService;
@@ -41,7 +40,6 @@ public class WalletController extends BaseController<Wallet, Integer> {
      * @param money
      * @return
      */
-    @LogRecord
     @ResponseBody
     @GetMapping("/support")
     public ObjectNode support(Integer id, Double money) {
@@ -85,7 +83,6 @@ public class WalletController extends BaseController<Wallet, Integer> {
      *
      * @return
      */
-    @LogRecord
     @ResponseBody
     @GetMapping("/my")
     public ObjectNode alipayTradePagePay() {
