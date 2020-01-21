@@ -1,6 +1,5 @@
 package cn.sbx0.zhibei.controller;
 
-import cn.sbx0.zhibei.annotation.LogRecord;
 import cn.sbx0.zhibei.entity.Category;
 import cn.sbx0.zhibei.entity.JsonViewInterface;
 import cn.sbx0.zhibei.service.BaseService;
@@ -39,7 +38,6 @@ public class CategoryController extends BaseController<Category, Integer> {
         this.mapper = mapper;
     }
 
-    @LogRecord
     @ResponseBody
     @GetMapping(value = "/name")
     public ObjectNode findByName(String name, Integer page, Integer size, String attribute, String direction) {

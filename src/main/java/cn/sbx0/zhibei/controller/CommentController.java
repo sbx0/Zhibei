@@ -1,7 +1,6 @@
 package cn.sbx0.zhibei.controller;
 
 import cn.sbx0.zhibei.annotation.ExpFunction;
-import cn.sbx0.zhibei.annotation.LogRecord;
 import cn.sbx0.zhibei.entity.Comment;
 import cn.sbx0.zhibei.entity.JsonViewInterface;
 import cn.sbx0.zhibei.entity.User;
@@ -49,7 +48,6 @@ public class CommentController extends BaseController<Comment, Integer> {
      * @return
      */
     @ExpFunction(value = "5")
-    @LogRecord
     @ResponseBody
     @PostMapping("/post")
     public ObjectNode post(Comment comment) {
@@ -76,7 +74,6 @@ public class CommentController extends BaseController<Comment, Integer> {
      * @param direction
      * @return
      */
-    @LogRecord
     @ResponseBody
     @GetMapping("/load")
     public ObjectNode load(String path, Integer page, Integer size, String attribute, String direction) {
@@ -108,7 +105,6 @@ public class CommentController extends BaseController<Comment, Integer> {
      * @param direction
      * @return
      */
-    @LogRecord
     @ResponseBody
     @GetMapping("/load/user")
     public ObjectNode loadByUser(Integer id, Integer page, Integer size, String attribute, String direction) {

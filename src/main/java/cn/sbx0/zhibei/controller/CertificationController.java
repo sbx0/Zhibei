@@ -1,6 +1,5 @@
 package cn.sbx0.zhibei.controller;
 
-import cn.sbx0.zhibei.annotation.LogRecord;
 import cn.sbx0.zhibei.entity.Certification;
 import cn.sbx0.zhibei.entity.JsonViewInterface;
 import cn.sbx0.zhibei.entity.User;
@@ -44,7 +43,6 @@ public class CertificationController extends BaseController<Certification, Integ
      * @param id
      * @return
      */
-    @LogRecord
     @ResponseBody
     @GetMapping("/user")
     public ObjectNode user(Integer id) {
@@ -71,7 +69,6 @@ public class CertificationController extends BaseController<Certification, Integ
      *
      * @return
      */
-    @LogRecord
     @ResponseBody
     @GetMapping("/status")
     public ObjectNode status() {
@@ -104,7 +101,6 @@ public class CertificationController extends BaseController<Certification, Integ
      * @param certification
      * @return
      */
-    @LogRecord
     @ResponseBody
     @PostMapping("/submit")
     public ObjectNode submit(Certification certification) {

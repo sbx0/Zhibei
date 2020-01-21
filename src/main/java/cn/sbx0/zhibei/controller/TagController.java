@@ -1,6 +1,5 @@
 package cn.sbx0.zhibei.controller;
 
-import cn.sbx0.zhibei.annotation.LogRecord;
 import cn.sbx0.zhibei.entity.Tag;
 import cn.sbx0.zhibei.entity.JsonViewInterface;
 import cn.sbx0.zhibei.entity.User;
@@ -45,7 +44,6 @@ public class TagController extends BaseController<Tag, Integer> {
      *
      * @return
      */
-    @LogRecord
     @ResponseBody
     @GetMapping("/father")
     public ObjectNode father() {
@@ -70,7 +68,6 @@ public class TagController extends BaseController<Tag, Integer> {
      *
      * @return
      */
-    @LogRecord
     @ResponseBody
     @GetMapping("/child")
     public ObjectNode child(Integer id) {
@@ -100,7 +97,6 @@ public class TagController extends BaseController<Tag, Integer> {
      * @param direction
      * @return
      */
-    @LogRecord
     @ResponseBody
     @GetMapping(value = "/name")
     public ObjectNode findByName(String name, Integer page, Integer size, String attribute, String direction) {

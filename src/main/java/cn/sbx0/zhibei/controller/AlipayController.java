@@ -1,6 +1,5 @@
 package cn.sbx0.zhibei.controller;
 
-import cn.sbx0.zhibei.annotation.LogRecord;
 import cn.sbx0.zhibei.config.AlipayConfig;
 import cn.sbx0.zhibei.entity.Alipay;
 import cn.sbx0.zhibei.entity.Product;
@@ -63,7 +62,6 @@ public class AlipayController extends BaseController<Alipay, Integer> {
      *
      * @return
      */
-    @LogRecord
     @ResponseBody
     @PostMapping("/pay")
     public ObjectNode alipayTradePagePay(Product product) {
@@ -120,7 +118,6 @@ public class AlipayController extends BaseController<Alipay, Integer> {
      *
      * @return
      */
-    @LogRecord
     @GetMapping("/return")
     public String alipayReturn(Map<String, String> params) {
         User user = userService.getUser();
@@ -201,7 +198,6 @@ public class AlipayController extends BaseController<Alipay, Integer> {
      *
      * @return
      */
-    @LogRecord
     @ResponseBody
     @PostMapping("/notify")
     public ObjectNode alipayNotify(Map<String, String> params) {

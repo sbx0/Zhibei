@@ -1,6 +1,5 @@
 package cn.sbx0.zhibei.controller;
 
-import cn.sbx0.zhibei.annotation.LogRecord;
 import cn.sbx0.zhibei.entity.UploadFile;
 import cn.sbx0.zhibei.entity.User;
 import cn.sbx0.zhibei.service.BaseService;
@@ -77,7 +76,6 @@ public class UploadFileController extends BaseController<UploadFile, Integer> {
      * @param file
      * @return
      */
-    @LogRecord
     @ResponseBody
     @PostMapping("/upload")
     public ObjectNode upload(MultipartFile file) {
@@ -157,7 +155,6 @@ public class UploadFileController extends BaseController<UploadFile, Integer> {
      * @return
      * @throws Exception
      */
-    @LogRecord
     @ResponseBody
     @GetMapping("/avatar")
     public ObjectNode avatar(String md5) {

@@ -1,6 +1,5 @@
 package cn.sbx0.zhibei.controller;
 
-import cn.sbx0.zhibei.annotation.LogRecord;
 import cn.sbx0.zhibei.entity.Demand;
 import cn.sbx0.zhibei.entity.JsonViewInterface;
 import cn.sbx0.zhibei.entity.Project;
@@ -54,7 +53,6 @@ public class ProjectController extends BaseController<Project, Integer> {
      * @param direction
      * @return
      */
-    @LogRecord
     @ResponseBody
     @GetMapping("/applyList")
     public ObjectNode applyList(Integer page, Integer size, String attribute, String direction) {
@@ -90,7 +88,6 @@ public class ProjectController extends BaseController<Project, Integer> {
      * @param direction
      * @return
      */
-    @LogRecord
     @ResponseBody
     @GetMapping("/my")
     public ObjectNode user(Integer page, Integer size, String attribute, String direction) {
@@ -117,7 +114,6 @@ public class ProjectController extends BaseController<Project, Integer> {
         return json;
     }
 
-    @LogRecord
     @ResponseBody
     @GetMapping("/set")
     public ObjectNode set(Integer id, Integer status) {
@@ -145,7 +141,6 @@ public class ProjectController extends BaseController<Project, Integer> {
         return json;
     }
 
-    @LogRecord
     @ResponseBody
     @GetMapping("/apply")
     public ObjectNode apply(Integer id) {

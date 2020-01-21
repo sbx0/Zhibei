@@ -1,6 +1,5 @@
 package cn.sbx0.zhibei.controller;
 
-import cn.sbx0.zhibei.annotation.LogRecord;
 import cn.sbx0.zhibei.entity.JsonViewInterface;
 import cn.sbx0.zhibei.entity.User;
 import cn.sbx0.zhibei.service.BaseService;
@@ -64,7 +63,6 @@ public abstract class BaseController<T, ID> {
      *
      * @return 实体
      */
-    @LogRecord
     @ResponseBody
     @GetMapping("/attribute")
     public ObjectNode getAttribute() {
@@ -98,7 +96,6 @@ public abstract class BaseController<T, ID> {
      * @param direction
      * @return
      */
-    @LogRecord
     @ResponseBody
     @GetMapping("/list")
     public ObjectNode adminList(Integer page, Integer size, String attribute, String direction) {
@@ -127,7 +124,6 @@ public abstract class BaseController<T, ID> {
      * @param direction
      * @return
      */
-    @LogRecord
     @ResponseBody
     @GetMapping("/normal/list")
     public ObjectNode normalList(Integer page, Integer size, String attribute, String direction) {
@@ -172,7 +168,6 @@ public abstract class BaseController<T, ID> {
      * @param id
      * @return
      */
-    @LogRecord
     @ResponseBody
     @GetMapping("/normal")
     public ObjectNode normalOne(ID id) {
@@ -188,7 +183,6 @@ public abstract class BaseController<T, ID> {
      * @param id
      * @return
      */
-    @LogRecord
     @ResponseBody
     @GetMapping("/{id}")
     public ObjectNode adminOne(@PathVariable("id") ID id) {
@@ -229,7 +223,6 @@ public abstract class BaseController<T, ID> {
      * @param t 范类
      * @return json
      */
-    @LogRecord
     @ResponseBody
     @PostMapping("/add")
     public ObjectNode add(T t) {
@@ -262,7 +255,6 @@ public abstract class BaseController<T, ID> {
      * @param id id
      * @return json
      */
-    @LogRecord
     @ResponseBody
     @GetMapping("/delete")
     public ObjectNode delete(ID id) {

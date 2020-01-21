@@ -1,7 +1,6 @@
 package cn.sbx0.zhibei.controller;
 
 import cn.sbx0.zhibei.annotation.ExpFunction;
-import cn.sbx0.zhibei.annotation.LogRecord;
 import cn.sbx0.zhibei.entity.*;
 import cn.sbx0.zhibei.service.*;
 import com.fasterxml.jackson.databind.MapperFeature;
@@ -46,7 +45,6 @@ public class AnswerController extends BaseController<Answer, Integer> {
         this.mapper = mapper;
     }
 
-    @LogRecord
     @ResponseBody
     @GetMapping("/best")
     public ObjectNode choseTheBest(Integer id) {
@@ -109,7 +107,6 @@ public class AnswerController extends BaseController<Answer, Integer> {
      * @return
      */
     @ExpFunction(value = "30")
-    @LogRecord
     @ResponseBody
     @PostMapping("/post")
     public ObjectNode post(Answer answer, Integer q_id) {
@@ -165,7 +162,6 @@ public class AnswerController extends BaseController<Answer, Integer> {
      * @param direction
      * @return
      */
-    @LogRecord
     @ResponseBody
     @GetMapping("/load")
     public ObjectNode load(Integer id, Integer page, Integer size, String attribute, String direction) {
@@ -203,7 +199,6 @@ public class AnswerController extends BaseController<Answer, Integer> {
      * @param direction
      * @return
      */
-    @LogRecord
     @ResponseBody
     @GetMapping("/load/user")
     public ObjectNode loadByUser(Integer id, Integer page, Integer size, String attribute, String direction) {

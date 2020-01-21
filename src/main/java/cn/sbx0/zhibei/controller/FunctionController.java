@@ -1,6 +1,5 @@
 package cn.sbx0.zhibei.controller;
 
-import cn.sbx0.zhibei.annotation.LogRecord;
 import cn.sbx0.zhibei.entity.Function;
 import cn.sbx0.zhibei.entity.User;
 import cn.sbx0.zhibei.service.BaseService;
@@ -45,7 +44,6 @@ public class FunctionController extends BaseController<Function, Integer> {
      * @param path
      * @return
      */
-    @LogRecord
     @ResponseBody
     @GetMapping("/load")
     public ObjectNode load(String path) {
@@ -82,7 +80,6 @@ public class FunctionController extends BaseController<Function, Integer> {
      * @param type
      * @return
      */
-    @LogRecord
     @ResponseBody
     @GetMapping("/run")
     public ObjectNode run(String path, String type) {

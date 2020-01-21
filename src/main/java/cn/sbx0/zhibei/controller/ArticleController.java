@@ -1,7 +1,6 @@
 package cn.sbx0.zhibei.controller;
 
 import cn.sbx0.zhibei.annotation.ExpFunction;
-import cn.sbx0.zhibei.annotation.LogRecord;
 import cn.sbx0.zhibei.entity.Article;
 import cn.sbx0.zhibei.entity.JsonViewInterface;
 import cn.sbx0.zhibei.entity.User;
@@ -49,7 +48,6 @@ public class ArticleController extends BaseController<Article, Integer> {
      * @param id
      * @return
      */
-    @LogRecord
     @ResponseBody
     @GetMapping("/analysis")
     public ObjectNode analysis(Integer id) {
@@ -71,7 +69,6 @@ public class ArticleController extends BaseController<Article, Integer> {
      * @param keyword
      * @return
      */
-    @LogRecord
     @ResponseBody
     @GetMapping("/search")
     public ObjectNode search(String keyword) {
@@ -128,7 +125,6 @@ public class ArticleController extends BaseController<Article, Integer> {
      * @param keyword
      * @return
      */
-    @LogRecord
     @ResponseBody
     @GetMapping("/suggest")
     public ObjectNode suggest(String keyword) {
@@ -165,7 +161,6 @@ public class ArticleController extends BaseController<Article, Integer> {
      * @param direction
      * @return
      */
-    @LogRecord
     @ResponseBody
     @GetMapping("/tag")
     public ObjectNode tag(Integer id, Integer page, Integer size, String attribute, String direction) {
@@ -196,7 +191,6 @@ public class ArticleController extends BaseController<Article, Integer> {
      * @param direction
      * @return
      */
-    @LogRecord
     @ResponseBody
     @GetMapping("/user")
     public ObjectNode user(Integer id, Integer page, Integer size, String attribute, String direction) {
@@ -225,7 +219,6 @@ public class ArticleController extends BaseController<Article, Integer> {
      * @return
      */
     @ExpFunction(value = "25")
-    @LogRecord
     @ResponseBody
     @PostMapping("/post")
     public ObjectNode post(Article article) {
