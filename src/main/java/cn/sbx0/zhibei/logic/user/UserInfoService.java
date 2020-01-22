@@ -2,12 +2,20 @@ package cn.sbx0.zhibei.logic.user;
 
 import cn.sbx0.zhibei.logic.BaseService;
 import cn.sbx0.zhibei.logic.ReturnStatus;
+import cn.sbx0.zhibei.tool.CookieTools;
 import cn.sbx0.zhibei.tool.StringTools;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.Resource;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.Date;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * 用户信息 服务层
@@ -16,6 +24,36 @@ import java.util.Date;
 public class UserInfoService extends BaseService<UserInfo, Integer> {
     @Resource
     private UserInfoDao dao;
+
+    /**
+     * 从cookie或session中获取登录的用户
+     *
+     * @return UserInfo
+     */
+    public UserInfo getLoginUser() {
+        HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
+        HttpSession session = request.getSession(true);
+        UserInfo user = (UserInfo) session.getAttribute("user");
+        if (user != null && user.getUserId() != null && user.getEmail() != null) return findByEmail(user.getEmail());
+        // 查找是否存在cookie
+        Map<String, Cookie> cookies = CookieTools.getCookiesByName(CookieTools.COOKIE_NAMES, request.getCookies());
+        if (cookies == null) return null;
+        if (cookies.size() == 0) return null;
+        // 为空
+        for (int i = 0; i < cookies.size(); i++) {
+            if (StringTools.checkNullStr(cookies.get(CookieTools.COOKIE_NAMES.get(i)).getValue())) return null;
+        }
+        // Cookie中的ID
+        int id = Integer.parseInt(cookies.get("ID").getValue());
+        // Cookie中的KEY
+        String key = cookies.get("KEY").getValue();
+        // 正确的KEY
+        String check = StringTools.getKey(id);
+        // 匹配KEY
+        if (!check.equals(key)) return null;
+        return findByUserId(id);
+    }
+
 
     /**
      * 注册
@@ -33,14 +71,34 @@ public class UserInfoService extends BaseService<UserInfo, Integer> {
         userInfo.setRegisterTime(new Date());
         userInfo.setBanned(false);
         dao.save(userInfo);
-        return ReturnStatus.success.getValue();
+        return ReturnStatus.success.getCode();
+    }
+
+    /**
+     * 根据用户ID获取用户信息
+     *
+     * @param id id
+     * @return UserInfo
+     */
+    public UserInfo findByUserId(int id) {
+        return dao.findByUserId(id);
+    }
+
+    /**
+     * 根据邮箱地址获取用户信息
+     *
+     * @param email email
+     * @return UserInfo
+     */
+    public UserInfo findByEmail(String email) {
+        return dao.findByEmail(email);
     }
 
     /**
      * 根据邮箱地址判断是否存在
      *
-     * @param email
-     * @return
+     * @param email email
+     * @return boolean
      */
     public boolean existByEmail(String email) {
         return dao.existByEmail(email) != null;

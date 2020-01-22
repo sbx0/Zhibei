@@ -1,6 +1,7 @@
 package cn.sbx0.zhibei.logic;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -20,8 +21,9 @@ import java.util.Date;
 @Controller
 public abstract class BaseController<T, ID> {
     protected final String statusCode = "status";
-    protected ObjectMapper mapper;
-    protected ObjectNode json;
+    protected final String statusMsg = "msg";
+    protected final String jsonOb = "object";
+    protected final String jsonObs = "objects";
 
     /**
      * 获取服务层 子类必须重写
@@ -29,6 +31,20 @@ public abstract class BaseController<T, ID> {
      * @return 对应的服务层
      */
     public abstract BaseService<T, ID> getService();
+
+    protected ObjectNode initJSON() {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.createObjectNode();
+    }
+
+    ArrayNode initJSONs() {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.createArrayNode();
+    }
+
+    protected ObjectMapper getMapper() {
+        return new ObjectMapper();
+    }
 
     /**
      * 格式化日期
