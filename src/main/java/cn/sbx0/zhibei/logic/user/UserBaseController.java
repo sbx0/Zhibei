@@ -4,6 +4,7 @@ import cn.sbx0.zhibei.logic.BaseController;
 import cn.sbx0.zhibei.logic.BaseService;
 import cn.sbx0.zhibei.logic.ReturnStatus;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,16 +27,19 @@ public class UserBaseController extends BaseController<UserBase, Integer> {
      *
      * @return json
      */
-    @PostMapping(value = "/info")
+    @GetMapping(value = "/info")
     public ObjectNode info() {
         ObjectNode json = initJSON();
-        UserInfo user = service.getLoginUser();
-        if (user == null) {
+        UserInfo userInfo = service.getLoginUser();
+        if (userInfo == null || userInfo.getUserId() == null) {
             json.put(statusCode, ReturnStatus.notLogin.getCode());
             json.put(statusMsg, ReturnStatus.notLogin.getMsg());
             return json;
         }
-        ObjectNode userInfoJson = getMapper().convertValue(user, ObjectNode.class);
+        UserBase userBase = service.findById(userInfo.getUserId());
+        ObjectNode userBaseJson = getMapper().convertValue(userBase, ObjectNode.class);
+        json.set("user", userBaseJson);
+        ObjectNode userInfoJson = getMapper().convertValue(userInfo, ObjectNode.class);
         json.set(jsonOb, userInfoJson);
         json.put(statusCode, ReturnStatus.success.getCode());
         json.put(statusMsg, ReturnStatus.success.getMsg());
