@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 
 /**
  * 基础用户 服务层
@@ -20,6 +21,23 @@ public class UserBaseService extends BaseService<UserBase, Integer> {
     private UserBaseDao dao;
     @Resource
     private UserInfoService userInfoService;
+
+    /**
+     * 心跳
+     * 记录活跃用户
+     */
+    public void heartbeat(int id, Date date) {
+        userInfoService.heartbeat(id, date);
+    }
+
+    /**
+     * 从cookie或session中获取登录的用户的Id
+     *
+     * @return int
+     */
+    public int getLoginUserId() {
+        return userInfoService.getLoginUserId();
+    }
 
     /**
      * 从cookie或session中获取登录的用户

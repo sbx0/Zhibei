@@ -42,6 +42,9 @@ public class UserInfo {
     @JsonFormat(pattern = "yyyy-MM-dd", locale = "zh", timezone = "GMT+8")
     private Date birthday; // 生日
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
+    private Date lastTimeOnline; // 最后一次在线的时间
+
     @Column(nullable = false)
     private Boolean banned = Boolean.FALSE; // 封禁
 
@@ -64,13 +67,14 @@ public class UserInfo {
     public String toString() {
         return "UserInfo{" +
                 "userId=" + userId +
+                ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", introduction='" + introduction + '\'' +
                 ", registerTime=" + registerTime +
                 ", phone='" + phone + '\'' +
-                ", email='" + email + '\'' +
                 ", sex='" + sex + '\'' +
                 ", birthday=" + birthday +
+                ", lastTimeOnline=" + lastTimeOnline +
                 ", banned=" + banned +
                 ", banHours=" + banHours +
                 ", integral=" + integral +
@@ -78,6 +82,14 @@ public class UserInfo {
                 ", exp=" + exp +
                 ", expMax=" + expMax +
                 '}';
+    }
+
+    public Date getLastTimeOnline() {
+        return lastTimeOnline;
+    }
+
+    public void setLastTimeOnline(Date lastTimeOnline) {
+        this.lastTimeOnline = lastTimeOnline;
     }
 
     public Integer getUserId() {

@@ -4,16 +4,18 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class UserBaseServiceTest {
     @Resource
-    UserBaseService userBaseService;
+    UserBaseService service;
     @Resource
     HttpSession session;
     @Resource
@@ -30,7 +32,7 @@ public class UserBaseServiceTest {
         UserBaseView userBaseView = new UserBaseView();
         userBaseView.setEmail("test@sbx0.cn");
         userBaseView.setPassword("test");
-        System.out.println(userBaseService.login(userBaseView, session, response));
+        System.out.println(service.login(userBaseView, session, response));
     }
 
     @Test
@@ -39,6 +41,14 @@ public class UserBaseServiceTest {
         userBaseView.setName("test");
         userBaseView.setEmail("test@sbx0.cn");
         userBaseView.setPassword("test");
-        System.out.println(userBaseService.register(userBaseView));
+        System.out.println(service.register(userBaseView));
+    }
+
+    @Test
+    @Transactional
+    public void heartbeat() {
+        int id = 1;
+        Date date = new Date();
+        service.heartbeat(id, date);
     }
 }

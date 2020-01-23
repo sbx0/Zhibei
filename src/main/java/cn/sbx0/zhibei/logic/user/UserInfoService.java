@@ -6,6 +6,7 @@ import cn.sbx0.zhibei.tool.CookieTools;
 import cn.sbx0.zhibei.tool.StringTools;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -24,6 +25,44 @@ import java.util.Objects;
 public class UserInfoService extends BaseService<UserInfo, Integer> {
     @Resource
     private UserInfoDao dao;
+
+    /**
+     * 心跳
+     * 记录活跃用户
+     */
+    @Transactional
+    public void heartbeat(int id, Date date) {
+        dao.updateLastTimeLogin(id, date);
+    }
+
+    /**
+     * 从cookie或session中获取登录的用户的Id
+     *
+     * @return int
+     */
+    public int getLoginUserId() {
+        HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
+        HttpSession session = request.getSession(true);
+        UserInfo user = (UserInfo) session.getAttribute("user");
+        if (user != null && user.getUserId() != null && user.getEmail() != null) return user.getUserId();
+        // 查找是否存在cookie
+        Map<String, Cookie> cookies = CookieTools.getCookiesByName(CookieTools.COOKIE_NAMES, request.getCookies());
+        if (cookies == null) return 0;
+        if (cookies.size() == 0) return 0;
+        // 为空
+        for (int i = 0; i < cookies.size(); i++) {
+            if (StringTools.checkNullStr(cookies.get(CookieTools.COOKIE_NAMES.get(i)).getValue())) return 0;
+        }
+        // Cookie中的ID
+        int id = Integer.parseInt(cookies.get("ID").getValue());
+        // Cookie中的KEY
+        String key = cookies.get("KEY").getValue();
+        // 正确的KEY
+        String check = StringTools.getKey(id);
+        // 匹配KEY
+        if (!check.equals(key)) return 0;
+        return id;
+    }
 
     /**
      * 从cookie或session中获取登录的用户

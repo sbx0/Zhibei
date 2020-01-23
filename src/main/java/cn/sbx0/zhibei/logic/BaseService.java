@@ -14,10 +14,7 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 公用基础 服务层
@@ -316,5 +313,4 @@ public abstract class BaseService<T, ID> {
                 return new Sort(Sort.Direction.DESC, attribute);
         }
     }
-
 }
