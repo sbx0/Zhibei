@@ -26,6 +26,21 @@ public class UserBaseController extends BaseController<UserBase, Integer> {
     private UserBaseService service;
 
     /**
+     * 返回最基础的登录用户信息
+     *
+     * @return json
+     */
+    @GetMapping(value = "/basic")
+    public ObjectNode avatar() {
+        ObjectNode json = initJSON();
+        UserBase userBase = service.findById(service.getLoginUserId());
+        ObjectNode userBaseJson = getMapper().convertValue(userBase, ObjectNode.class);
+        json.set(jsonOb, userBaseJson);
+        json.put(statusCode, ReturnStatus.success.getCode());
+        return json;
+    }
+
+    /**
      * 心跳
      * 记录活跃用户
      *
