@@ -58,7 +58,7 @@ public class UserBaseService extends BaseService<UserBase, Integer> {
         if (StringTools.checkNullStr(user.getEmail())) return ReturnStatus.nullStr;
         if (StringTools.checkNullStr(user.getPassword())) return ReturnStatus.nullStr;
         if (StringTools.checkNotEmail(user.getEmail())) return ReturnStatus.invalidMail;
-        if (!userInfoService.existByEmail(user.getEmail())) return ReturnStatus.repeatOperation;
+        if (!userInfoService.existByEmail(user.getEmail())) return ReturnStatus.invalidMail;
         UserInfo userInfo = userInfoService.findByEmail(user.getEmail());
         if (userInfo == null) return ReturnStatus.failed;
         // 密码是否正确

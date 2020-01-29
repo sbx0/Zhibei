@@ -25,6 +25,14 @@ public class UserBaseController extends BaseController<UserBase, Integer> {
     @Resource
     private UserBaseService service;
 
+    @GetMapping(value = "/notLogin")
+    public ObjectNode notLogin() {
+        ObjectNode json = initJSON();
+        json.put(statusMsg, ReturnStatus.notLogin.getMsg());
+        json.put(statusCode, ReturnStatus.notLogin.getCode());
+        return json;
+    }
+
     /**
      * 返回最基础的登录用户信息
      *
