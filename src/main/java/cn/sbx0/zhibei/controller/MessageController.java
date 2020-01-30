@@ -19,8 +19,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
 
@@ -158,7 +161,8 @@ public class MessageController extends BaseController<Message, Integer> {
         }
         message.setId(null);
         message.setSendTime(new Date());
-        message.setIp(RequestTools.getIpAddress());
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        message.setIp(RequestTools.getIpAddress(request));
         message.setSendUser(user);
         message.setType("msg");
         if (messageService.save(message)) {
