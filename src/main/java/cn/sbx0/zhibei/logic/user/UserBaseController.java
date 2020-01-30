@@ -25,6 +25,19 @@ public class UserBaseController extends BaseController<UserBase, Integer> {
     @Resource
     private UserBaseService service;
 
+    /**
+     * 当前活跃人数
+     *
+     * @return json
+     */
+    @GetMapping(value = "/active")
+    public ObjectNode active() {
+        ObjectNode json = initJSON();
+        json.put("active", service.active());
+        json.put(statusCode, ReturnStatus.success.getCode());
+        return json;
+    }
+
     @GetMapping(value = "/notLogin")
     public ObjectNode notLogin() {
         ObjectNode json = initJSON();

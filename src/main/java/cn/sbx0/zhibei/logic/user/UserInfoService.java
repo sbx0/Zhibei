@@ -27,6 +27,16 @@ public class UserInfoService extends BaseService<UserInfo, Integer> {
     private UserInfoDao dao;
 
     /**
+     * 指定时间内活跃的用户
+     *
+     * @param time time
+     * @return int
+     */
+    public int countByTime(Date time) {
+        return dao.countByTime(time);
+    }
+
+    /**
      * 心跳
      * 记录活跃用户
      */

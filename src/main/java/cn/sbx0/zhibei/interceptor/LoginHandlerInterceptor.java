@@ -30,8 +30,6 @@ public class LoginHandlerInterceptor implements HandlerInterceptor {
      */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        Logger logger = LoggerFactory.getLogger(getClass());
-        logger.info("preHandle begin");
         HttpSession session = request.getSession(true);
         UserInfo user = (UserInfo) session.getAttribute("user");
         if (!(user != null && user.getUserId() != null && user.getEmail() != null)) {
@@ -53,15 +51,13 @@ public class LoginHandlerInterceptor implements HandlerInterceptor {
                 // 正确的KEY
                 String check = StringTools.getKey(id);
                 // 匹配KEY
-                isLogin = !check.equals(key);
+                isLogin = check.equals(key);
             }
             if (!isLogin) {
                 request.getRequestDispatcher("/user/base/notLogin").forward(request, response);
             }
-            logger.info("preHandle end return " + isLogin);
             return isLogin;
         }
-        logger.info("preHandle end return true");
         return true;
     }
 

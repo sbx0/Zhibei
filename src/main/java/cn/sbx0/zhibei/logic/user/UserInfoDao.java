@@ -10,6 +10,9 @@ import java.util.Date;
  * 用户信息 数据层
  */
 public interface UserInfoDao extends PagingAndSortingRepository<UserInfo, Integer> {
+    @Query(value = "select count(*) from user_info where last_time_online > ?1", nativeQuery = true)
+    int countByTime(Date time);
+
     @Query(value = "select 1 from user_info where email = ?1", nativeQuery = true)
     String existByEmail(String email);
 

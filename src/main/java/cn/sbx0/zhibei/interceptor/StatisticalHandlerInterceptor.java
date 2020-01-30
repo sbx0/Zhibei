@@ -1,10 +1,6 @@
 package cn.sbx0.zhibei.interceptor;
 
-import cn.sbx0.zhibei.logic.statistical.entity.StatisticalUser;
 import cn.sbx0.zhibei.logic.statistical.service.StatisticalUserService;
-import cn.sbx0.zhibei.tool.RequestTools;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -12,7 +8,6 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Date;
 
 /**
  * 统计拦截器
@@ -33,16 +28,7 @@ public class StatisticalHandlerInterceptor implements HandlerInterceptor {
      */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        Logger logger = LoggerFactory.getLogger(getClass());
-        logger.info("preHandle begin");
-        logger.info(RequestTools.getUserAgent(request));
-        StatisticalUser user = new StatisticalUser();
-        user.setIp(RequestTools.getIpAddress(request));
-        user.setClient(RequestTools.getClient(request));
-        logger.info(user.getIp());
-        user.setTime(new Date());
-        service.save(user);
-        logger.info("preHandle end");
+        service.handlerInterceptor(request);
         return true;
     }
 
