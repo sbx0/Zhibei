@@ -29,7 +29,8 @@ public class MvcConfig implements WebMvcConfigurer {
                                 "/user/base/register",
                                 "/user/base/basic",
                                 "/user/base/notLogin",
-                                "/user/base/logout"
+                                "/user/base/logout",
+                                "/statistical/**"
                         );
             }
         };

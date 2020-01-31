@@ -1,6 +1,9 @@
 package cn.sbx0.zhibei.logic;
 
 import cn.sbx0.zhibei.tool.StringTools;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -26,6 +29,20 @@ public abstract class BaseService<T, ID> {
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
     private static final Integer PAGE_SIZE = 10;
     private static final String[] NOT_NULL_METHODS = {}; // 对象指定对象的get方法
+
+    protected ObjectNode initJSON() {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.createObjectNode();
+    }
+
+    protected ArrayNode initJSONs() {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.createArrayNode();
+    }
+
+    protected ObjectMapper getMapper() {
+        return new ObjectMapper();
+    }
 
     /**
      * 获取数据层 子类必须重写

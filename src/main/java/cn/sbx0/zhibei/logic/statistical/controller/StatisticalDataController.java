@@ -34,7 +34,7 @@ public class StatisticalDataController extends BaseController<StatisticalData, I
     @GetMapping(value = "/recent")
     public ObjectNode recent(Integer day, String kind, String group) {
         ObjectNode json = initJSON();
-        ObjectNode data = service.findByDay(day, kind, group);
+        ObjectNode data = service.findByKindAndGrouping(day, kind, group);
         json.set("objects", data);
         json.put(statusCode, ReturnStatus.success.getCode());
         return json;
