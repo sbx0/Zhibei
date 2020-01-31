@@ -3,6 +3,7 @@ package cn.sbx0.zhibei.logic.user;
 import cn.sbx0.zhibei.logic.BaseService;
 import cn.sbx0.zhibei.logic.ReturnStatus;
 import cn.sbx0.zhibei.tool.CookieTools;
+import cn.sbx0.zhibei.tool.DateTools;
 import cn.sbx0.zhibei.tool.StringTools;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,13 @@ public class UserBaseService extends BaseService<UserBase, Integer> {
     private UserBaseDao dao;
     @Resource
     private UserInfoService userInfoService;
+
+    public int active() {
+        Date now = new Date();
+        // 间隔30分钟
+        Date before = DateTools.rollSecond(now, 60 * 30);
+        return userInfoService.countByTime(before);
+    }
 
     /**
      * 心跳
@@ -58,7 +66,7 @@ public class UserBaseService extends BaseService<UserBase, Integer> {
         if (StringTools.checkNullStr(user.getEmail())) return ReturnStatus.nullStr;
         if (StringTools.checkNullStr(user.getPassword())) return ReturnStatus.nullStr;
         if (StringTools.checkNotEmail(user.getEmail())) return ReturnStatus.invalidMail;
-        if (!userInfoService.existByEmail(user.getEmail())) return ReturnStatus.repeatOperation;
+        if (!userInfoService.existByEmail(user.getEmail())) return ReturnStatus.invalidMail;
         UserInfo userInfo = userInfoService.findByEmail(user.getEmail());
         if (userInfo == null) return ReturnStatus.failed;
         // 密码是否正确
@@ -127,4 +135,5 @@ public class UserBaseService extends BaseService<UserBase, Integer> {
     public UserBase getEntity() {
         return new UserBase();
     }
+
 }
