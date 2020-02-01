@@ -17,6 +17,7 @@ import java.util.Date;
 @DynamicUpdate
 public class UserCertification {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id; // id
 
     @Column(nullable = false)
