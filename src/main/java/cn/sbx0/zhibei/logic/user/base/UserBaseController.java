@@ -1,8 +1,9 @@
-package cn.sbx0.zhibei.logic.user;
+package cn.sbx0.zhibei.logic.user.base;
 
 import cn.sbx0.zhibei.logic.BaseController;
 import cn.sbx0.zhibei.logic.BaseService;
 import cn.sbx0.zhibei.logic.ReturnStatus;
+import cn.sbx0.zhibei.logic.user.info.UserInfo;
 import cn.sbx0.zhibei.tool.CookieTools;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,4 +1,4 @@
-package cn.sbx0.zhibei.logic.user;
+package cn.sbx0.zhibei.logic.user.base;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;

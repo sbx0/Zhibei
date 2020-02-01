@@ -37,7 +37,7 @@ public abstract class BaseController<T, ID> {
         return mapper.createObjectNode();
     }
 
-    ArrayNode initJSONs() {
+    protected ArrayNode initJSONs() {
         ObjectMapper mapper = new ObjectMapper();
         return mapper.createArrayNode();
     }

@@ -1,4 +1,4 @@
-package cn.sbx0.zhibei.logic.user;
+package cn.sbx0.zhibei.logic.user.certification;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.annotations.DynamicInsert;
@@ -17,14 +17,16 @@ import java.util.Date;
 @DynamicUpdate
 public class UserCertification {
     @Id
-    @Column(nullable = false, unique = true, columnDefinition = "Int(11)")
-    private Integer userId; // id
+    private Integer id; // id
 
     @Column(nullable = false)
-    private Integer status = CertificationStatus.UnderConfirm.getValue(); // 认证状态
+    private Integer userId; // 用户Id
 
     @Column(nullable = false)
-    private Integer kind = CertificationType.Personal.getValue(); // 认证种类
+    private Integer status = CertificationStatus.underConfirm.getValue(); // 认证状态
+
+    @Column(nullable = false)
+    private Integer kind = CertificationType.personal.getValue(); // 认证种类
 
     @Lob
     @Column(nullable = false)
@@ -34,15 +36,29 @@ public class UserCertification {
     @Column(nullable = false)
     private Date validityTime; // 认证有效期
 
+    @JsonFormat(pattern = "yyyy-MM-dd", locale = "zh", timezone = "GMT+8")
+    @Column(nullable = false)
+    private Date submitTime; // 认证提交时间
+
     @Override
     public String toString() {
         return "UserCertification{" +
-                "userId=" + userId +
+                "id=" + id +
+                ", userId=" + userId +
                 ", status=" + status +
                 ", kind=" + kind +
                 ", material='" + material + '\'' +
                 ", validityTime=" + validityTime +
+                ", submitTime=" + submitTime +
                 '}';
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Integer getUserId() {
@@ -83,5 +99,13 @@ public class UserCertification {
 
     public void setValidityTime(Date validityTime) {
         this.validityTime = validityTime;
+    }
+
+    public Date getSubmitTime() {
+        return submitTime;
+    }
+
+    public void setSubmitTime(Date submitTime) {
+        this.submitTime = submitTime;
     }
 }

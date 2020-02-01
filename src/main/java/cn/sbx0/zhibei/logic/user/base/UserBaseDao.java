@@ -1,4 +1,4 @@
-package cn.sbx0.zhibei.logic.user;
+package cn.sbx0.zhibei.logic.user.base;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;

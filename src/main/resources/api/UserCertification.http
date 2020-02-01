@@ -1,0 +1,11 @@
+###
+POST http://localhost:8085/user/base/login?email=test@sbx0.cn&password=test
+Accept: application/json
+Cache-Control: no-cache
+
+###
+GET http://localhost:8085/user/certification/list
+Accept: application/json
+
+###
+

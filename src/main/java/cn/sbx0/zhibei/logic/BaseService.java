@@ -1,5 +1,6 @@
 package cn.sbx0.zhibei.logic;
 
+import cn.sbx0.zhibei.logic.user.certification.UserCertification;
 import cn.sbx0.zhibei.tool.StringTools;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;

@@ -1,7 +1,9 @@
-package cn.sbx0.zhibei.logic.user;
+package cn.sbx0.zhibei.logic.user.base;
 
 import cn.sbx0.zhibei.logic.BaseService;
 import cn.sbx0.zhibei.logic.ReturnStatus;
+import cn.sbx0.zhibei.logic.user.info.UserInfo;
+import cn.sbx0.zhibei.logic.user.info.UserInfoService;
 import cn.sbx0.zhibei.tool.CookieTools;
 import cn.sbx0.zhibei.tool.DateTools;
 import cn.sbx0.zhibei.tool.StringTools;
@@ -63,10 +65,10 @@ public class UserBaseService extends BaseService<UserBase, Integer> {
      * @return ReturnStatus
      */
     public ReturnStatus login(UserBaseView user, HttpSession session, HttpServletResponse response) {
-        if (StringTools.checkNullStr(user.getEmail())) return ReturnStatus.nullStr;
-        if (StringTools.checkNullStr(user.getPassword())) return ReturnStatus.nullStr;
-        if (StringTools.checkNotEmail(user.getEmail())) return ReturnStatus.invalidMail;
-        if (!userInfoService.existByEmail(user.getEmail())) return ReturnStatus.invalidMail;
+        if (StringTools.checkNullStr(user.getEmail())) return ReturnStatus.nullError;
+        if (StringTools.checkNullStr(user.getPassword())) return ReturnStatus.nullError;
+        if (StringTools.checkNotEmail(user.getEmail())) return ReturnStatus.invalidValue;
+        if (!userInfoService.existByEmail(user.getEmail())) return ReturnStatus.invalidValue;
         UserInfo userInfo = userInfoService.findByEmail(user.getEmail());
         if (userInfo == null) return ReturnStatus.failed;
         // 密码是否正确
@@ -93,10 +95,10 @@ public class UserBaseService extends BaseService<UserBase, Integer> {
      * @return ReturnStatus
      */
     public ReturnStatus register(UserBaseView user) {
-        if (StringTools.checkNullStr(user.getName())) return ReturnStatus.nullStr;
-        if (StringTools.checkNullStr(user.getEmail())) return ReturnStatus.nullStr;
-        if (StringTools.checkNullStr(user.getPassword())) return ReturnStatus.nullStr;
-        if (StringTools.checkNotEmail(user.getEmail())) return ReturnStatus.invalidMail;
+        if (StringTools.checkNullStr(user.getName())) return ReturnStatus.nullError;
+        if (StringTools.checkNullStr(user.getEmail())) return ReturnStatus.nullError;
+        if (StringTools.checkNullStr(user.getPassword())) return ReturnStatus.nullError;
+        if (StringTools.checkNotEmail(user.getEmail())) return ReturnStatus.invalidValue;
         if (existByName(user.getName())) return ReturnStatus.repeatOperation;
         if (userInfoService.existByEmail(user.getEmail())) return ReturnStatus.repeatOperation;
         UserBase userBase = new UserBase();

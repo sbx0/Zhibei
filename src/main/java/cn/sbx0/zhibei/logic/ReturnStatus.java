@@ -6,8 +6,8 @@ package cn.sbx0.zhibei.logic;
 public enum ReturnStatus {
     failed(-1, "操作失败"),
     success(0, "操作成功"),
-    nullStr(1, "空字符串"),
-    invalidMail(2, "无效邮箱"),
+    nullError(1, "空值错误"),
+    invalidValue(2, "无效数据"),
     repeatOperation(3, "重复操作"),
     wrongPassword(4, "密码错误"),
     notLogin(5, "暂未登录");

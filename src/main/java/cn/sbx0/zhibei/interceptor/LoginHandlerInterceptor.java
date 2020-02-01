@@ -1,10 +1,8 @@
 package cn.sbx0.zhibei.interceptor;
 
-import cn.sbx0.zhibei.logic.user.UserInfo;
+import cn.sbx0.zhibei.logic.user.info.UserInfo;
 import cn.sbx0.zhibei.tool.CookieTools;
 import cn.sbx0.zhibei.tool.StringTools;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 

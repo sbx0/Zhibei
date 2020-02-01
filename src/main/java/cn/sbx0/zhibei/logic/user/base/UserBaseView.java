@@ -1,4 +1,4 @@
-package cn.sbx0.zhibei.logic.user;
+package cn.sbx0.zhibei.logic.user.base;
 
 /**
  * 基础用户 显示类
