@@ -9,13 +9,26 @@ import java.util.List;
  */
 @Mapper
 public interface UserCertificationMapper {
+
     /**
      * 查询所有的认证信息
      *
-     * @param id     id
-     * @param kind   kind
-     * @param status status
-     * @return UserCertification
+     * @param id
+     * @param kind
+     * @param status
+     * @param start
+     * @param end
+     * @return
      */
-    List<UserCertification> selectAll(Integer id, String kind, String status);
+    List<UserCertification> findAllByUserAndKindAndStatusAndPage(Integer userId, String kind, String status, int start, int end);
+
+    /**
+     * 查询所有的认证信息的条数
+     *
+     * @param id
+     * @param kind
+     * @param status
+     * @return
+     */
+    Integer countAllByUserAndKindAndStatusAndPage(Integer userId, String kind, String status);
 }

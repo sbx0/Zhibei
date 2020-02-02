@@ -3,8 +3,11 @@
         PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
+    <settings>
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
     <typeAliases>
-        <package name="cn.sbx0.zhibei.logic"/>
+        <package name="cn.sbx0.zhibei.logic.user.certification"/>
     </typeAliases>
     <mappers>
         <mapper resource="mybatis/logic/user/certification/UserCertificationMapper.xml"/>

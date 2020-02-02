@@ -1,11 +1,15 @@
 package cn.sbx0.zhibei.logic.user.certification;
 
+import cn.sbx0.zhibei.entity.Certification;
+import cn.sbx0.zhibei.entity.User;
 import cn.sbx0.zhibei.logic.BaseService;
 import cn.sbx0.zhibei.logic.ReturnStatus;
 import cn.sbx0.zhibei.logic.user.info.UserInfo;
 import cn.sbx0.zhibei.logic.user.info.UserInfoService;
 import cn.sbx0.zhibei.tool.DateTools;
 import cn.sbx0.zhibei.tool.StringTools;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +26,8 @@ public class UserCertificationService extends BaseService<UserCertification, Int
     private UserCertificationDao dao;
     @Resource
     private UserInfoService userInfoService;
+    @Resource
+    private UserCertificationMapper userCertificationMapper;
 
     @Override
     public PagingAndSortingRepository<UserCertification, Integer> getDao() {
@@ -31,6 +37,20 @@ public class UserCertificationService extends BaseService<UserCertification, Int
     @Override
     public UserCertification getEntity() {
         return new UserCertification();
+    }
+
+    public List<UserCertification> findAllByUserAndKindAndStatusAndPage(Integer page, Integer size, Integer total, Integer userId, String kind, String status) {
+        if (page == null || page < 1) {
+            return null;
+        }
+        if (size == null || size < 1) {
+            return null;
+        }
+        int begin = (page - 1) * size;
+        if (begin > total) begin = total;
+        int end = begin + size;
+        if (end > total) end = total;
+        return userCertificationMapper.findAllByUserAndKindAndStatusAndPage(userId, kind, status, begin, end);
     }
 
     /**
@@ -104,5 +124,20 @@ public class UserCertificationService extends BaseService<UserCertification, Int
 
     public List<UserCertification> findByUserAndKindAndStatus(Integer id, String kind, String status) {
         return dao.findByUserAndKindAndStatus(id, kind, status);
+    }
+
+    /**
+     * 获取类型
+     */
+    public ArrayNode type() {
+        List<CertificationType> list = CertificationType.list();
+        ArrayNode jsons = initJSONs();
+        for (CertificationType type : list) {
+            ObjectNode json = initJSON();
+            json.put("name", type.getName());
+            json.put("value", type.getValue());
+            jsons.add(json);
+        }
+        return jsons;
     }
 }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -32,6 +33,19 @@ public class UserCertificationController extends BaseController<UserCertificatio
     @Override
     public BaseService<UserCertification, Integer> getService() {
         return service;
+    }
+
+    /**
+     * 获取认证类型
+     *
+     * @return json
+     */
+    @GetMapping("/type")
+    public ObjectNode type() {
+        ObjectNode json = initJSON();
+        json.set("objects", service.type());
+        json.put(statusCode, ReturnStatus.success.getCode());
+        return json;
     }
 
     /**
@@ -67,16 +81,30 @@ public class UserCertificationController extends BaseController<UserCertificatio
         return json;
     }
 
-    // todo 认证申请列表 get
+    /**
+     * 认证申请列表
+     *
+     * @param id
+     * @param kind
+     * @param status
+     * @return
+     */
     @GetMapping("/list")
-    public ObjectNode list(Integer id, String kind, String status) {
+    public ObjectNode list(Integer userId, String kind, String status, Integer page, Integer size) {
         ObjectNode json = initJSON();
-        List<UserCertification> list = (List<UserCertification>) userCertificationMapper.selectAll(id, kind, status);
-        ArrayNode jsons = initJSONs();
-        for (UserCertification certification : list) {
-            jsons.add(getMapper().convertValue(certification, ObjectNode.class));
+        Integer total = userCertificationMapper.countAllByUserAndKindAndStatusAndPage(userId, kind, status);
+        List<UserCertification> list = (List<UserCertification>) service.findAllByUserAndKindAndStatusAndPage(page, size, total, userId, kind, status);
+        if (list != null && list.size() > 0) {
+            ArrayNode jsons = initJSONs();
+            for (UserCertification certification : list) {
+                jsons.add(getMapper().convertValue(certification, ObjectNode.class));
+            }
+            json.set("objects", jsons);
         }
-        json.set("objects", jsons);
+        json.put("page", page);
+        json.put("size", size);
+        json.put("total", total);
+        json.put(statusCode, ReturnStatus.success.getCode());
         return json;
     }
 

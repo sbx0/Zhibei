@@ -1,17 +1,20 @@
 package cn.sbx0.zhibei.logic.user.certification;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * 认证种类
  */
 public enum CertificationType {
-    webSiteOwner(1024, "网站所有者"),
-    advertisers(512, "广告主"),
-    admin(256, "管理员"),
-    auditors(128, "审核人员"),
+    personal(0, "个人"),
+    enterprise(996, "企业"),
     university(985, "大学"),
     mechanism(12, "机构"),
-    enterprise(996, "企业"),
-    personal(0, "个人"),
+    advertisers(512, "广告主"),
+    auditors(128, "审核人员"),
+    admin(256, "管理员"),
+    webSiteOwner(1024, "网站所有者"),
     ;
     int value;
     String name;
@@ -27,6 +30,19 @@ public enum CertificationType {
 
     public String getName() {
         return name;
+    }
+
+    public static List<CertificationType> list() {
+        return Arrays.asList(
+                personal,
+                enterprise,
+                university,
+                mechanism,
+                advertisers,
+                auditors,
+                admin,
+                webSiteOwner
+        );
     }
 
     public static boolean judge(int value) {
