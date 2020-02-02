@@ -1,8 +1,9 @@
-package cn.sbx0.zhibei.logic.user;
+package cn.sbx0.zhibei.logic.user.base;
 
 import cn.sbx0.zhibei.logic.BaseController;
 import cn.sbx0.zhibei.logic.BaseService;
 import cn.sbx0.zhibei.logic.ReturnStatus;
+import cn.sbx0.zhibei.logic.user.info.UserInfo;
 import cn.sbx0.zhibei.tool.CookieTools;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -55,9 +56,13 @@ public class UserBaseController extends BaseController<UserBase, Integer> {
     public ObjectNode avatar() {
         ObjectNode json = initJSON();
         UserBase userBase = service.findById(service.getLoginUserId());
-        ObjectNode userBaseJson = getMapper().convertValue(userBase, ObjectNode.class);
-        json.set(jsonOb, userBaseJson);
-        json.put(statusCode, ReturnStatus.success.getCode());
+        if (userBase != null) {
+            ObjectNode userBaseJson = getMapper().convertValue(userBase, ObjectNode.class);
+            json.set(jsonOb, userBaseJson);
+            json.put(statusCode, ReturnStatus.success.getCode());
+        } else {
+            json.put(statusCode, ReturnStatus.notLogin.getCode());
+        }
         return json;
     }
 
@@ -70,8 +75,13 @@ public class UserBaseController extends BaseController<UserBase, Integer> {
     @GetMapping(value = "/heartbeat")
     public ObjectNode heartbeat() {
         ObjectNode json = initJSON();
-        service.heartbeat(service.getLoginUserId(), new Date());
-        json.put(statusCode, ReturnStatus.success.getCode());
+        int id = service.getLoginUserId();
+        if (id != 0) {
+            service.heartbeat(service.getLoginUserId(), new Date());
+            json.put(statusCode, ReturnStatus.success.getCode());
+        } else {
+            json.put(statusCode, ReturnStatus.notLogin.getCode());
+        }
         return json;
     }
 

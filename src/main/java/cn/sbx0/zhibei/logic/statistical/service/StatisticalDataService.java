@@ -3,8 +3,7 @@ package cn.sbx0.zhibei.logic.statistical.service;
 import cn.sbx0.zhibei.logic.BaseService;
 import cn.sbx0.zhibei.logic.statistical.dao.StatisticalDataDao;
 import cn.sbx0.zhibei.logic.statistical.entity.StatisticalData;
-import cn.sbx0.zhibei.logic.user.UserBaseService;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import cn.sbx0.zhibei.logic.user.base.UserBaseService;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -14,6 +13,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class StatisticalDataService extends BaseService<StatisticalData, Integer> {
@@ -32,6 +32,21 @@ public class StatisticalDataService extends BaseService<StatisticalData, Integer
     @Override
     public StatisticalData getEntity() {
         return new StatisticalData();
+    }
+
+    public ObjectNode findByKindAndGrouping(int day, String kind, String group) {
+        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd HH:ss");
+        ObjectNode json = initJSON();
+        ArrayNode jsons = initJSONs();
+        List<StatisticalData> list = dao.findByKindAndGrouping(day, kind, group);
+        for (StatisticalData data : list) {
+            ObjectNode j = initJSON();
+            j.put("date", sdf.format(data.getTime()));
+            j.put(kind, data.getValue());
+            jsons.add(j);
+        }
+        json.set("data", jsons);
+        return json;
     }
 
     /**
@@ -89,17 +104,4 @@ public class StatisticalDataService extends BaseService<StatisticalData, Integer
         dao.save(data);
     }
 
-    ObjectNode initJSON() {
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.createObjectNode();
-    }
-
-    ArrayNode initJSONs() {
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.createArrayNode();
-    }
-
-    ObjectMapper getMapper() {
-        return new ObjectMapper();
-    }
 }

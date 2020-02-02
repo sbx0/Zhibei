@@ -1,5 +1,7 @@
 package cn.sbx0.zhibei.logic.user;
 
+import cn.sbx0.zhibei.logic.user.base.UserBaseService;
+import cn.sbx0.zhibei.logic.user.base.UserBaseView;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
