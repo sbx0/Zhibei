@@ -36,6 +36,66 @@ public class UserCertificationController extends BaseController<UserCertificatio
     }
 
     /**
+     * 认证通过 拒绝 取消
+     */
+    @GetMapping("/judge")
+    public ObjectNode judge(int status, int id) {
+        ObjectNode json = initJSON();
+        UserInfo user = userBaseService.getLoginUser();
+        if (user == null) {
+            json.put(statusCode, ReturnStatus.notLogin.getCode());
+            return json;
+        }
+        UserCertification certification = service.findById(id);
+        if (certification == null) {
+            json.put(statusCode, ReturnStatus.nullError.getCode());
+            return json;
+        }
+        // 判断状态合法性
+        if (CertificationStatus.judge(status)) {
+            certification.setStatus(status);
+        } else {
+            json.put(statusCode, ReturnStatus.invalidValue.getCode());
+            return json;
+        }
+        if (service.save(certification)) {
+            json.put(statusCode, ReturnStatus.success.getCode());
+        } else {
+            json.put(statusCode, ReturnStatus.failed.getCode());
+        }
+        return json;
+    }
+
+    /**
+     * 取消认证
+     *
+     * @return json
+     */
+    @GetMapping("/cancel")
+    public ObjectNode cancel() {
+        ObjectNode json = initJSON();
+        UserInfo user = userBaseService.getLoginUser();
+        if (user == null) {
+            json.put(statusCode, ReturnStatus.notLogin.getCode());
+            return json;
+        }
+        UserCertification certification = service.findByUserAndNewest(user.getUserId());
+        if (certification == null) {
+            json.put(statusCode, ReturnStatus.nullError.getCode());
+            return json;
+        }
+        // 设置为取消状态
+        certification.setStatus(CertificationStatus.cancel.getValue());
+        json.put(statusCode, ReturnStatus.invalidValue.getCode());
+        if (service.save(certification)) {
+            json.put(statusCode, ReturnStatus.success.getCode());
+        } else {
+            json.put(statusCode, ReturnStatus.failed.getCode());
+        }
+        return json;
+    }
+
+    /**
      * 获取认证类型
      *
      * @return json

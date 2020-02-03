@@ -25,10 +25,16 @@ public class UserBaseService extends BaseService<UserBase, Integer> {
     @Resource
     private UserInfoService userInfoService;
 
+    /**
+     * 查询活跃人数
+     * 一小时内活跃的人数
+     *
+     * @return int
+     */
     public int active() {
         Date now = new Date();
-        // 间隔30分钟
-        Date before = DateTools.rollSecond(now, 60 * 30);
+        // 间隔60分钟
+        Date before = DateTools.rollSecond(now, 60 * 60);
         return userInfoService.countByTime(before);
     }
 
