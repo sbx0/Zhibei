@@ -1,5 +1,6 @@
 package cn.sbx0.zhibei.logic.user.base;
 
+import cn.sbx0.zhibei.annotation.RoleCheck;
 import cn.sbx0.zhibei.logic.BaseController;
 import cn.sbx0.zhibei.logic.BaseService;
 import cn.sbx0.zhibei.logic.ReturnStatus;
@@ -31,6 +32,7 @@ public class UserBaseController extends BaseController<UserBase, Integer> {
      *
      * @return json
      */
+    @RoleCheck(values = {"webSiteOwner", "admin"})
     @GetMapping(value = "/active")
     public ObjectNode active() {
         ObjectNode json = initJSON();
@@ -39,6 +41,24 @@ public class UserBaseController extends BaseController<UserBase, Integer> {
         return json;
     }
 
+    /**
+     * 仅用于显示无权限
+     *
+     * @return json
+     */
+    @GetMapping(value = "/noPermission")
+    public ObjectNode noPermission() {
+        ObjectNode json = initJSON();
+        json.put(statusMsg, ReturnStatus.noPermission.getMsg());
+        json.put(statusCode, ReturnStatus.noPermission.getCode());
+        return json;
+    }
+
+    /**
+     * 仅用于显示未登录
+     *
+     * @return json
+     */
     @GetMapping(value = "/notLogin")
     public ObjectNode notLogin() {
         ObjectNode json = initJSON();

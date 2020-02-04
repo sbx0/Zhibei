@@ -1,6 +1,6 @@
 package cn.sbx0.zhibei.config;
 
-import cn.sbx0.zhibei.interceptor.LoginHandlerInterceptor;
+import cn.sbx0.zhibei.interceptor.UserHandlerInterceptor;
 import cn.sbx0.zhibei.interceptor.StatisticalHandlerInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +13,8 @@ import javax.annotation.Resource;
 public class MvcConfig implements WebMvcConfigurer {
     @Resource
     private StatisticalHandlerInterceptor statisticalHandlerInterceptor;
+    @Resource
+    private UserHandlerInterceptor userHandlerInterceptor;
 
     @Bean
     public WebMvcConfigurer webMvcConfigurerAdapter() {
@@ -21,7 +23,7 @@ public class MvcConfig implements WebMvcConfigurer {
             public void addInterceptors(InterceptorRegistry registry) {
                 registry.addInterceptor(statisticalHandlerInterceptor)
                         .addPathPatterns("/**");
-                registry.addInterceptor(new LoginHandlerInterceptor())
+                registry.addInterceptor(userHandlerInterceptor)
                         .addPathPatterns("/**")
                         .excludePathPatterns(
                                 "/demand/normal/list",

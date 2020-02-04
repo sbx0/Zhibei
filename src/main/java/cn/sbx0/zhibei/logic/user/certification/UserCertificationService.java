@@ -99,6 +99,7 @@ public class UserCertificationService extends BaseService<UserCertification, Int
                 dao.save(certification);
                 return ReturnStatus.success;
             } catch (Exception e) {
+                logger.info(e.getMessage());
                 return ReturnStatus.failed;
             }
         } else if (userCertification.getStatus() == CertificationStatus.underConfirm.getValue()

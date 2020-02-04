@@ -4,9 +4,10 @@ package cn.sbx0.zhibei.logic.user.certification;
  * 认证状态
  */
 public enum CertificationStatus {
-    confirmFailed(-1, "审核未通过"),
+    cancel(-2, "取消"),
+    confirmFailed(-1, "未通过"),
     underConfirm(0, "审核中"),
-    confirmPassed(1, "审核通过"),
+    confirmPassed(1, "通过"),
     ;
     int value;
     String name;
@@ -22,5 +23,17 @@ public enum CertificationStatus {
 
     public String getName() {
         return name;
+    }
+
+    public static boolean judge(int value) {
+        switch (value) {
+            case -2:
+            case -1:
+            case 0:
+            case 1:
+                return true;
+            default:
+                return false;
+        }
     }
 }

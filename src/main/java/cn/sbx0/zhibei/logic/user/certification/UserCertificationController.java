@@ -1,5 +1,6 @@
 package cn.sbx0.zhibei.logic.user.certification;
 
+import cn.sbx0.zhibei.annotation.LoginRequired;
 import cn.sbx0.zhibei.logic.BaseController;
 import cn.sbx0.zhibei.logic.BaseService;
 import cn.sbx0.zhibei.logic.ReturnStatus;
@@ -27,12 +28,70 @@ public class UserCertificationController extends BaseController<UserCertificatio
     private UserCertificationService service;
     @Resource
     private UserBaseService userBaseService;
-    @Autowired
+    @Resource
     private UserCertificationMapper userCertificationMapper;
 
     @Override
     public BaseService<UserCertification, Integer> getService() {
         return service;
+    }
+
+    /**
+     * 认证通过 拒绝 取消
+     */
+    @LoginRequired
+    @GetMapping("/judge")
+    public ObjectNode judge(int status, int id) {
+        ObjectNode json = initJSON();
+        UserInfo user = userBaseService.getLoginUser();
+        if (user == null) {
+            json.put(statusCode, ReturnStatus.notLogin.getCode());
+            return json;
+        }
+        UserCertification certification = service.findById(id);
+        if (certification == null) {
+            json.put(statusCode, ReturnStatus.nullError.getCode());
+            return json;
+        }
+        // 判断状态合法性
+        if (CertificationStatus.judge(status)) {
+            certification.setStatus(status);
+        } else {
+            json.put(statusCode, ReturnStatus.invalidValue.getCode());
+            return json;
+        }
+        if (service.save(certification)) {
+            json.put(statusCode, ReturnStatus.success.getCode());
+        } else {
+            json.put(statusCode, ReturnStatus.failed.getCode());
+        }
+        return json;
+    }
+
+    /**
+     * 取消认证
+     *
+     * @return json
+     */
+    @LoginRequired
+    @GetMapping("/cancel")
+    public ObjectNode cancel() {
+        ObjectNode json = initJSON();
+        UserInfo user = userBaseService.getLoginUser();
+        UserCertification certification = service.findByUserAndNewest(user.getUserId());
+        if (certification == null) {
+            json.put(statusCode, ReturnStatus.nullError.getCode());
+            return json;
+        }
+        // 设置为取消状态
+        certification.setStatus(CertificationStatus.cancel.getValue());
+        json.put(statusCode, ReturnStatus.invalidValue.getCode());
+        if (service.save(certification)) {
+            json.put(statusCode, ReturnStatus.success.getCode());
+        } else {
+            json.put(statusCode, ReturnStatus.failed.getCode());
+        }
+        return json;
     }
 
     /**
@@ -54,6 +113,7 @@ public class UserCertificationController extends BaseController<UserCertificatio
      * @param certification certification
      * @return json
      */
+    @LoginRequired
     @PostMapping("/submit")
     public ObjectNode submit(UserCertification certification) {
         ObjectNode json = initJSON();
@@ -67,6 +127,7 @@ public class UserCertificationController extends BaseController<UserCertificatio
      *
      * @return json
      */
+    @LoginRequired
     @GetMapping("/check")
     public ObjectNode check() {
         ObjectNode json = initJSON();
@@ -76,7 +137,7 @@ public class UserCertificationController extends BaseController<UserCertificatio
             json.set("object", getMapper().convertValue(certification, ObjectNode.class));
             json.put(statusCode, ReturnStatus.success.getCode());
         } else {
-            json.put(statusCode, ReturnStatus.nullError.getCode());
+            json.put(statusCode, ReturnStatus.emptyResult.getCode());
         }
         return json;
     }
@@ -84,16 +145,17 @@ public class UserCertificationController extends BaseController<UserCertificatio
     /**
      * 认证申请列表
      *
-     * @param id
-     * @param kind
-     * @param status
-     * @return
+     * @param userId userId
+     * @param kind   kind
+     * @param status status
+     * @return json
      */
+    @LoginRequired
     @GetMapping("/list")
     public ObjectNode list(Integer userId, String kind, String status, Integer page, Integer size) {
         ObjectNode json = initJSON();
         Integer total = userCertificationMapper.countAllByUserAndKindAndStatusAndPage(userId, kind, status);
-        List<UserCertification> list = (List<UserCertification>) service.findAllByUserAndKindAndStatusAndPage(page, size, total, userId, kind, status);
+        List<UserCertification> list = service.findAllByUserAndKindAndStatusAndPage(page, size, total, userId, kind, status);
         if (list != null && list.size() > 0) {
             ArrayNode jsons = initJSONs();
             for (UserCertification certification : list) {
