@@ -10,7 +10,9 @@ public enum ReturnStatus {
     invalidValue(2, "无效数据"),
     repeatOperation(3, "重复操作"),
     wrongPassword(4, "密码错误"),
-    notLogin(5, "暂未登录");
+    notLogin(5, "暂未登录"),
+    emptyResult(6, "结果为空"),
+    noPermission(7, "无权限");
     int code;
     String msg;
 

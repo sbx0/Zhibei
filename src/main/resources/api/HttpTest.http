@@ -1,0 +1,32 @@
+### 注册
+POST http://localhost:8085/user/base/register?name=测试账号&email=test@sbx0.cn&password=test
+Accept: application/json
+Cache-Control: no-cache
+
+### 登录
+POST http://localhost:8085/user/base/login?email=test@sbx0.cn&password=test
+Accept: application/json
+Cache-Control: no-cache
+
+### 退出登录
+GET http://localhost:8085/user/base/logout
+Accept: application/json
+Cache-Control: no-cache
+
+### 认证列表
+GET http://localhost:8085/user/certification/list?page=1&size=5
+Accept: application/json
+
+### 认证列表
+GET http://localhost:8085/user/certification/check
+Accept: application/json
+
+### 初始化用户角色
+GET http://localhost:8085/user/role/init
+Accept: application/json
+
+### 获取当前活跃人数
+GET http://localhost:8085/user/base/active
+Accept: application/json
+
+###

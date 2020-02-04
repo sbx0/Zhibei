@@ -4,6 +4,7 @@ import cn.sbx0.zhibei.logic.BaseService;
 import cn.sbx0.zhibei.logic.ReturnStatus;
 import cn.sbx0.zhibei.logic.user.info.UserInfo;
 import cn.sbx0.zhibei.logic.user.info.UserInfoService;
+import cn.sbx0.zhibei.logic.user.role.UserRoleService;
 import cn.sbx0.zhibei.tool.CookieTools;
 import cn.sbx0.zhibei.tool.DateTools;
 import cn.sbx0.zhibei.tool.StringTools;
@@ -24,6 +25,8 @@ public class UserBaseService extends BaseService<UserBase, Integer> {
     private UserBaseDao dao;
     @Resource
     private UserInfoService userInfoService;
+    @Resource
+    private UserRoleService userRoleService;
 
     /**
      * 查询活跃人数
@@ -117,6 +120,11 @@ public class UserBaseService extends BaseService<UserBase, Integer> {
             if (status != ReturnStatus.success.getCode()) {
                 // 如果用户信息创建失败，回滚基础用户
                 dao.delete(userBase);
+            }
+            // 绑定初始用户角色
+            ReturnStatus returnStatus = userRoleService.bindInit(userBase.getId());
+            if (returnStatus != ReturnStatus.success) {
+                return ReturnStatus.failed;
             }
         } else {
             return ReturnStatus.failed;
