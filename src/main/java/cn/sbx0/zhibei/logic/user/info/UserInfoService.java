@@ -27,6 +27,19 @@ public class UserInfoService extends BaseService<UserInfo, Integer> {
     @Resource
     private UserInfoDao dao;
 
+    @Override
+    public boolean checkDataValidity(UserInfo userInfo) {
+        if (userInfo.getUserId() == null) return false;
+        if (StringTools.checkNullStr(userInfo.getEmail())) return false;
+        if (StringTools.checkNotEmail(userInfo.getEmail())) return false;
+        if (StringTools.checkNullStr(userInfo.getPassword())) return false;
+        if (userInfo.getRegisterTime() == null) return false;
+        if (userInfo.getBanned() == null) return false;
+        if (userInfo.getLevel() == null) return false;
+        if (userInfo.getExp() == null) return false;
+        return userInfo.getExpMax() != null;
+    }
+
     /**
      * 指定时间内活跃的用户
      *

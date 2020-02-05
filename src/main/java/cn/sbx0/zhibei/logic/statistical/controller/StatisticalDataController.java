@@ -35,8 +35,12 @@ public class StatisticalDataController extends BaseController<StatisticalData, I
     public ObjectNode recent(Integer day, String kind, String group) {
         ObjectNode json = initJSON();
         ObjectNode data = service.findByKindAndGrouping(day, kind, group);
-        json.set("objects", data);
-        json.put(statusCode, ReturnStatus.success.getCode());
+        if (data != null) {
+            json.set("objects", data);
+            json.put(statusCode, ReturnStatus.success.getCode());
+        } else {
+            json.put(statusCode, ReturnStatus.emptyResult.getCode());
+        }
         return json;
     }
 }

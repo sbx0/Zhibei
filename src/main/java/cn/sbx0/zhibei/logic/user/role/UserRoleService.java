@@ -2,11 +2,14 @@ package cn.sbx0.zhibei.logic.user.role;
 
 import cn.sbx0.zhibei.logic.BaseService;
 import cn.sbx0.zhibei.logic.ReturnStatus;
+import cn.sbx0.zhibei.logic.user.base.UserBaseService;
 import cn.sbx0.zhibei.tool.DateTools;
+import cn.sbx0.zhibei.tool.StringTools;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -19,6 +22,8 @@ public class UserRoleService extends BaseService<UserRole, Integer> {
     private UserRoleDao dao;
     @Resource
     private UserRoleBindDao userRoleBindDao;
+    @Resource
+    private UserBaseService userBaseService;
 
     @Override
     public PagingAndSortingRepository<UserRole, Integer> getDao() {
@@ -28,6 +33,12 @@ public class UserRoleService extends BaseService<UserRole, Integer> {
     @Override
     public UserRole getEntity() {
         return new UserRole();
+    }
+
+    @Override
+    public boolean checkDataValidity(UserRole userRole) {
+        if (StringTools.checkNullStr(userRole.getCode())) return false;
+        return userRole.getWeight() != null;
     }
 
     /**
@@ -84,5 +95,74 @@ public class UserRoleService extends BaseService<UserRole, Integer> {
      */
     public List<UserRoleBind> findAllByUserId(Integer userId) {
         return userRoleBindDao.findAllByUserId(userId);
+    }
+
+    /**
+     * 给某个用户添加角色
+     *
+     * @param userId userId
+     * @param roleId roleId
+     * @param kind   kind 为0时增加，为其他时删除
+     * @return ReturnStatus
+     */
+    public ReturnStatus give(Integer userId, Integer roleId, Integer kind) {
+        // 验证数据有效性
+        if (!userBaseService.existById(userId)) return ReturnStatus.invalidValue;
+        if (!existById(roleId)) return ReturnStatus.invalidValue;
+        // 查询用户已经拥有的所有角色
+        List<UserRoleBind> userRoleBinds = findAllByUserId(userId);
+        if (userRoleBinds == null) userRoleBinds = new ArrayList<>();
+        boolean exist = false;
+        Date now = new Date();
+        // 添加
+        if (kind == 0) {
+            for (UserRoleBind userRoleBind : userRoleBinds) {
+                // 如果要添加的角色之前绑定过
+                if (userRoleBind.getRoleId().equals(roleId)) {
+                    exist = true;
+                    // 且该角色还未过期
+                    if (userRoleBind.getValidityTime().getTime() > now.getTime()) {
+                        return ReturnStatus.repeatOperation;
+                    } else {
+                        // 角色过期，更新有效期，默认一年
+                        userRoleBind.setValidityTime(DateTools.addDay(now, 365));
+                        // 保存
+                        userRoleBindDao.save(userRoleBind);
+                    }
+                    break;
+                }
+            }
+            // 如果添加的角色并没有
+            if (!exist) {
+                UserRoleBind userRoleBind = new UserRoleBind();
+                userRoleBind.setValidityTime(DateTools.addDay(now, 365));
+                userRoleBind.setUserId(userId);
+                userRoleBind.setRoleId(roleId);
+                userRoleBindDao.save(userRoleBind);
+            }
+        } else {
+            // 删除
+            for (UserRoleBind userRoleBind : userRoleBinds) {
+                // 如果要删除的角色之前绑定过
+                if (userRoleBind.getRoleId().equals(roleId)) {
+                    // 设置有效期为现在，也就是立即过期
+                    userRoleBind.setValidityTime(now);
+                    // 保存
+                    userRoleBindDao.save(userRoleBind);
+                    break;
+                }
+            }
+        }
+        return ReturnStatus.success;
+    }
+
+    /**
+     * 查询角色是否存在
+     *
+     * @param roleId roleId
+     * @return boolean
+     */
+    private boolean existById(Integer roleId) {
+        return dao.existById(roleId) != null;
     }
 }

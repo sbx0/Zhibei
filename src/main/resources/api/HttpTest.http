@@ -1,17 +1,69 @@
 ### 注册
-POST http://localhost:8085/user/base/register?name=测试账号&email=test@sbx0.cn&password=test
+POST http://localhost:8085/user/base/register
 Accept: application/json
-Cache-Control: no-cache
+Content-Type: application/x-www-form-urlencoded
+
+name=测试用户&email=test@sbx0.cn&password=test
 
 ### 登录
-POST http://localhost:8085/user/base/login?email=test@sbx0.cn&password=test
+POST http://localhost:8085/user/base/login
 Accept: application/json
-Cache-Control: no-cache
+Content-Type: application/x-www-form-urlencoded
+
+email=test@sbx0.cn&password=test
+
 
 ### 退出登录
 GET http://localhost:8085/user/base/logout
 Accept: application/json
 Cache-Control: no-cache
+
+### 获取登录信息
+GET http://localhost:8085/user/base/info
+Accept: application/json
+
+### 返回最基础的登录用户信息
+GET http://localhost:8085/user/base/basic
+Accept: application/json
+
+### 心跳
+GET http://localhost:8085/user/base/heartbeat
+Accept: application/json
+
+### 仅用于显示未登录
+GET http://localhost:8085/user/base/notLogin
+Accept: application/json
+
+### 仅用于显示无权限
+GET http://localhost:8085/user/base/noPermission
+Accept: application/json
+
+### 获取当前活跃人数
+GET http://localhost:8085/user/base/active
+Accept: application/json
+
+### 提交认证
+POST http://localhost:8085/user/certification/submit
+Accept: application/json
+Content-Type: application/x-www-form-urlencoded
+
+kind=0&material=test
+
+### 查询认证
+GET http://localhost:8085/user/certification/check
+Accept: application/json
+
+### 认证通过 拒绝 取消
+GET http://localhost:8085/user/certification/judge?status=0&id=1
+Accept: application/json
+
+### 取消认证
+GET http://localhost:8085/user/certification/cancel
+Accept: application/json
+
+### 获取认证类型
+GET http://localhost:8085/user/certification/type
+Accept: application/json
 
 ### 认证列表
 GET http://localhost:8085/user/certification/list?page=1&size=5
@@ -21,12 +73,43 @@ Accept: application/json
 GET http://localhost:8085/user/certification/check
 Accept: application/json
 
+### 查询最近的统计数据
+GET http://localhost:8085/statistical/data/recent?day=30&kind=view&group=per_hour
+Accept: application/json
+
+### 查询最近的客户端统计数据
+GET http://localhost:8085/statistical/user/client
+Accept: application/json
+
 ### 初始化用户角色
 GET http://localhost:8085/user/role/init
 Accept: application/json
 
-### 获取当前活跃人数
-GET http://localhost:8085/user/base/active
+### 赋予某人权限
+GET http://localhost:8085/user/role/give?userId=1&roleId=3&kind=0
+Accept: application/json
+
+### 增 改 保存
+POST http://localhost:8085/user/base/admin/save
+Accept: application/json
+Content-Type: application/x-www-form-urlencoded
+
+name=423
+
+### 删 删除
+GET http://localhost:8085/user/base/admin/delete?id=4
+Accept: application/json
+
+### 查 查询
+GET http://localhost:8085/user/base/admin/one?id=4
+Accept: application/json
+
+### 查 查询
+GET http://localhost:8085/user/base/admin/list?page=1&size=10
+Accept: application/json
+
+### 查 查询
+GET http://localhost:8085/user/base/admin/attribute
 Accept: application/json
 
 ###

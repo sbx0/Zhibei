@@ -1,6 +1,7 @@
 package cn.sbx0.zhibei.logic.user.certification;
 
 import cn.sbx0.zhibei.annotation.LoginRequired;
+import cn.sbx0.zhibei.annotation.RoleCheck;
 import cn.sbx0.zhibei.logic.BaseController;
 import cn.sbx0.zhibei.logic.BaseService;
 import cn.sbx0.zhibei.logic.ReturnStatus;
@@ -8,14 +9,12 @@ import cn.sbx0.zhibei.logic.user.base.UserBaseService;
 import cn.sbx0.zhibei.logic.user.info.UserInfo;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -39,6 +38,7 @@ public class UserCertificationController extends BaseController<UserCertificatio
     /**
      * 认证通过 拒绝 取消
      */
+    @RoleCheck(values = {"auditors", "admin", "webSiteOwner"})
     @LoginRequired
     @GetMapping("/judge")
     public ObjectNode judge(int status, int id) {
@@ -60,7 +60,7 @@ public class UserCertificationController extends BaseController<UserCertificatio
             json.put(statusCode, ReturnStatus.invalidValue.getCode());
             return json;
         }
-        if (service.save(certification)) {
+        if (service.save(certification).getId() != null) {
             json.put(statusCode, ReturnStatus.success.getCode());
         } else {
             json.put(statusCode, ReturnStatus.failed.getCode());
@@ -86,7 +86,7 @@ public class UserCertificationController extends BaseController<UserCertificatio
         // 设置为取消状态
         certification.setStatus(CertificationStatus.cancel.getValue());
         json.put(statusCode, ReturnStatus.invalidValue.getCode());
-        if (service.save(certification)) {
+        if (service.save(certification).getId() != null) {
             json.put(statusCode, ReturnStatus.success.getCode());
         } else {
             json.put(statusCode, ReturnStatus.failed.getCode());
@@ -99,6 +99,7 @@ public class UserCertificationController extends BaseController<UserCertificatio
      *
      * @return json
      */
+    @LoginRequired
     @GetMapping("/type")
     public ObjectNode type() {
         ObjectNode json = initJSON();
@@ -150,6 +151,7 @@ public class UserCertificationController extends BaseController<UserCertificatio
      * @param status status
      * @return json
      */
+    @RoleCheck(values = {"auditors", "admin", "webSiteOwner"})
     @LoginRequired
     @GetMapping("/list")
     public ObjectNode list(Integer userId, String kind, String status, Integer page, Integer size) {

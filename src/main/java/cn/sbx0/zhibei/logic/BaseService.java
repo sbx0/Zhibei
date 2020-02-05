@@ -1,6 +1,5 @@
 package cn.sbx0.zhibei.logic;
 
-import cn.sbx0.zhibei.logic.user.certification.UserCertification;
 import cn.sbx0.zhibei.tool.StringTools;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -18,7 +17,10 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 公用基础 服务层
@@ -60,9 +62,16 @@ public abstract class BaseService<T, ID> {
     public abstract T getEntity();
 
     /**
+     * 检查数据有效性
+     *
+     * @return boolean
+     */
+    public abstract boolean checkDataValidity(T t);
+
+    /**
      * 获取对象属性类型，属性名
      */
-    public List getAttribute() {
+    public List<Map> getAttribute() {
         Field[] fields = getEntity().getClass().getDeclaredFields();
         List<Map> list = new ArrayList();
         for (int i = 0; i < fields.length; i++) {
@@ -109,18 +118,14 @@ public abstract class BaseService<T, ID> {
     /**
      * 保存
      *
-     * @param entity 实体类
-     * @return 操作是否成功
+     * @param t t
+     * @return T
      */
-    @Transactional
-    public boolean save(T entity) {
-        try {
-            getDao().save(entity);
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            return false;
+    public T save(T t) {
+        if (checkDataValidity(t)) {
+            return getDao().save(t);
+        } else {
+            return null;
         }
     }
 
@@ -131,13 +136,12 @@ public abstract class BaseService<T, ID> {
      * @return 操作是否成功
      */
     @Transactional
-    public boolean saveAll(Iterable<T> entities) {
+    public Iterable<T> saveAll(Iterable<T> entities) {
         try {
-            getDao().saveAll(entities);
-            return true;
-        } catch (Exception e) {
+            return getDao().saveAll(entities);
+        } catch (IllegalArgumentException e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            return false;
+            return null;
         }
     }
 
@@ -148,9 +152,10 @@ public abstract class BaseService<T, ID> {
      * @return 实体
      */
     public T findById(ID id) {
-        try {
+        if (id == null) return null;
+        if (getDao().findById(id).isPresent()) {
             return getDao().findById(id).get();
-        } catch (Exception e) {
+        } else {
             return null;
         }
     }
@@ -292,11 +297,11 @@ public abstract class BaseService<T, ID> {
     /**
      * 拼接Pageable
      *
-     * @param page
-     * @param size
-     * @param attribute
-     * @param direction
-     * @return
+     * @param page      page
+     * @param size      size
+     * @param attribute attribute
+     * @param direction direction
+     * @return Pageable
      */
     public static Pageable buildPageable(Integer page, Integer size, String attribute, String direction) {
         if (page == null) page = 1;

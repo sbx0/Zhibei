@@ -9,4 +9,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 public interface UserRoleDao extends PagingAndSortingRepository<UserRole, Integer> {
     @Query(value = "SELECT * FROM user_role where code = ?1", nativeQuery = true)
     UserRole findByCode(String code);
+
+    @Query(value = "select 1 from user_role where id = ?1", nativeQuery = true)
+    String existById(Integer roleId);
 }
