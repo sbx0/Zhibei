@@ -60,7 +60,7 @@ public class UserCertificationController extends BaseController<UserCertificatio
             json.put(statusCode, ReturnStatus.invalidValue.getCode());
             return json;
         }
-        if (service.save(certification)) {
+        if (service.save(certification).getId() != null) {
             json.put(statusCode, ReturnStatus.success.getCode());
         } else {
             json.put(statusCode, ReturnStatus.failed.getCode());
@@ -86,7 +86,7 @@ public class UserCertificationController extends BaseController<UserCertificatio
         // 设置为取消状态
         certification.setStatus(CertificationStatus.cancel.getValue());
         json.put(statusCode, ReturnStatus.invalidValue.getCode());
-        if (service.save(certification)) {
+        if (service.save(certification).getId() != null) {
             json.put(statusCode, ReturnStatus.success.getCode());
         } else {
             json.put(statusCode, ReturnStatus.failed.getCode());

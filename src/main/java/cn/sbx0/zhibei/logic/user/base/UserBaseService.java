@@ -28,6 +28,12 @@ public class UserBaseService extends BaseService<UserBase, Integer> {
     @Resource
     private UserRoleService userRoleService;
 
+    @Override
+    public boolean checkDataValidity(UserBase userBase) {
+        if (StringTools.checkNullStr(userBase.getName())) return false;
+        return userBase.getName() != null;
+    }
+
     /**
      * 查询活跃人数
      * 一小时内活跃的人数

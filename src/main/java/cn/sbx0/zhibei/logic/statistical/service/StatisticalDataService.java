@@ -34,6 +34,11 @@ public class StatisticalDataService extends BaseService<StatisticalData, Integer
         return new StatisticalData();
     }
 
+    @Override
+    public boolean checkDataValidity(StatisticalData statisticalData) {
+        return true;
+    }
+
     public ObjectNode findByKindAndGrouping(int day, String kind, String group) {
         SimpleDateFormat sdf = new SimpleDateFormat("MM-dd HH:ss");
         ObjectNode json = initJSON();

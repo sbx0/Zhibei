@@ -89,4 +89,27 @@ Accept: application/json
 GET http://localhost:8085/user/role/give?userId=1&roleId=3&kind=0
 Accept: application/json
 
+### 增 改 保存
+POST http://localhost:8085/user/base/admin/save
+Accept: application/json
+Content-Type: application/x-www-form-urlencoded
+
+name=423
+
+### 删 删除
+GET http://localhost:8085/user/base/admin/delete?id=4
+Accept: application/json
+
+### 查 查询
+GET http://localhost:8085/user/base/admin/one?id=4
+Accept: application/json
+
+### 查 查询
+GET http://localhost:8085/user/base/admin/list?page=1&size=10
+Accept: application/json
+
+### 查 查询
+GET http://localhost:8085/user/base/admin/attribute
+Accept: application/json
+
 ###

@@ -20,6 +20,11 @@ public class StatisticalUserService extends BaseService<StatisticalUser, Integer
     @Resource
     private StatisticalUserDao dao;
 
+    @Override
+    public boolean checkDataValidity(StatisticalUser statisticalUser) {
+        return true;
+    }
+
     public ObjectNode countByClient() {
         ObjectNode data = initJSON();
         ArrayNode jsons = initJSONs();

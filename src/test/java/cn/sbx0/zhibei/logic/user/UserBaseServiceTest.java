@@ -1,5 +1,6 @@
 package cn.sbx0.zhibei.logic.user;
 
+import cn.sbx0.zhibei.logic.user.base.UserBase;
 import cn.sbx0.zhibei.logic.user.base.UserBaseService;
 import cn.sbx0.zhibei.logic.user.base.UserBaseView;
 import org.junit.Test;
@@ -22,6 +23,14 @@ public class UserBaseServiceTest {
     HttpSession session;
     @Resource
     HttpServletResponse response;
+
+    @Test
+    public void save() {
+        UserBase user = new UserBase();
+        user.setName("1");
+        UserBase newUser = service.save(user);
+        System.out.println(newUser);
+    }
 
     @Test
     public void main() {

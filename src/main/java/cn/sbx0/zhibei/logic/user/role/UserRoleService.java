@@ -4,6 +4,7 @@ import cn.sbx0.zhibei.logic.BaseService;
 import cn.sbx0.zhibei.logic.ReturnStatus;
 import cn.sbx0.zhibei.logic.user.base.UserBaseService;
 import cn.sbx0.zhibei.tool.DateTools;
+import cn.sbx0.zhibei.tool.StringTools;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +33,12 @@ public class UserRoleService extends BaseService<UserRole, Integer> {
     @Override
     public UserRole getEntity() {
         return new UserRole();
+    }
+
+    @Override
+    public boolean checkDataValidity(UserRole userRole) {
+        if (StringTools.checkNullStr(userRole.getCode())) return false;
+        return userRole.getWeight() != null;
     }
 
     /**

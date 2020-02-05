@@ -39,6 +39,16 @@ public class UserCertificationService extends BaseService<UserCertification, Int
         return new UserCertification();
     }
 
+    @Override
+    public boolean checkDataValidity(UserCertification certification) {
+        if (certification.getUserId() == null) return false;
+        if (certification.getStatus() == null) return false;
+        if (certification.getKind() == null) return false;
+        if (certification.getMaterial() == null) return false;
+        if (certification.getValidityTime() == null) return false;
+        return certification.getSubmitTime() != null;
+    }
+
     public List<UserCertification> findAllByUserAndKindAndStatusAndPage(Integer page, Integer size, Integer total, Integer userId, String kind, String status) {
         if (page == null || page < 1) {
             return null;
