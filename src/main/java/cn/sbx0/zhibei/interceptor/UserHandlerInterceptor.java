@@ -80,7 +80,11 @@ public class UserHandlerInterceptor implements HandlerInterceptor {
                     String check = StringTools.getKey(userId);
                     // 匹配KEY
                     isLogin = check.equals(key);
-                    if (!isLogin) request.getRequestDispatcher("/user/base/notLogin").forward(request, response);
+                    if (!isLogin) {
+                        request.getRequestDispatcher("/user/base/notLogin").forward(request, response);
+                        return false;
+                    }
+
                 }
                 // 已登录
                 // 如果有检查角色注解
@@ -103,6 +107,7 @@ public class UserHandlerInterceptor implements HandlerInterceptor {
                             }
                         }
                         request.getRequestDispatcher("/user/base/noPermission").forward(request, response);
+                        return false;
                     }
                 }
             }

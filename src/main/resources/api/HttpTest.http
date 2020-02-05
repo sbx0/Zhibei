@@ -85,4 +85,8 @@ Accept: application/json
 GET http://localhost:8085/user/role/init
 Accept: application/json
 
+### 赋予某人权限
+GET http://localhost:8085/user/role/give?userId=1&roleId=3&kind=0
+Accept: application/json
+
 ###

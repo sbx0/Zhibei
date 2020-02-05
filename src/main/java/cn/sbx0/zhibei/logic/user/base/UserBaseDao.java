@@ -12,4 +12,7 @@ public interface UserBaseDao extends PagingAndSortingRepository<UserBase, Intege
 
     @Query(value = "select 1 from user_base where name = ?1", nativeQuery = true)
     String existsByName(String name);
+
+    @Query(value = "select 1 from user_base where id = ?1", nativeQuery = true)
+    String existById(Integer id);
 }

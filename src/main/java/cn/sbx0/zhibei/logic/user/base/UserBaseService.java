@@ -138,8 +138,18 @@ public class UserBaseService extends BaseService<UserBase, Integer> {
      * @param name name
      * @return boolean
      */
-    private boolean existByName(String name) {
+    public boolean existByName(String name) {
         return dao.existsByName(name) != null;
+    }
+
+    /**
+     * 根据用户名判断用户是否存在
+     *
+     * @param id id
+     * @return boolean
+     */
+    public boolean existById(Integer id) {
+        return dao.existById(id) != null;
     }
 
     @Override
