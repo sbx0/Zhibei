@@ -1,5 +1,6 @@
 package cn.sbx0.zhibei.logic.user.base;
 
+import cn.sbx0.zhibei.annotation.LoginRequired;
 import cn.sbx0.zhibei.annotation.RoleCheck;
 import cn.sbx0.zhibei.logic.BaseController;
 import cn.sbx0.zhibei.logic.BaseService;
@@ -32,7 +33,6 @@ public class UserBaseController extends BaseController<UserBase, Integer> {
      *
      * @return json
      */
-    @RoleCheck(values = {"webSiteOwner", "admin"})
     @GetMapping(value = "/active")
     public ObjectNode active() {
         ObjectNode json = initJSON();
@@ -68,25 +68,6 @@ public class UserBaseController extends BaseController<UserBase, Integer> {
     }
 
     /**
-     * 返回最基础的登录用户信息
-     *
-     * @return json
-     */
-    @GetMapping(value = "/basic")
-    public ObjectNode avatar() {
-        ObjectNode json = initJSON();
-        UserBase userBase = service.findById(service.getLoginUserId());
-        if (userBase != null) {
-            ObjectNode userBaseJson = getMapper().convertValue(userBase, ObjectNode.class);
-            json.set(jsonOb, userBaseJson);
-            json.put(statusCode, ReturnStatus.success.getCode());
-        } else {
-            json.put(statusCode, ReturnStatus.notLogin.getCode());
-        }
-        return json;
-    }
-
-    /**
      * 心跳
      * 记录活跃用户
      *
@@ -106,19 +87,22 @@ public class UserBaseController extends BaseController<UserBase, Integer> {
     }
 
     /**
-     * 退出登录
+     * 返回最基础的登录用户信息
      *
-     * @param request  request
-     * @param response response
      * @return json
      */
-    @GetMapping(value = "/logout")
-    public ObjectNode logout(HttpServletRequest request, HttpServletResponse response) {
+    @LoginRequired
+    @GetMapping(value = "/basic")
+    public ObjectNode avatar() {
         ObjectNode json = initJSON();
-        CookieTools.removeCookies(response);
-        HttpSession session = request.getSession(false);
-        if (session != null) session.removeAttribute("user");
-        json.put(statusCode, ReturnStatus.success.getCode());
+        UserBase userBase = service.findById(service.getLoginUserId());
+        if (userBase != null) {
+            ObjectNode userBaseJson = getMapper().convertValue(userBase, ObjectNode.class);
+            json.set(jsonOb, userBaseJson);
+            json.put(statusCode, ReturnStatus.success.getCode());
+        } else {
+            json.put(statusCode, ReturnStatus.notLogin.getCode());
+        }
         return json;
     }
 
@@ -127,6 +111,7 @@ public class UserBaseController extends BaseController<UserBase, Integer> {
      *
      * @return json
      */
+    @LoginRequired
     @GetMapping(value = "/info")
     public ObjectNode info() {
         ObjectNode json = initJSON();
@@ -140,6 +125,24 @@ public class UserBaseController extends BaseController<UserBase, Integer> {
         json.set("user", userBaseJson);
         ObjectNode userInfoJson = getMapper().convertValue(userInfo, ObjectNode.class);
         json.set(jsonOb, userInfoJson);
+        json.put(statusCode, ReturnStatus.success.getCode());
+        return json;
+    }
+
+    /**
+     * 退出登录
+     *
+     * @param request  request
+     * @param response response
+     * @return json
+     */
+    @LoginRequired
+    @GetMapping(value = "/logout")
+    public ObjectNode logout(HttpServletRequest request, HttpServletResponse response) {
+        ObjectNode json = initJSON();
+        CookieTools.removeCookies(response);
+        HttpSession session = request.getSession(false);
+        if (session != null) session.removeAttribute("user");
         json.put(statusCode, ReturnStatus.success.getCode());
         return json;
     }

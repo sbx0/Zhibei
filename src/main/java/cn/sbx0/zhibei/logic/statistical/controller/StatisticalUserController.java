@@ -24,7 +24,7 @@ public class StatisticalUserController extends BaseController<StatisticalUser, I
     }
 
     /**
-     * 最近的数据
+     * 查询最近的客户端统计数据
      *
      * @return ObjectNode
      */

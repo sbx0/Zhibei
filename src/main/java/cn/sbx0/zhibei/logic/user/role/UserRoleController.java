@@ -1,12 +1,8 @@
 package cn.sbx0.zhibei.logic.user.role;
 
-import cn.sbx0.zhibei.annotation.LoginRequired;
 import cn.sbx0.zhibei.logic.BaseController;
 import cn.sbx0.zhibei.logic.BaseService;
 import cn.sbx0.zhibei.logic.ReturnStatus;
-import cn.sbx0.zhibei.logic.user.certification.CertificationStatus;
-import cn.sbx0.zhibei.logic.user.certification.UserCertification;
-import cn.sbx0.zhibei.logic.user.info.UserInfo;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

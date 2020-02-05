@@ -39,13 +39,15 @@ public class StatisticalDataService extends BaseService<StatisticalData, Integer
         ObjectNode json = initJSON();
         ArrayNode jsons = initJSONs();
         List<StatisticalData> list = dao.findByKindAndGrouping(day, kind, group);
-        for (StatisticalData data : list) {
-            ObjectNode j = initJSON();
-            j.put("date", sdf.format(data.getTime()));
-            j.put(kind, data.getValue());
-            jsons.add(j);
+        if (list != null) {
+            for (StatisticalData data : list) {
+                ObjectNode j = initJSON();
+                j.put("date", sdf.format(data.getTime()));
+                j.put(kind, data.getValue());
+                jsons.add(j);
+            }
+            json.set("data", jsons);
         }
-        json.set("data", jsons);
         return json;
     }
 
