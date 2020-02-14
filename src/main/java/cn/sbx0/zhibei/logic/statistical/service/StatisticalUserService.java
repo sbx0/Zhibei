@@ -61,6 +61,7 @@ public class StatisticalUserService extends BaseService<StatisticalUser, Integer
     public void handlerInterceptor(HttpServletRequest request) {
         String ip = RequestTools.getIpAddress(request);
         String client = RequestTools.getClient(request);
+        String agent = request.getHeader("user-agent");
         Date now = new Date();
         // 间隔15分钟
         Date before = DateTools.rollSecond(now, 60 * 15);
@@ -69,6 +70,7 @@ public class StatisticalUserService extends BaseService<StatisticalUser, Integer
             user = new StatisticalUser();
             user.setIp(ip);
             user.setClient(client);
+            user.setAgent(agent);
             user.setTime(now);
             save(user);
         }

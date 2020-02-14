@@ -16,7 +16,7 @@ import java.util.Date;
 public class StatisticalData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     /**
      * 种类
@@ -43,11 +43,22 @@ public class StatisticalData {
     @Column(nullable = false)
     private Date time;
 
-    public Long getId() {
+    @Override
+    public String toString() {
+        return "StatisticalData{" +
+                "id=" + id +
+                ", kind='" + kind + '\'' +
+                ", grouping='" + grouping + '\'' +
+                ", value=" + value +
+                ", time=" + time +
+                '}';
+    }
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -81,16 +92,5 @@ public class StatisticalData {
 
     public void setTime(Date time) {
         this.time = time;
-    }
-
-    @Override
-    public String toString() {
-        return "DataDO{" +
-                "id=" + id +
-                ", kind='" + kind + '\'' +
-                ", grouping='" + grouping + '\'' +
-                ", value=" + value +
-                ", time=" + time +
-                '}';
     }
 }

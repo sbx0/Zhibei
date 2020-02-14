@@ -17,8 +17,11 @@ import java.util.Date;
 @DynamicUpdate
 public class UserInfo {
     @Id
-    @Column(nullable = false, unique = true, columnDefinition = "Int(11)")
-    private Integer userId; // id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id; // id
+
+    @Column(nullable = false, unique = true)
+    private Integer userId; // 用户Id
 
     @Column(nullable = false, unique = true, length = 50)
     private String email; // 邮箱
@@ -66,7 +69,8 @@ public class UserInfo {
     @Override
     public String toString() {
         return "UserInfo{" +
-                "userId=" + userId +
+                "id=" + id +
+                ", userId=" + userId +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", introduction='" + introduction + '\'' +
@@ -84,12 +88,12 @@ public class UserInfo {
                 '}';
     }
 
-    public Date getLastTimeOnline() {
-        return lastTimeOnline;
+    public Integer getId() {
+        return id;
     }
 
-    public void setLastTimeOnline(Date lastTimeOnline) {
-        this.lastTimeOnline = lastTimeOnline;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Integer getUserId() {
@@ -98,6 +102,14 @@ public class UserInfo {
 
     public void setUserId(Integer userId) {
         this.userId = userId;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {
@@ -132,14 +144,6 @@ public class UserInfo {
         this.phone = phone;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getSex() {
         return sex;
     }
@@ -154,6 +158,14 @@ public class UserInfo {
 
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
+    }
+
+    public Date getLastTimeOnline() {
+        return lastTimeOnline;
+    }
+
+    public void setLastTimeOnline(Date lastTimeOnline) {
+        this.lastTimeOnline = lastTimeOnline;
     }
 
     public Boolean getBanned() {

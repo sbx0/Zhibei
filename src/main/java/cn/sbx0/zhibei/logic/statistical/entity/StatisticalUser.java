@@ -13,7 +13,7 @@ import java.util.Date;
 public class StatisticalUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     /**
      * ip
@@ -28,6 +28,12 @@ public class StatisticalUser {
     private String client;
 
     /**
+     * 客户端
+     */
+    @Column(nullable = false)
+    private String agent;
+
+    /**
      * 统计日期
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
@@ -40,15 +46,16 @@ public class StatisticalUser {
                 "id=" + id +
                 ", ip='" + ip + '\'' +
                 ", client='" + client + '\'' +
+                ", agent='" + agent + '\'' +
                 ", time=" + time +
                 '}';
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -66,6 +73,14 @@ public class StatisticalUser {
 
     public void setClient(String client) {
         this.client = client;
+    }
+
+    public String getAgent() {
+        return agent;
+    }
+
+    public void setAgent(String agent) {
+        this.agent = agent;
     }
 
     public Date getTime() {

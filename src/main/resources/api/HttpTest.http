@@ -68,7 +68,7 @@ Accept: application/json
 GET http://localhost:8085/user/certification/list?page=1&size=5
 Accept: application/json
 
-### 认证列表
+### 检查认证
 GET http://localhost:8085/user/certification/check
 Accept: application/json
 
@@ -93,12 +93,6 @@ POST http://localhost:8085/user/base/admin/save
 Content-Type: application/x-www-form-urlencoded
 
 name=423
-
-### 增 改 保存
-POST http://localhost:8085/user/certification/admin/save
-Content-Type: application/x-www-form-urlencoded
-
-userId=1
 
 ### 删 删除
 GET http://localhost:8085/user/base/admin/delete?id=4
