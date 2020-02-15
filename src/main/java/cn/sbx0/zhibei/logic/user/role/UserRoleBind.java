@@ -1,6 +1,7 @@
 package cn.sbx0.zhibei.logic.user.role;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -11,6 +12,7 @@ import java.util.Date;
 @Table(name = "user_role_bind")
 @DynamicInsert
 @DynamicUpdate
+@Data
 public class UserRoleBind {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,45 +28,4 @@ public class UserRoleBind {
     @Column(nullable = false)
     private Date validityTime; // 角色有效期
 
-    @Override
-    public String toString() {
-        return "UserRoleBind{" +
-                "id=" + id +
-                ", userId=" + userId +
-                ", roleId=" + roleId +
-                ", validityTime=" + validityTime +
-                '}';
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
-    public Integer getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(Integer roleId) {
-        this.roleId = roleId;
-    }
-
-    public Date getValidityTime() {
-        return validityTime;
-    }
-
-    public void setValidityTime(Date validityTime) {
-        this.validityTime = validityTime;
-    }
 }

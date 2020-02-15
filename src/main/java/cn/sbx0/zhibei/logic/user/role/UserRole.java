@@ -1,5 +1,6 @@
 package cn.sbx0.zhibei.logic.user.role;
 
+import lombok.Data;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -9,6 +10,7 @@ import javax.persistence.*;
 @Table(name = "user_role")
 @DynamicInsert
 @DynamicUpdate
+@Data
 public class UserRole {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,36 +22,4 @@ public class UserRole {
     @Column(nullable = false)
     private Integer weight; // 权值
 
-    @Override
-    public String toString() {
-        return "UserRole{" +
-                "id=" + id +
-                ", code='" + code + '\'' +
-                ", weight=" + weight +
-                '}';
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public Integer getWeight() {
-        return weight;
-    }
-
-    public void setWeight(Integer weight) {
-        this.weight = weight;
-    }
 }

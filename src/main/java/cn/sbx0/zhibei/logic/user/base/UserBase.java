@@ -1,5 +1,6 @@
 package cn.sbx0.zhibei.logic.user.base;
 
+import lombok.Data;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -13,6 +14,7 @@ import javax.persistence.*;
 @Table(name = "user_base")
 @DynamicInsert
 @DynamicUpdate
+@Data
 public class UserBase {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,37 +24,4 @@ public class UserBase {
     private String name; // 用户名
 
     private String avatar; // 头像
-
-    @Override
-    public String toString() {
-        return "UserBase{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", avatar='" + avatar + '\'' +
-                '}';
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
-    }
 }
