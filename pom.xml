@@ -29,11 +29,11 @@
 
     <dependencies>
 
-        <!-- https://mvnrepository.com/artifact/eu.bitwalker/UserAgentUtils -->
+        <!-- https://mvnrepository.com/artifact/nl.basjes.parse.useragent/yauaa -->
         <dependency>
-            <groupId>eu.bitwalker</groupId>
-            <artifactId>UserAgentUtils</artifactId>
-            <version>1.21</version>
+            <groupId>nl.basjes.parse.useragent</groupId>
+            <artifactId>yauaa</artifactId>
+            <version>5.15</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->

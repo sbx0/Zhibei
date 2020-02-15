@@ -7,6 +7,8 @@ import cn.sbx0.zhibei.tool.DateTools;
 import cn.sbx0.zhibei.tool.RequestTools;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import nl.basjes.parse.useragent.UserAgent;
+import nl.basjes.parse.useragent.UserAgentAnalyzer;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Service;
 
@@ -14,11 +16,19 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.locks.ReentrantLock;
 
 @Service
 public class StatisticalUserService extends BaseService<StatisticalUser, Integer> {
     @Resource
     private StatisticalUserDao dao;
+    private ReentrantLock lock = new ReentrantLock();
+
+    private UserAgentAnalyzer uaa = UserAgentAnalyzer
+            .newBuilder()
+            .hideMatcherLoadStats()
+            .withCache(10000)
+            .build();
 
     @Override
     public boolean checkDataValidity(StatisticalUser statisticalUser) {
@@ -54,25 +64,36 @@ public class StatisticalUserService extends BaseService<StatisticalUser, Integer
     }
 
     /**
-     * 相同ip和客户端记录间隔15分钟
+     * 相同ip和客户端记录间隔60分钟
      *
      * @param request 请求
      */
     public void handlerInterceptor(HttpServletRequest request) {
-        String ip = RequestTools.getIpAddress(request);
-        String client = RequestTools.getClient(request);
-        String agent = request.getHeader("user-agent");
-        Date now = new Date();
-        // 间隔15分钟
-        Date before = DateTools.rollSecond(now, 60 * 15);
-        StatisticalUser user = dao.findByIpAndTime(ip, client, before);
-        if (user == null) {
-            user = new StatisticalUser();
-            user.setIp(ip);
-            user.setClient(client);
-            user.setAgent(agent);
-            user.setTime(now);
-            save(user);
+        lock.lock();
+        try {
+            String ip = RequestTools.getIpAddress(request);
+            String agentStr = request.getHeader("user-agent");
+            UserAgent agent = uaa.parse(agentStr);
+            String client = agent.getValue("OperatingSystemClass");
+            Date now = new Date();
+            // 间隔60分钟
+            Date before = DateTools.rollSecond(now, 60 * 60);
+            StatisticalUser user = dao.findByIpAndTime(ip, client, before);
+            if (user == null) {
+                user = new StatisticalUser();
+                user.setIp(ip);
+                user.setClient(client);
+                user.setTime(now);
+                user.setClient(client);
+                user.setAgent(agent.getValue("AgentNameVersionMajor"));
+                user.setDevice(agent.getValue("DeviceName"));
+                user.setSystem(agent.getValue("OperatingSystemNameVersionMajor"));
+                save(user);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            lock.unlock();
         }
     }
 

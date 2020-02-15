@@ -3,6 +3,8 @@ package cn.sbx0.zhibei.logic.user;
 import cn.sbx0.zhibei.logic.user.base.UserBase;
 import cn.sbx0.zhibei.logic.user.base.UserBaseService;
 import cn.sbx0.zhibei.logic.user.base.UserBaseView;
+import nl.basjes.parse.useragent.UserAgent;
+import nl.basjes.parse.useragent.UserAgentAnalyzer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,6 +25,25 @@ public class UserBaseServiceTest {
     HttpSession session;
     @Resource
     HttpServletResponse response;
+
+    @Test
+    public void userAgent() {
+        UserAgentAnalyzer uaa = UserAgentAnalyzer
+                .newBuilder()
+                .hideMatcherLoadStats()
+                .withCache(10000)
+                .build();
+
+        UserAgent agent = uaa.parse("Mozilla/5.0 (Linux; Android 10; OS105 Build/QQ1B.200205.002; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/74.0.3729.186 Mobile Safari/537.36 Html5Plus/1.0 (Immersed/24.0)");
+
+        for (String fieldName : agent.getAvailableFieldNamesSorted()) {
+            System.out.println(fieldName + " = " + agent.getValue(fieldName));
+        }
+        // OperatingSystemClass client 是PC还是Mobile还是Tablet
+        // DeviceName device Google Nexus 7
+        // OperatingSystemNameVersionMajor system Windows 10
+        // AgentNameVersionMajor agent Edge 80
+    }
 
     @Test
     public void save() {

@@ -24,16 +24,28 @@ public class StatisticalUser {
     private String ip;
 
     /**
-     * 客户端
+     * OperatingSystemClass 是PC还是Mobile还是Tablet
      */
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 10)
     private String client;
 
     /**
-     * 客户端
+     * AgentNameVersionMajor 浏览器类型
      */
     @Column(nullable = false)
     private String agent;
+
+    /**
+     * DeviceName 设备名称
+     */
+    @Column(nullable = false)
+    private String device;
+
+    /**
+     * OperatingSystemNameVersionMajor 系统名称
+     */
+    @Column(nullable = false)
+    private String system;
 
     /**
      * 统计日期
