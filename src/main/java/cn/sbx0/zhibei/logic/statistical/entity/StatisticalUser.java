@@ -1,6 +1,7 @@
 package cn.sbx0.zhibei.logic.statistical.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -10,10 +11,11 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "statistical_user")
+@Data
 public class StatisticalUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     /**
      * ip
@@ -22,10 +24,28 @@ public class StatisticalUser {
     private String ip;
 
     /**
-     * 客户端
+     * OperatingSystemClass 是PC还是Mobile还是Tablet
      */
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 10)
     private String client;
+
+    /**
+     * AgentNameVersionMajor 浏览器类型
+     */
+    @Column(nullable = false)
+    private String agent;
+
+    /**
+     * DeviceName 设备名称
+     */
+    @Column(nullable = false)
+    private String device;
+
+    /**
+     * OperatingSystemNameVersionMajor 系统名称
+     */
+    @Column(nullable = false)
+    private String system;
 
     /**
      * 统计日期
@@ -33,46 +53,4 @@ public class StatisticalUser {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     @Column(nullable = false)
     private Date time;
-
-    @Override
-    public String toString() {
-        return "StatisticalUser{" +
-                "id=" + id +
-                ", ip='" + ip + '\'' +
-                ", client='" + client + '\'' +
-                ", time=" + time +
-                '}';
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getIp() {
-        return ip;
-    }
-
-    public void setIp(String ip) {
-        this.ip = ip;
-    }
-
-    public String getClient() {
-        return client;
-    }
-
-    public void setClient(String client) {
-        this.client = client;
-    }
-
-    public Date getTime() {
-        return time;
-    }
-
-    public void setTime(Date time) {
-        this.time = time;
-    }
 }

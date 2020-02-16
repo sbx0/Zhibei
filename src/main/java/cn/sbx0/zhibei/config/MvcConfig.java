@@ -24,16 +24,7 @@ public class MvcConfig implements WebMvcConfigurer {
                 registry.addInterceptor(statisticalHandlerInterceptor)
                         .addPathPatterns("/**");
                 registry.addInterceptor(userHandlerInterceptor)
-                        .addPathPatterns("/**")
-                        .excludePathPatterns(
-                                "/demand/normal/list",
-                                "/user/base/login",
-                                "/user/base/register",
-                                "/user/base/basic",
-                                "/user/base/notLogin",
-                                "/user/base/logout",
-                                "/statistical/**"
-                        );
+                        .addPathPatterns("/**");
             }
         };
     }

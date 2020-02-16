@@ -1,6 +1,7 @@
 package cn.sbx0.zhibei.logic.statistical.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -13,10 +14,11 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "statistical_data")
+@Data
 public class StatisticalData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     /**
      * 种类
@@ -43,54 +45,4 @@ public class StatisticalData {
     @Column(nullable = false)
     private Date time;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getKind() {
-        return kind;
-    }
-
-    public void setKind(String kind) {
-        this.kind = kind;
-    }
-
-    public String getGrouping() {
-        return grouping;
-    }
-
-    public void setGrouping(String grouping) {
-        this.grouping = grouping;
-    }
-
-    public Double getValue() {
-        return value;
-    }
-
-    public void setValue(Double value) {
-        this.value = value;
-    }
-
-    public Date getTime() {
-        return time;
-    }
-
-    public void setTime(Date time) {
-        this.time = time;
-    }
-
-    @Override
-    public String toString() {
-        return "DataDO{" +
-                "id=" + id +
-                ", kind='" + kind + '\'' +
-                ", grouping='" + grouping + '\'' +
-                ", value=" + value +
-                ", time=" + time +
-                '}';
-    }
 }

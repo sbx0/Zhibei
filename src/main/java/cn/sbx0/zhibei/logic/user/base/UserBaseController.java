@@ -1,7 +1,6 @@
 package cn.sbx0.zhibei.logic.user.base;
 
 import cn.sbx0.zhibei.annotation.LoginRequired;
-import cn.sbx0.zhibei.annotation.RoleCheck;
 import cn.sbx0.zhibei.logic.BaseController;
 import cn.sbx0.zhibei.logic.BaseService;
 import cn.sbx0.zhibei.logic.ReturnStatus;

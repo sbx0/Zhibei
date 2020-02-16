@@ -92,9 +92,11 @@ public class UserCertificationService extends BaseService<UserCertification, Int
         UserCertification userCertification = findByUserAndNewest(user.getUserId());
         if (userCertification == null
                 || (userCertification.getValidityTime().getTime() > new Date().getTime())
-                && userCertification.getStatus() == CertificationStatus.confirmPassed.getValue()) {
+                && userCertification.getStatus() == CertificationStatus.confirmPassed.getValue()
+                || userCertification.getStatus() != CertificationStatus.confirmPassed.getValue()) {
             // 1.没有认证记录
             // 2.有认证记录且认证通过但认证已过期
+            // 3.有认证记录但无效
             // 所以新建认证
             // 有效期默认为一年
             Date validityTime = DateTools.addDay(new Date(), 365);

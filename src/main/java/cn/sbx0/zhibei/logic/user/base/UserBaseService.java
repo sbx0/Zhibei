@@ -119,7 +119,7 @@ public class UserBaseService extends BaseService<UserBase, Integer> {
         UserBase userBase = new UserBase();
         userBase.setName(user.getName());
         // 初始头像，后面可以改的
-        userBase.setAvatar("/avatar.jpg");
+        userBase.setAvatar("avatar.jpg");
         userBase = dao.save(userBase);
         if (userBase.getId() != null) {
             int status = userInfoService.register(userBase.getId(), user);

@@ -1,6 +1,7 @@
 package cn.sbx0.zhibei.logic.user.info;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -15,10 +16,14 @@ import java.util.Date;
 @Table(name = "user_info")
 @DynamicInsert
 @DynamicUpdate
+@Data
 public class UserInfo {
     @Id
-    @Column(nullable = false, unique = true, columnDefinition = "Int(11)")
-    private Integer userId; // id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id; // id
+
+    @Column(nullable = false, unique = true)
+    private Integer userId; // 用户Id
 
     @Column(nullable = false, unique = true, length = 50)
     private String email; // 邮箱
@@ -63,144 +68,4 @@ public class UserInfo {
     @Column(nullable = false, columnDefinition = "Decimal(10,1) default '100.0'")
     private Double expMax; // 当前等级的最大经验值，超过清空升级
 
-    @Override
-    public String toString() {
-        return "UserInfo{" +
-                "userId=" + userId +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", introduction='" + introduction + '\'' +
-                ", registerTime=" + registerTime +
-                ", phone='" + phone + '\'' +
-                ", sex='" + sex + '\'' +
-                ", birthday=" + birthday +
-                ", lastTimeOnline=" + lastTimeOnline +
-                ", banned=" + banned +
-                ", banHours=" + banHours +
-                ", integral=" + integral +
-                ", level=" + level +
-                ", exp=" + exp +
-                ", expMax=" + expMax +
-                '}';
-    }
-
-    public Date getLastTimeOnline() {
-        return lastTimeOnline;
-    }
-
-    public void setLastTimeOnline(Date lastTimeOnline) {
-        this.lastTimeOnline = lastTimeOnline;
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getIntroduction() {
-        return introduction;
-    }
-
-    public void setIntroduction(String introduction) {
-        this.introduction = introduction;
-    }
-
-    public Date getRegisterTime() {
-        return registerTime;
-    }
-
-    public void setRegisterTime(Date registerTime) {
-        this.registerTime = registerTime;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getSex() {
-        return sex;
-    }
-
-    public void setSex(String sex) {
-        this.sex = sex;
-    }
-
-    public Date getBirthday() {
-        return birthday;
-    }
-
-    public void setBirthday(Date birthday) {
-        this.birthday = birthday;
-    }
-
-    public Boolean getBanned() {
-        return banned;
-    }
-
-    public void setBanned(Boolean banned) {
-        this.banned = banned;
-    }
-
-    public Double getBanHours() {
-        return banHours;
-    }
-
-    public void setBanHours(Double banHours) {
-        this.banHours = banHours;
-    }
-
-    public Double getIntegral() {
-        return integral;
-    }
-
-    public void setIntegral(Double integral) {
-        this.integral = integral;
-    }
-
-    public Integer getLevel() {
-        return level;
-    }
-
-    public void setLevel(Integer level) {
-        this.level = level;
-    }
-
-    public Double getExp() {
-        return exp;
-    }
-
-    public void setExp(Double exp) {
-        this.exp = exp;
-    }
-
-    public Double getExpMax() {
-        return expMax;
-    }
-
-    public void setExpMax(Double expMax) {
-        this.expMax = expMax;
-    }
 }

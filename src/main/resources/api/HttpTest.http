@@ -44,7 +44,6 @@ Accept: application/json
 
 ### 提交认证
 POST http://localhost:8085/user/certification/submit
-Accept: application/json
 Content-Type: application/x-www-form-urlencoded
 
 kind=0&material=test
@@ -69,7 +68,7 @@ Accept: application/json
 GET http://localhost:8085/user/certification/list?page=1&size=5
 Accept: application/json
 
-### 认证列表
+### 检查认证
 GET http://localhost:8085/user/certification/check
 Accept: application/json
 
@@ -91,7 +90,6 @@ Accept: application/json
 
 ### 增 改 保存
 POST http://localhost:8085/user/base/admin/save
-Accept: application/json
 Content-Type: application/x-www-form-urlencoded
 
 name=423
