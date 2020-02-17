@@ -58,9 +58,9 @@ public class UserHandlerInterceptor implements HandlerInterceptor {
         if (loginRequiredAnnotation != null || roleCheckAnnotation != null) {
             HttpSession session = request.getSession(true);
             UserInfo user = (UserInfo) session.getAttribute("user");
+            int userId = -1;
+            boolean isLogin = false;
             if (!(user != null && user.getUserId() != null && user.getEmail() != null)) {
-                int userId;
-                boolean isLogin;
                 // 查找是否存在cookie
                 Map<String, Cookie> cookies = CookieTools.getCookiesByName(CookieTools.COOKIE_NAMES, request.getCookies());
                 if (cookies == null) return false;
@@ -84,35 +84,34 @@ public class UserHandlerInterceptor implements HandlerInterceptor {
                         request.getRequestDispatcher("/user/base/notLogin").forward(request, response);
                         return false;
                     }
-
                 }
-                // 已登录
-                // 如果有检查角色注解
-                if (roleCheckAnnotation != null) {
-                    String[] roles = roleCheckAnnotation.values();
-                    if (roles.length > 0) {
-                        Date now = new Date();
-                        List<UserRoleBind> userRoleBinds = service.findAllByUserId(userId);
-                        List<UserRole> userRoles = new ArrayList<>();
-                        for (UserRoleBind userRoleBind : userRoleBinds) {
-                            // 如果用户角色过期
-                            if (now.getTime() > userRoleBind.getValidityTime().getTime()) {
-                                continue;
-                            }
-                            userRoles.add(service.findById(userRoleBind.getRoleId()));
+            }
+            // 已登录
+            // 如果有检查角色注解
+            if (roleCheckAnnotation != null) {
+                String[] roles = roleCheckAnnotation.values();
+                if (roles.length > 0) {
+                    Date now = new Date();
+                    List<UserRoleBind> userRoleBinds = service.findAllByUserId(userId);
+                    List<UserRole> userRoles = new ArrayList<>();
+                    for (UserRoleBind userRoleBind : userRoleBinds) {
+                        // 如果用户角色过期
+                        if (now.getTime() > userRoleBind.getValidityTime().getTime()) {
+                            continue;
                         }
-                        for (UserRole userRole : userRoles) {
-                            for (String role : roles) {
-                                if (userRole.getCode().equals(role)) return true;
-                            }
-                        }
-                        request.getRequestDispatcher("/user/base/noPermission").forward(request, response);
-                        return false;
+                        userRoles.add(service.findById(userRoleBind.getRoleId()));
                     }
+                    for (UserRole userRole : userRoles) {
+                        for (String role : roles) {
+                            if (userRole.getCode().equals(role)) return true;
+                        }
+                    }
+                    request.getRequestDispatcher("/user/base/noPermission").forward(request, response);
+                    return false;
                 }
             }
             return true;
         }
-         return true;
+        return true;
     }
 }
