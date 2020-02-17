@@ -90,7 +90,6 @@ public class UserBaseController extends BaseController<UserBase, Integer> {
      *
      * @return json
      */
-    @LoginRequired
     @GetMapping(value = "/basic")
     public ObjectNode avatar() {
         ObjectNode json = initJSON();

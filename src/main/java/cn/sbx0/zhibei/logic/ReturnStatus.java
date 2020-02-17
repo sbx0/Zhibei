@@ -1,5 +1,7 @@
 package cn.sbx0.zhibei.logic;
 
+import lombok.Data;
+
 /**
  * 用于判断执行状态
  */
@@ -12,7 +14,9 @@ public enum ReturnStatus {
     wrongPassword(4, "密码错误"),
     notLogin(5, "暂未登录"),
     emptyResult(6, "结果为空"),
-    noPermission(7, "无权限");
+    noPermission(7, "暂无权限"),
+    exception(8, "发生异常"),
+    outRange(9, "超出限制");
     int code;
     String msg;
 
@@ -32,8 +36,8 @@ public enum ReturnStatus {
     @Override
     public String toString() {
         return "ReturnStatus{" +
-                "value=" + code +
-                ", str='" + msg + '\'' +
+                "code=" + code +
+                ", msg='" + msg + '\'' +
                 '}';
     }
 }
