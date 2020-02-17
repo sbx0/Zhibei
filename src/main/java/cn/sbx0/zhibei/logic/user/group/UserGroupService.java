@@ -36,10 +36,6 @@ public class UserGroupService extends BaseService<UserGroup, Integer> {
         return true;
     }
 
-    public Page<UserGroup> findAllByName(String name, Pageable pageable) {
-        return dao.findAllByName("%" + name + "%", pageable);
-    }
-
     /**
      * 创建
      *
@@ -108,5 +104,27 @@ public class UserGroupService extends BaseService<UserGroup, Integer> {
         } catch (Exception e) {
             return ReturnStatus.exception;
         }
+    }
+
+    /**
+     * todo
+     *
+     * @param userId
+     * @param pageable
+     * @return
+     */
+    public Page<UserGroup> findAllByUser(Integer userId, Pageable pageable) {
+        return dao.findAllByUser(userId, pageable);
+    }
+
+    /**
+     * todo
+     *
+     * @param name
+     * @param pageable
+     * @return
+     */
+    public Page<UserGroup> findAllByName(String name, Pageable pageable) {
+        return dao.findAllByName("%" + name + "%", pageable);
     }
 }

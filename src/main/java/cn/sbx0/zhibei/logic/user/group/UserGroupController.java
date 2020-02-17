@@ -33,6 +33,39 @@ public class UserGroupController extends BaseController<UserGroup, Integer> {
     }
 
     /**
+     * todo
+     *
+     * @param page
+     * @return
+     */
+    @LoginRequired
+    @GetMapping("/my")
+    public ObjectNode my(Integer page) {
+        ObjectNode json = initJSON();
+        UserInfo user = userBaseService.getLoginUser();
+        int size = 20;
+        String direction = "desc";
+        Page<UserGroup> userGroupPage;
+        String attribute = "limit_number";
+        userGroupPage = service.findAllByUser(user.getUserId(), BaseService.buildPageable(page, size, attribute, direction));
+        List<UserGroup> tList = userGroupPage.getContent();
+        ArrayNode jsons = getMapper().createArrayNode();
+        if (tList.size() > 0) {
+            for (UserGroup t : tList) {
+                ObjectNode object = getMapper().convertValue(t, ObjectNode.class);
+                jsons.add(object);
+            }
+        }
+        json.set("objects", jsons);
+        json.put("total_pages", userGroupPage.getTotalPages());
+        json.put("total_elements", userGroupPage.getTotalElements());
+        json.put("page", page);
+        json.put("size", size);
+        json.put(statusCode, ReturnStatus.success.getCode());
+        return json;
+    }
+
+    /**
      * 创建群组
      *
      * @param name name
@@ -68,7 +101,7 @@ public class UserGroupController extends BaseController<UserGroup, Integer> {
             userGroupPage = normalList(page, size, attribute, direction);
         } else {
             String attribute = "limit_number";
-            userGroupPage = searchList(name, page, size, attribute, direction);
+            userGroupPage = service.findAllByName(name, BaseService.buildPageable(page, size, attribute, direction));
         }
         List<UserGroup> tList = userGroupPage.getContent();
         ArrayNode jsons = getMapper().createArrayNode();
@@ -85,9 +118,5 @@ public class UserGroupController extends BaseController<UserGroup, Integer> {
         json.put("size", size);
         json.put(statusCode, ReturnStatus.success.getCode());
         return json;
-    }
-
-    private Page<UserGroup> searchList(String name, Integer page, Integer size, String attribute, String direction) {
-        return service.findAllByName(name, BaseService.buildPageable(page, size, attribute, direction));
     }
 }
