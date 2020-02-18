@@ -126,8 +126,7 @@ public abstract class BaseController<T, ID> {
         if (t == null) {
             json.put(statusCode, ReturnStatus.emptyResult.getCode());
         } else {
-            ObjectNode objectNode = getMapper().convertValue(t, ObjectNode.class);
-            json.set("object", objectNode);
+            json.set("object", getService().convertToJson(t));
             json.put(statusCode, ReturnStatus.success.getCode());
         }
         return json;

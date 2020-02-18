@@ -12,6 +12,6 @@ public interface UserGroupDao extends PagingAndSortingRepository<UserGroup, Inte
     @Query(nativeQuery = true, value = "SELECT * FROM user_group WHERE name like ?1")
     Page<UserGroup> findAllByName(String name, Pageable pageable);
 
-    @Query(nativeQuery = true, value = "SELECT * FROM user_group WHERE owner_id = ?1")
+    @Query(nativeQuery = true, value = "SELECT DISTINCT * FROM user_group WHERE owner_id = ?1 OR id IN (SELECT group_id FROM user_group_bind WHERE user_id = ?1)")
     Page<UserGroup> findAllByUser(Integer userId, Pageable pageable);
 }

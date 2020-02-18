@@ -127,4 +127,19 @@ public class UserGroupService extends BaseService<UserGroup, Integer> {
     public Page<UserGroup> findAllByName(String name, Pageable pageable) {
         return dao.findAllByName("%" + name + "%", pageable);
     }
+
+    /**
+     * todo
+     *
+     * @param id
+     * @param loginUserId
+     * @return
+     */
+    public ReturnStatus checkUser(Integer id, int loginUserId) {
+        if (userGroupBindDao.existsByUser(loginUserId, id) != null) {
+            return ReturnStatus.success;
+        } else {
+            return ReturnStatus.emptyResult;
+        }
+    }
 }

@@ -4,6 +4,7 @@ import cn.sbx0.zhibei.annotation.LoginRequired;
 import cn.sbx0.zhibei.logic.BaseController;
 import cn.sbx0.zhibei.logic.BaseService;
 import cn.sbx0.zhibei.logic.ReturnStatus;
+import cn.sbx0.zhibei.logic.user.base.UserBase;
 import cn.sbx0.zhibei.logic.user.base.UserBaseService;
 import cn.sbx0.zhibei.logic.user.info.UserInfo;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -30,6 +31,67 @@ public class UserGroupController extends BaseController<UserGroup, Integer> {
     @Override
     public BaseService<UserGroup, Integer> getService() {
         return service;
+    }
+
+    @LoginRequired
+    @GetMapping("/check")
+    public ObjectNode check(Integer id) {
+        ObjectNode json = initJSON();
+        ReturnStatus status = service.checkUser(id, userBaseService.getLoginUserId());
+        json.put(statusCode, status.getCode());
+        return json;
+    }
+
+    @LoginRequired
+    @GetMapping("/quit")
+    public ObjectNode quit(Integer id) {
+        ObjectNode json = initJSON();
+        ReturnStatus status = service.removeUser(id, userBaseService.getLoginUserId());
+        json.put(statusCode, status.getCode());
+        return json;
+    }
+
+    /**
+     * todo
+     *
+     * @param id
+     * @return
+     */
+    @LoginRequired
+    @GetMapping("/join")
+    public ObjectNode join(Integer id) {
+        ObjectNode json = initJSON();
+        ReturnStatus status = service.addUser(id, userBaseService.getLoginUserId(), false, 365);
+        json.put(statusCode, status.getCode());
+        return json;
+    }
+
+    /**
+     * todo
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping("/member")
+    public ObjectNode member(Integer id) {
+        ObjectNode json = initJSON();
+        json.set(jsonObs, userBaseService.findAllByGroup(id));
+        json.put(statusCode, ReturnStatus.success.getCode());
+        return json;
+    }
+
+    /**
+     * todo
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping("/one")
+    public ObjectNode one(Integer id) {
+        ObjectNode json = initJSON();
+        json.set(jsonOb, getService().convertToJson(service.findById(id)));
+        json.put(statusCode, ReturnStatus.success.getCode());
+        return json;
     }
 
     /**

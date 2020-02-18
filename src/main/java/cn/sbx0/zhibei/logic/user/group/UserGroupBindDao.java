@@ -15,4 +15,7 @@ public interface UserGroupBindDao extends PagingAndSortingRepository<UserGroupBi
 
     @Query(nativeQuery = true, value = "SELECT COUNT(*) FROM user_group_bind WHERE group_id = ?1 and validity_time > NOW()")
     Integer countByGroup(Integer groupId);
+
+    @Query(nativeQuery = true, value = "SELECT 1 FROM user_group_bind WHERE user_id = ?1 AND group_id = ?2")
+    Integer existsByUser(Integer userId, Integer groupId);
 }

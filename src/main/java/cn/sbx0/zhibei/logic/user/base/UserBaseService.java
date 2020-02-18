@@ -8,6 +8,7 @@ import cn.sbx0.zhibei.logic.user.role.UserRoleService;
 import cn.sbx0.zhibei.tool.CookieTools;
 import cn.sbx0.zhibei.tool.DateTools;
 import cn.sbx0.zhibei.tool.StringTools;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 基础用户 服务层
@@ -32,6 +34,16 @@ public class UserBaseService extends BaseService<UserBase, Integer> {
     public boolean checkDataValidity(UserBase userBase) {
         if (StringTools.checkNullStr(userBase.getName())) return false;
         return userBase.getName() != null;
+    }
+
+    /**
+     * todo
+     *
+     * @param groupId
+     * @return
+     */
+    public ArrayNode findAllByGroup(Integer groupId) {
+        return convertToJsons(dao.findAllByGroup(groupId));
     }
 
     /**
