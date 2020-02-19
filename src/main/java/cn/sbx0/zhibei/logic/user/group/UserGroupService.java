@@ -6,10 +6,13 @@ import cn.sbx0.zhibei.tool.DateTools;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionSystemException;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * 用户组 服务层
@@ -37,6 +40,18 @@ public class UserGroupService extends BaseService<UserGroup, Integer> {
     }
 
     /**
+     * todo
+     *
+     * @param id
+     * @return
+     */
+    public boolean isOutOfRange(Integer id) {
+        Integer limitNumber = dao.findLimitById(id);
+        Integer currentNumber = userGroupBindDao.countByGroup(id);
+        return currentNumber >= limitNumber;
+    }
+
+    /**
      * 创建
      *
      * @param group group
@@ -45,6 +60,7 @@ public class UserGroupService extends BaseService<UserGroup, Integer> {
     public ReturnStatus create(UserGroup group) {
         if (!checkDataValidity(group)) return ReturnStatus.invalidValue;
         group.setCreateTime(new Date());
+        group.setCurrentNumber(1);
         group.setLimitNumber(5);
         group.setValidityTime(DateTools.addDay(new Date(), 365 * 100));
         group = dao.save(group);
@@ -69,20 +85,34 @@ public class UserGroupService extends BaseService<UserGroup, Integer> {
      * @return ReturnStatus
      */
     public ReturnStatus addUser(Integer groupId, Integer userId, boolean isAdmin, Integer day) {
-        Integer limit = userGroupBindDao.countByGroup(groupId);
-        UserGroup group = dao.findById(groupId).get();
-        if (limit >= group.getLimitNumber()) return ReturnStatus.outRange;
-        UserGroupBind userGroupBind = userGroupBindDao.findByGroupAndUser(groupId, userId);
-        if (userGroupBind == null) userGroupBind = new UserGroupBind();
-        userGroupBind.setAdmin(true);
-        userGroupBind.setUserId(userId);
-        userGroupBind.setGroupId(groupId);
-        userGroupBind.setValidityTime(DateTools.addDay(new Date(), day));
         try {
-            userGroupBind = userGroupBindDao.save(userGroupBind);
-            if (userGroupBind.getId() != null) return ReturnStatus.success;
-            else return ReturnStatus.failed;
-        } catch (Exception e) {
+            if (isOutOfRange(groupId)) {
+                return ReturnStatus.outRange;
+            }
+            if (userGroupBindDao.existsByUser(userId, groupId) != null) {
+                return ReturnStatus.repeatOperation;
+            }
+            UserGroup group = dao.findById(groupId).get();
+            group.setCurrentNumber(group.getCurrentNumber() + 1);
+            try {
+                save(group);
+            } catch (Exception e) {
+                return ReturnStatus.exception;
+            }
+            UserGroupBind userGroupBind = userGroupBindDao.findByGroupAndUser(groupId, userId);
+            if (userGroupBind == null) userGroupBind = new UserGroupBind();
+            userGroupBind.setAdmin(true);
+            userGroupBind.setUserId(userId);
+            userGroupBind.setGroupId(groupId);
+            userGroupBind.setValidityTime(DateTools.addDay(new Date(), day));
+            try {
+                userGroupBind = userGroupBindDao.save(userGroupBind);
+                if (userGroupBind.getId() != null) return ReturnStatus.success;
+                else return ReturnStatus.failed;
+            } catch (Exception e) {
+                return ReturnStatus.exception;
+            }
+        } catch (ObjectOptimisticLockingFailureException e) {
             return ReturnStatus.exception;
         }
     }
@@ -95,13 +125,36 @@ public class UserGroupService extends BaseService<UserGroup, Integer> {
      * @return ReturnStatus
      */
     public ReturnStatus removeUser(Integer groupId, Integer userId) {
-        Integer id = userGroupBindDao.findIdByGroupAndUser(groupId, userId);
-        UserGroupBind userGroupBind = new UserGroupBind();
-        userGroupBind.setId(id);
         try {
-            userGroupBindDao.delete(userGroupBind);
-            return ReturnStatus.success;
-        } catch (Exception e) {
+            if (userGroupBindDao.existsByUser(userId, groupId) == null) {
+                return ReturnStatus.emptyResult;
+            }
+            UserGroup userGroup = findById(groupId);
+            int currentNumber = userGroup.getCurrentNumber() - 1;
+            if (currentNumber <= 0) {
+                try {
+                    delete(userGroup);
+                    return ReturnStatus.success;
+                } catch (Exception e) {
+                    return ReturnStatus.exception;
+                }
+            }
+            userGroup.setCurrentNumber(currentNumber);
+            try {
+                save(userGroup);
+            } catch (Exception e) {
+                return ReturnStatus.exception;
+            }
+            Integer id = userGroupBindDao.findIdByGroupAndUser(groupId, userId);
+            UserGroupBind userGroupBind = new UserGroupBind();
+            userGroupBind.setId(id);
+            try {
+                userGroupBindDao.delete(userGroupBind);
+                return ReturnStatus.success;
+            } catch (TransactionSystemException e) {
+                return ReturnStatus.exception;
+            }
+        } catch (ObjectOptimisticLockingFailureException e) {
             return ReturnStatus.exception;
         }
     }

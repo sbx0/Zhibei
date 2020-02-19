@@ -106,11 +106,11 @@ public class UserBaseService extends BaseService<UserBase, Integer> {
             session.removeAttribute(userInfo.getUserId().toString());
             return ReturnStatus.wrongPassword;
         } else {
+            // 登录成功 设置session
+            session.setAttribute("user", userInfo);
             // 登录成功 设置cookie
             response.addCookie(CookieTools.createCookie(CookieTools.COOKIE_NAMES.get(0), userInfo.getUserId().toString(), 30));
             response.addCookie(CookieTools.createCookie(CookieTools.COOKIE_NAMES.get(1), StringTools.getKey(userInfo.getUserId()), 30));
-            // 登录成功 设置session
-            session.setAttribute("user", userInfo);
         }
         return ReturnStatus.success;
     }

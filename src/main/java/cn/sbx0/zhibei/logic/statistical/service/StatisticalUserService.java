@@ -1,6 +1,7 @@
 package cn.sbx0.zhibei.logic.statistical.service;
 
 import cn.sbx0.zhibei.logic.BaseService;
+import cn.sbx0.zhibei.logic.ReturnStatus;
 import cn.sbx0.zhibei.logic.statistical.dao.StatisticalUserDao;
 import cn.sbx0.zhibei.logic.statistical.entity.StatisticalUser;
 import cn.sbx0.zhibei.tool.DateTools;
@@ -68,8 +69,7 @@ public class StatisticalUserService extends BaseService<StatisticalUser, Integer
      *
      * @param request 请求
      */
-    public void handlerInterceptor(HttpServletRequest request) {
-        lock.lock();
+    public ReturnStatus report(HttpServletRequest request) {
         try {
             String ip = RequestTools.getIpAddress(request);
             String agentStr = request.getHeader("user-agent");
@@ -90,10 +90,9 @@ public class StatisticalUserService extends BaseService<StatisticalUser, Integer
                 user.setSystem(agent.getValue("OperatingSystemNameVersionMajor"));
                 save(user);
             }
+            return ReturnStatus.success;
         } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            lock.unlock();
+            return ReturnStatus.exception;
         }
     }
 

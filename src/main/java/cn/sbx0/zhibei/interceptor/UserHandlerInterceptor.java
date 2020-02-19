@@ -59,6 +59,7 @@ public class UserHandlerInterceptor implements HandlerInterceptor {
             HttpSession session = request.getSession(true);
             UserInfo user = (UserInfo) session.getAttribute("user");
             int userId = -1;
+            if (user != null) userId = user.getUserId();
             boolean isLogin = false;
             if (!(user != null && user.getUserId() != null && user.getEmail() != null)) {
                 // 查找是否存在cookie

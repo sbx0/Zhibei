@@ -63,7 +63,7 @@ public class FileUploadController extends BaseController<FileUpload, Integer> {
             FileUpload fileUpload = fileUploadService.md5Check(md5);
             if (fileUpload != null) {
                 UserBase userBase = userBaseService.findById(user.getUserId());
-                userBase.setAvatar("upload/user" + user.getUserId() + "/" + fileUpload.getType() + "/" + fileUpload.getName());
+                userBase.setAvatar("upload/user" + fileUpload.getUserId() + "/" + fileUpload.getType() + "/" + fileUpload.getName());
                 userBase = userBaseService.save(userBase);
                 json.put(statusCode, ReturnStatus.success.getCode());
             } else {
@@ -142,7 +142,7 @@ public class FileUploadController extends BaseController<FileUpload, Integer> {
                 json.put("oName", fileUpload.getOriginalName());
                 json.put("name", fileUpload.getName());
                 json.put("type", fileUpload.getType());
-                json.put("user", user.getUserId());
+                json.put("user", fileUpload.getUserId());
                 json.put("md5", md5);
             } else {
                 String path = fileUploadService.getPath();

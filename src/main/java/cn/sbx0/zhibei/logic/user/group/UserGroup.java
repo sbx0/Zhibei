@@ -25,6 +25,9 @@ public class UserGroup {
     private String name; // 组名称
 
     @Column(nullable = false)
+    private Integer currentNumber; // 当前成员数
+
+    @Column(nullable = false)
     private Integer limitNumber; // 最多容纳多少组成员
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
@@ -37,4 +40,7 @@ public class UserGroup {
 
     @Column(nullable = false)
     private Integer ownerId; // 创建者Id
+
+    @Version
+    private Long version;
 }
