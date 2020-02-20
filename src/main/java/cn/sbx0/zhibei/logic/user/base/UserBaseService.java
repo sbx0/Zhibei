@@ -13,6 +13,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.Date;
@@ -74,6 +75,15 @@ public class UserBaseService extends BaseService<UserBase, Integer> {
      */
     public int getLoginUserId() {
         return userInfoService.getLoginUserId();
+    }
+
+    public int getLoginUserId(HttpServletRequest request) {
+        return userInfoService.getLoginUserId(request);
+    }
+
+    public String getLoginUserName(HttpServletRequest request) {
+        UserBase userBase = findById(getLoginUserId(request));
+        return userBase.getName();
     }
 
     /**

@@ -59,6 +59,29 @@ public class UserInfoService extends BaseService<UserInfo, Integer> {
         dao.updateLastTimeLogin(id, date);
     }
 
+    public int getLoginUserId(HttpServletRequest request) {
+        HttpSession session = request.getSession(true);
+        UserInfo user = (UserInfo) session.getAttribute("user");
+        if (user != null && user.getUserId() != null && user.getEmail() != null) return user.getUserId();
+        // 查找是否存在cookie
+        Map<String, Cookie> cookies = CookieTools.getCookiesByName(CookieTools.COOKIE_NAMES, request.getCookies());
+        if (cookies == null) return 0;
+        if (cookies.size() == 0) return 0;
+        // 为空
+        for (int i = 0; i < cookies.size(); i++) {
+            if (StringTools.checkNullStr(cookies.get(CookieTools.COOKIE_NAMES.get(i)).getValue())) return 0;
+        }
+        // Cookie中的ID
+        int id = Integer.parseInt(cookies.get("ID").getValue());
+        // Cookie中的KEY
+        String key = cookies.get("KEY").getValue();
+        // 正确的KEY
+        String check = StringTools.getKey(id);
+        // 匹配KEY
+        if (!check.equals(key)) return 0;
+        return id;
+    }
+
     /**
      * 从cookie或session中获取登录的用户的Id
      *
@@ -95,6 +118,29 @@ public class UserInfoService extends BaseService<UserInfo, Integer> {
      */
     public UserInfo getLoginUser() {
         HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
+        HttpSession session = request.getSession(true);
+        UserInfo user = (UserInfo) session.getAttribute("user");
+        if (user != null && user.getUserId() != null && user.getEmail() != null) return findByEmail(user.getEmail());
+        // 查找是否存在cookie
+        Map<String, Cookie> cookies = CookieTools.getCookiesByName(CookieTools.COOKIE_NAMES, request.getCookies());
+        if (cookies == null) return null;
+        if (cookies.size() == 0) return null;
+        // 为空
+        for (int i = 0; i < cookies.size(); i++) {
+            if (StringTools.checkNullStr(cookies.get(CookieTools.COOKIE_NAMES.get(i)).getValue())) return null;
+        }
+        // Cookie中的ID
+        int id = Integer.parseInt(cookies.get("ID").getValue());
+        // Cookie中的KEY
+        String key = cookies.get("KEY").getValue();
+        // 正确的KEY
+        String check = StringTools.getKey(id);
+        // 匹配KEY
+        if (!check.equals(key)) return null;
+        return findByUserId(id);
+    }
+
+    public UserInfo getLoginUser(HttpServletRequest request) {
         HttpSession session = request.getSession(true);
         UserInfo user = (UserInfo) session.getAttribute("user");
         if (user != null && user.getUserId() != null && user.getEmail() != null) return findByEmail(user.getEmail());
@@ -176,4 +222,5 @@ public class UserInfoService extends BaseService<UserInfo, Integer> {
     public UserInfo getEntity() {
         return new UserInfo();
     }
+
 }
