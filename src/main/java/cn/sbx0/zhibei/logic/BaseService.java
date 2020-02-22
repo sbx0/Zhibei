@@ -47,6 +47,19 @@ public abstract class BaseService<T, ID> {
         return new ObjectMapper();
     }
 
+    public ObjectNode convertToJson(T t) {
+        return getMapper().convertValue(t, ObjectNode.class);
+    }
+
+    public ArrayNode convertToJsons(List<T> list) {
+        ArrayNode arrayNode = initJSONs();
+        for (T t : list) {
+            ObjectNode objectNode = convertToJson(t);
+            arrayNode.add(objectNode);
+        }
+        return arrayNode;
+    }
+
     /**
      * 获取数据层 子类必须重写
      *

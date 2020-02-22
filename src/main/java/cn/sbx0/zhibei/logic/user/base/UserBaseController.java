@@ -27,6 +27,20 @@ public class UserBaseController extends BaseController<UserBase, Integer> {
     @Resource
     private UserBaseService service;
 
+    @GetMapping(value = "/show")
+    public ObjectNode show(Integer id) {
+        ObjectNode json = initJSON();
+        UserBase userBase = service.findById(id);
+        if (userBase != null) {
+            ObjectNode userBaseJson = getMapper().convertValue(userBase, ObjectNode.class);
+            json.set(jsonOb, userBaseJson);
+            json.put(statusCode, ReturnStatus.success.getCode());
+        } else {
+            json.put(statusCode, ReturnStatus.invalidValue.getCode());
+        }
+        return json;
+    }
+
     /**
      * 当前活跃人数
      *
@@ -90,9 +104,8 @@ public class UserBaseController extends BaseController<UserBase, Integer> {
      *
      * @return json
      */
-    @LoginRequired
     @GetMapping(value = "/basic")
-    public ObjectNode avatar() {
+    public ObjectNode basic() {
         ObjectNode json = initJSON();
         UserBase userBase = service.findById(service.getLoginUserId());
         if (userBase != null) {

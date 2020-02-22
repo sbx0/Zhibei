@@ -8,13 +8,16 @@ import cn.sbx0.zhibei.logic.user.role.UserRoleService;
 import cn.sbx0.zhibei.tool.CookieTools;
 import cn.sbx0.zhibei.tool.DateTools;
 import cn.sbx0.zhibei.tool.StringTools;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 基础用户 服务层
@@ -32,6 +35,16 @@ public class UserBaseService extends BaseService<UserBase, Integer> {
     public boolean checkDataValidity(UserBase userBase) {
         if (StringTools.checkNullStr(userBase.getName())) return false;
         return userBase.getName() != null;
+    }
+
+    /**
+     * todo
+     *
+     * @param groupId
+     * @return
+     */
+    public ArrayNode findAllByGroup(Integer groupId) {
+        return convertToJsons(dao.findAllByGroup(groupId));
     }
 
     /**
@@ -64,6 +77,15 @@ public class UserBaseService extends BaseService<UserBase, Integer> {
         return userInfoService.getLoginUserId();
     }
 
+    public int getLoginUserId(HttpServletRequest request) {
+        return userInfoService.getLoginUserId(request);
+    }
+
+    public String getLoginUserName(HttpServletRequest request) {
+        UserBase userBase = findById(getLoginUserId(request));
+        return userBase.getName();
+    }
+
     /**
      * 从cookie或session中获取登录的用户
      *
@@ -94,11 +116,11 @@ public class UserBaseService extends BaseService<UserBase, Integer> {
             session.removeAttribute(userInfo.getUserId().toString());
             return ReturnStatus.wrongPassword;
         } else {
+            // 登录成功 设置session
+            session.setAttribute("user", userInfo);
             // 登录成功 设置cookie
             response.addCookie(CookieTools.createCookie(CookieTools.COOKIE_NAMES.get(0), userInfo.getUserId().toString(), 30));
             response.addCookie(CookieTools.createCookie(CookieTools.COOKIE_NAMES.get(1), StringTools.getKey(userInfo.getUserId()), 30));
-            // 登录成功 设置session
-            session.setAttribute("user", userInfo);
         }
         return ReturnStatus.success;
     }

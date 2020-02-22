@@ -1,0 +1,111 @@
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+    <title>Zhibei Dev</title>
+</head>
+<body>
+<div style="height: 30px">
+    <h2 style="text-align: left">
+        Zhibei Dev
+    </h2>
+</div>
+<ul>
+    <li>
+        <h3>WebSocket Test</h3>
+    </li>
+    <div style="overflow:auto;max-height: 250px;">
+        <label for="name">Name</label>
+        <input id="name" type="text"/>
+        <label for="text">Text</label>
+        <input id="text" type="text"/>
+        <br/>
+        <button onclick="send()">Send Message</button>
+        <button onclick="disconnect()">Close Connect</button>
+        <br/>
+        <div id="console"></div>
+    </div>
+</ul>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<hr/>
+<div style="text-align:center;">
+    <a href="login.html">Login</a>
+    |
+    <a href="index.html">Index</a>
+    |
+    <a href="https://sbx0.cn/" target="_blank">SPA by React</a>
+    |
+    <a href="https://github.com/sbx0/Zhibei" target="_blank">GitHub</a>
+    |
+    <a href="https://blog.sbx0.cn/" target="_blank">Blog</a>
+    <hr/>
+    <small>sbx0</small>
+    <br/>
+    <small>2019 - 2020</small>
+    <br/>
+    <small>Power By Spring Boot</small>
+</div>
+</body>
+<script src="https://cdn.bootcss.com/sockjs-client/1.1.4/sockjs.min.js"></script>
+<script src="https://cdn.bootcss.com/stomp.js/2.3.3/stomp.min.js"></script>
+<script>
+    let stompClient = null;
+    //gateway网关的地址
+    let host = "http://localhost:8085";
+
+    // SendUser ***********************************************
+    function connect() {
+        //地址+端点路径，构建websocket链接地址,注意，对应config配置里的addEndpoint
+        let socket = new SockJS(host + '/ws');
+        stompClient = Stomp.over(socket);
+        stompClient.connect({}, function (frame) {
+            showResponse('Connected.');
+            //监听的路径以及回调
+            stompClient.subscribe('/user/queue/msg', function (response) {
+                showResponse(response.body);
+            });
+
+            stompClient.subscribe('/topic/public', function (response) {
+                showResponse(response.body);
+            });
+        });
+    }
+
+    function disconnect() {
+        if (stompClient != null) {
+            stompClient.disconnect();
+        }
+        showResponse('Disonnected.');
+    }
+
+    function send() {
+        let name = document.getElementById('name').value.toString();
+        let message = document.getElementById('text').value.toString();
+        /*//发送消息的路径,由客户端发送消息到服务端
+        stompClient.send("/ws/sendServer", {}, message);
+        */
+        /*// 发送给所有广播sendTopic的人,客户端发消息，大家都接收，相当于直播说话 注：连接需开启 /topic/sendTopic
+        stompClient.send("/ws/sendAllUser", {}, message);
+        */
+        /* 这边需要注意，需要启动不同的前端html进行测试，需要改不同token ，例如 token=1234，token=4567
+        * 然后可以通过写入name 为token  进行指定用户发送
+        */
+        stompClient.send("/ws/sendToSomeone", {}, JSON.stringify({name: name, message: message}));
+    }
+
+    function showResponse(message) {
+        let date = new Date();
+        document.getElementById('console').innerHTML =
+            '<p>' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds() +
+            ' ' + message + '</p>' +
+            document.getElementById('console').innerHTML;
+    }
+
+    connect();
+</script>
+</html>

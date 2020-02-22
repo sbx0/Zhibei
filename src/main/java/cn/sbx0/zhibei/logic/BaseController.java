@@ -126,8 +126,7 @@ public abstract class BaseController<T, ID> {
         if (t == null) {
             json.put(statusCode, ReturnStatus.emptyResult.getCode());
         } else {
-            ObjectNode objectNode = getMapper().convertValue(t, ObjectNode.class);
-            json.set("object", objectNode);
+            json.set("object", getService().convertToJson(t));
             json.put(statusCode, ReturnStatus.success.getCode());
         }
         return json;
@@ -166,7 +165,7 @@ public abstract class BaseController<T, ID> {
     @GetMapping("/admin/list")
     public ObjectNode adminList(Integer page, Integer size, String attribute, String direction) {
         ObjectNode json = initJSON();
-        Page<T> tPage = getService().findAll(BaseService.buildPageable(page, size, attribute, direction));
+        Page<T> tPage = normalList(page, size, attribute, direction);
         List<T> tList = tPage.getContent();
         ArrayNode jsons = getMapper().createArrayNode();
         if (tList.size() > 0) {
@@ -182,6 +181,10 @@ public abstract class BaseController<T, ID> {
         json.put("size", size);
         json.put(statusCode, ReturnStatus.success.getCode());
         return json;
+    }
+
+    public Page<T> normalList(Integer page, Integer size, String attribute, String direction) {
+        return getService().findAll(BaseService.buildPageable(page, size, attribute, direction));
     }
 
 }
