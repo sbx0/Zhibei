@@ -19,6 +19,7 @@
         <input id="name" type="text"/>
         <label for="text">Text</label>
         <input id="text" type="text"/>
+        <br/>
         <button onclick="send()">Send Message</button>
         <button onclick="disconnect()">Close Connect</button>
         <br/>
@@ -55,7 +56,7 @@
 <script>
     let stompClient = null;
     //gateway网关的地址
-    let host = "http://zb.sbx0.cn";
+    let host = "http://localhost:8085";
 
     // SendUser ***********************************************
     function connect() {
@@ -65,11 +66,11 @@
         stompClient.connect({}, function (frame) {
             showResponse('Connected.');
             //监听的路径以及回调
-            stompClient.subscribe('/user/queue/sendUser', function (response) {
+            stompClient.subscribe('/user/queue/msg', function (response) {
                 showResponse(response.body);
             });
 
-            stompClient.subscribe('/topic/sendTopic', function (response) {
+            stompClient.subscribe('/topic/public', function (response) {
                 showResponse(response.body);
             });
         });
@@ -94,7 +95,7 @@
         /* 这边需要注意，需要启动不同的前端html进行测试，需要改不同token ，例如 token=1234，token=4567
         * 然后可以通过写入name 为token  进行指定用户发送
         */
-        stompClient.send("/ws/sendMyUser", {}, JSON.stringify({name: name, message: message}));
+        stompClient.send("/ws/sendToSomeone", {}, JSON.stringify({name: name, message: message}));
     }
 
     function showResponse(message) {
