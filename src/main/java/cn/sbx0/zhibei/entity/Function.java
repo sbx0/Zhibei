@@ -14,7 +14,7 @@ import java.util.Date;
  * 点赞 / 踩脚 / 收藏
  */
 @Entity
-@Table(name = "Function")
+@Table(name = "functions")
 @DynamicInsert
 @DynamicUpdate
 public class Function implements Serializable {

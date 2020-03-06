@@ -45,7 +45,7 @@ public class StatisticalUser {
      * OperatingSystemNameVersionMajor 系统名称
      */
     @Column(nullable = false)
-    private String system;
+    private String operationSystem;
 
     /**
      * 统计日期

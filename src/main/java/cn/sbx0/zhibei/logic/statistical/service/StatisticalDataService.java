@@ -47,7 +47,7 @@ public class StatisticalDataService extends BaseService<StatisticalData, Integer
         if (list != null) {
             for (StatisticalData data : list) {
                 ObjectNode j = initJSON();
-                j.put("date", sdf.format(data.getTime()));
+                j.put("date", sdf.format(data.getRecordTime()));
                 j.put(kind, data.getValue());
                 jsons.add(j);
             }
@@ -72,7 +72,7 @@ public class StatisticalDataService extends BaseService<StatisticalData, Integer
             StatisticalData data = dao.findByDay(i, kind, group);
             if (data != null) {
                 ObjectNode j = initJSON();
-                j.put("date", sdf.format(data.getTime()));
+                j.put("date", sdf.format(data.getRecordTime()));
                 j.put(kind, data.getValue());
                 jsons.add(j);
             }
@@ -89,8 +89,8 @@ public class StatisticalDataService extends BaseService<StatisticalData, Integer
         int count = userBaseService.active();
         StatisticalData data = new StatisticalData();
         data.setGrouping("per_hour");
-        data.setKind("active");
-        data.setTime(new Date());
+        data.setType("active");
+        data.setRecordTime(new Date());
         data.setValue((double) count);
         logger.info("active = " + count);
         dao.save(data);
@@ -104,8 +104,8 @@ public class StatisticalDataService extends BaseService<StatisticalData, Integer
         int count = statisticalUserService.view();
         StatisticalData data = new StatisticalData();
         data.setGrouping("per_hour");
-        data.setKind("view");
-        data.setTime(new Date());
+        data.setType("view");
+        data.setRecordTime(new Date());
         data.setValue((double) count);
         logger.info("view = " + count);
         dao.save(data);

@@ -24,7 +24,7 @@ public class StatisticalData {
      * 种类
      */
     @Column(nullable = false, length = 30)
-    private String kind;
+    private String type;
 
     /**
      * 分组
@@ -43,6 +43,6 @@ public class StatisticalData {
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     @Column(nullable = false)
-    private Date time;
+    private Date recordTime;
 
 }

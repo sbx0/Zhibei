@@ -87,7 +87,7 @@ public class StatisticalUserService extends BaseService<StatisticalUser, Integer
                 user.setClient(client);
                 user.setAgent(agent.getValue("AgentNameVersionMajor"));
                 user.setDevice(agent.getValue("DeviceName"));
-                user.setSystem(agent.getValue("OperatingSystemNameVersionMajor"));
+                user.setOperationSystem(agent.getValue("OperatingSystemNameVersionMajor"));
                 save(user);
             }
             return ReturnStatus.success;
