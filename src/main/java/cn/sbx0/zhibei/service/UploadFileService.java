@@ -95,13 +95,13 @@ public class UploadFileService extends BaseService<UploadFile, Integer> {
         Sort s;
         switch (direction) {
             case "desc":
-                s = new Sort(Sort.Direction.DESC, sort);
+                s = Sort.by(Sort.Direction.DESC, sort);
                 break;
             case "asc":
-                s = new Sort(Sort.Direction.ASC, sort);
+                s = Sort.by(Sort.Direction.ASC, sort);
                 break;
             default:
-                s = new Sort(Sort.Direction.DESC, sort);
+                s = Sort.by(Sort.Direction.DESC, sort);
         }
         Pageable pageable = PageRequest.of(page, size, s);
         try {

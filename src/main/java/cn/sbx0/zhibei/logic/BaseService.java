@@ -342,11 +342,11 @@ public abstract class BaseService<T, ID> {
     public static Sort buildSort(String attribute, String direction) {
         switch (direction) {
             case "ASC": // 升序
-                return new Sort(Sort.Direction.ASC, attribute);
+                return Sort.by(Sort.Direction.ASC, attribute);
             case "DESC": // 降序
-                return new Sort(Sort.Direction.DESC, attribute);
+                return Sort.by(Sort.Direction.ASC, attribute);
             default: // 默认降序
-                return new Sort(Sort.Direction.DESC, attribute);
+                return Sort.by(Sort.Direction.ASC, attribute);
         }
     }
 
