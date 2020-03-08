@@ -30,7 +30,7 @@ public class StatisticalData {
      * 分组
      */
     @Column(nullable = false, length = 30)
-    private String grouping;
+    private String groupBy;
 
     /**
      * 数值

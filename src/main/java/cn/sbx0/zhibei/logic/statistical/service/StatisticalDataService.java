@@ -88,7 +88,7 @@ public class StatisticalDataService extends BaseService<StatisticalData, Integer
     public void active() {
         int count = userBaseService.active();
         StatisticalData data = new StatisticalData();
-        data.setGrouping("per_hour");
+        data.setGroupBy("per_hour");
         data.setType("active");
         data.setRecordTime(new Date());
         data.setValue((double) count);
@@ -103,7 +103,7 @@ public class StatisticalDataService extends BaseService<StatisticalData, Integer
     public void view() {
         int count = statisticalUserService.view();
         StatisticalData data = new StatisticalData();
-        data.setGrouping("per_hour");
+        data.setGroupBy("per_hour");
         data.setType("view");
         data.setRecordTime(new Date());
         data.setValue((double) count);
