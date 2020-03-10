@@ -1,13 +1,11 @@
 package cn.sbx0.zhibei.logic.websocket;
 
 import cn.sbx0.zhibei.logic.user.base.UserBaseService;
-import cn.sbx0.zhibei.logic.user.info.UserInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.server.support.DefaultHandshakeHandler;
 

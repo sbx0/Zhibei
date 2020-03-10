@@ -119,7 +119,7 @@ public class UserBaseController extends BaseController<UserBase, Integer> {
     }
 
     /**
-     * 获取登录信息
+     * 获取当前登录用户信息
      *
      * @return json
      */
