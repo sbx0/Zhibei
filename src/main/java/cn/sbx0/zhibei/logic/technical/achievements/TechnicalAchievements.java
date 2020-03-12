@@ -32,6 +32,13 @@ public class TechnicalAchievements {
     private Date postTime; // 发布时间
 
     @Column(nullable = false)
+    private String cover; // 封面
+
+    @Lob
+    @Column(nullable = false)
+    private String context; // 内容
+
+    @Column(nullable = false)
     private Integer maturity = TechnicalMaturity.inDevelopment.getValue(); // 成熟度
 
     @Column(nullable = false)

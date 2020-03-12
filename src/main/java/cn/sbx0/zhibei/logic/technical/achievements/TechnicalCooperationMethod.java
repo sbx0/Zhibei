@@ -1,5 +1,8 @@
 package cn.sbx0.zhibei.logic.technical.achievements;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 技术合作方法
  */
@@ -24,6 +27,16 @@ public enum TechnicalCooperationMethod {
 
     public String getName() {
         return name;
+    }
+
+    public static List<TechnicalCooperationMethod> list() {
+        List<TechnicalCooperationMethod> list = new ArrayList<>();
+        list.add(completeTransfer);
+        list.add(licenseTransfer);
+        list.add(technologyShares);
+        list.add(cooperativeProduction);
+        list.add(other);
+        return list;
     }
 
     public static boolean judge(int value) {

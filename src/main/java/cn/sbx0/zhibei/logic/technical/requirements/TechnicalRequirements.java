@@ -22,8 +22,9 @@ public class TechnicalRequirements {
     @Column(nullable = false, unique = true, length = 15)
     private String name; // 名称
 
-    @Column(length = 250)
-    private String introduction; // 简介
+    @Lob
+    @Column(nullable = false)
+    private String context; // 内容
 
     @Column(nullable = false)
     private String cover; // 封面
