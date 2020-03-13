@@ -16,10 +16,9 @@ import javax.persistence.*;
 @Data
 public class TechnicalClassification {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id; // id
+    private String id; // id
 
-    @Column(nullable = false, unique = true, length = 15)
+    @Column(nullable = false)
     private String name; // 名称
 
     @Column(length = 250)
@@ -28,5 +27,7 @@ public class TechnicalClassification {
     @Column(nullable = false)
     private String cover; // 封面
 
-    private Integer fatherId; // 父亲
+    private String fatherId; // 父亲
+
+    private String pinYinPrefix; // 拼音前缀
 }

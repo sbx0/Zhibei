@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * 技术分类 数据层
  */
-public interface TechnicalClassificationDao extends PagingAndSortingRepository<TechnicalClassification, Integer> {
+public interface TechnicalClassificationDao extends PagingAndSortingRepository<TechnicalClassification, String> {
     @Query(value = "select * from technical_classification where father_id is null", nativeQuery = true)
     List<TechnicalClassification> findAllFather();
 

@@ -1,5 +1,15 @@
-### 初始化
+### 初始化用户角色
+GET http://localhost:8085/user/role/init
+Accept: application/json
+Cache-Control: no-cache
+
+### 初始化地区
 GET http://localhost:8085/address/base/init
+Accept: application/json
+Cache-Control: no-cache
+
+### 初始化技术分类
+GET http://localhost:8085/technical/classification/init
 Accept: application/json
 Cache-Control: no-cache
 
@@ -83,10 +93,6 @@ Accept: application/json
 
 ### 查询最近的客户端统计数据
 GET http://localhost:8085/statistical/user/client
-Accept: application/json
-
-### 初始化用户角色
-GET http://localhost:8085/user/role/init
 Accept: application/json
 
 ### 赋予某人权限
