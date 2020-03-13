@@ -121,4 +121,9 @@ Accept: application/json
 GET http://localhost:8085/user/base/admin/attribute
 Accept: application/json
 
+### 查 查询
+GET http://localhost:8085/technical/achievements/list?page=1&size=10&attribute=id&direction=DESC
+Accept: application/json
+Cache-Control: no-cache
+
 ###

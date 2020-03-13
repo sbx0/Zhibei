@@ -4,6 +4,7 @@ import cn.sbx0.zhibei.annotation.LoginRequired;
 import cn.sbx0.zhibei.logic.BaseController;
 import cn.sbx0.zhibei.logic.BaseService;
 import cn.sbx0.zhibei.logic.ReturnStatus;
+import cn.sbx0.zhibei.logic.address.AddressBase;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +23,15 @@ public class TechnicalClassificationController extends BaseController<TechnicalC
     @Override
     public BaseService<TechnicalClassification, String> getService() {
         return service;
+    }
+
+    @GetMapping("/sonToFather")
+    public ObjectNode sonToFather(String sonId) {
+        ObjectNode json = initJSON();
+        List<TechnicalClassification> list = service.sonToFather(sonId);
+        json.set(jsonObs, service.convertToJsons(list));
+        json.put(statusCode, ReturnStatus.success.getCode());
+        return json;
     }
 
     @LoginRequired
@@ -51,7 +61,7 @@ public class TechnicalClassificationController extends BaseController<TechnicalC
 
     @LoginRequired
     @GetMapping("/son")
-    public ObjectNode son(Integer fatherId) {
+    public ObjectNode son(String fatherId) {
         ObjectNode json = initJSON();
         List<TechnicalClassification> list = service.findAllSon(fatherId);
         ArrayNode jsons = initJSONs();

@@ -45,8 +45,8 @@ public class TechnicalAchievements {
     private Integer cooperationMethod = TechnicalCooperationMethod.other.getValue(); // 合作方式
 
     @Column(nullable = false)
-    private Integer classificationId; // 分类ID
+    private String classificationId; // 分类ID
 
     @Column(nullable = false)
-    private Integer addressId; // 地区ID
+    private String addressId; // 地区ID
 }

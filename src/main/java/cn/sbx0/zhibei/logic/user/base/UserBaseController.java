@@ -49,7 +49,7 @@ public class UserBaseController extends BaseController<UserBase, Integer> {
     @GetMapping(value = "/active")
     public ObjectNode active() {
         ObjectNode json = initJSON();
-        json.put("active", service.active());
+        json.put(jsonOb, service.active());
         json.put(statusCode, ReturnStatus.success.getCode());
         return json;
     }

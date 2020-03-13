@@ -4,7 +4,6 @@ import cn.sbx0.zhibei.annotation.LoginRequired;
 import cn.sbx0.zhibei.logic.BaseController;
 import cn.sbx0.zhibei.logic.BaseService;
 import cn.sbx0.zhibei.logic.ReturnStatus;
-import cn.sbx0.zhibei.logic.user.certification.CertificationType;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +22,15 @@ public class AddressBaseController extends BaseController<AddressBase, String> {
     @Override
     public BaseService<AddressBase, String> getService() {
         return service;
+    }
+
+    @GetMapping("/sonToFather")
+    public ObjectNode sonToFather(String sonId) {
+        ObjectNode json = initJSON();
+        List<AddressBase> list = service.sonToFather(sonId);
+        json.set(jsonObs, service.convertToJsons(list));
+        json.put(statusCode, ReturnStatus.success.getCode());
+        return json;
     }
 
     @LoginRequired
@@ -52,7 +60,7 @@ public class AddressBaseController extends BaseController<AddressBase, String> {
 
     @LoginRequired
     @GetMapping("/son")
-    public ObjectNode son(Integer fatherId) {
+    public ObjectNode son(String fatherId) {
         ObjectNode json = initJSON();
         List<AddressBase> list = service.findAllSon(fatherId);
         ArrayNode jsons = initJSONs();

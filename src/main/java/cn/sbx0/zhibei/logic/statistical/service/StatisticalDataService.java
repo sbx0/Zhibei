@@ -3,6 +3,7 @@ package cn.sbx0.zhibei.logic.statistical.service;
 import cn.sbx0.zhibei.logic.BaseService;
 import cn.sbx0.zhibei.logic.statistical.dao.StatisticalDataDao;
 import cn.sbx0.zhibei.logic.statistical.entity.StatisticalData;
+import cn.sbx0.zhibei.logic.technical.achievements.TechnicalAchievementsService;
 import cn.sbx0.zhibei.logic.user.base.UserBaseService;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -23,6 +24,8 @@ public class StatisticalDataService extends BaseService<StatisticalData, Integer
     private UserBaseService userBaseService;
     @Resource
     private StatisticalUserService statisticalUserService;
+    @Resource
+    private TechnicalAchievementsService technicalAchievementsService;
 
     @Override
     public PagingAndSortingRepository<StatisticalData, Integer> getDao() {
@@ -79,6 +82,21 @@ public class StatisticalDataService extends BaseService<StatisticalData, Integer
         }
         json.set("data", jsons);
         return json;
+    }
+
+    /**
+     * 每天统计技术成果数
+     */
+    @Scheduled(cron = "00 00 00 * * ?")
+    public void technicalAchievementsCount() {
+        long count = technicalAchievementsService.count();
+        StatisticalData data = new StatisticalData();
+        data.setGroupBy("per_day");
+        data.setType("technicalAchievementsCount");
+        data.setRecordTime(new Date());
+        data.setValue((double) count);
+        logger.info("technicalAchievementsCount = " + count);
+        dao.save(data);
     }
 
     /**

@@ -2,6 +2,7 @@ package cn.sbx0.zhibei.logic.technical.classification;
 
 import cn.sbx0.zhibei.logic.BaseService;
 import cn.sbx0.zhibei.logic.ReturnStatus;
+import cn.sbx0.zhibei.logic.address.AddressBase;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +35,21 @@ public class TechnicalClassificationService extends BaseService<TechnicalClassif
         return true;
     }
 
+
+    public List<TechnicalClassification> sonToFather(String sonId) {
+        List<TechnicalClassification> list = new ArrayList<>();
+        TechnicalClassification son = findById(sonId);
+        while (son != null) {
+            list.add(son);
+            if (son.getFatherId() != null) {
+                son = findById(son.getFatherId());
+            } else {
+                son = null;
+            }
+        }
+        return list;
+    }
+
     public ReturnStatus init() {
         ClassPathResource resource = new ClassPathResource("api/technical_area_format_array.json");
         File file = null;
@@ -54,7 +71,8 @@ public class TechnicalClassificationService extends BaseService<TechnicalClassif
                             TechnicalClassification a = new TechnicalClassification();
                             a.setId(json.getI());
                             a.setName(json.getN());
-                            a.setFatherId(json.getP());
+                            if (!json.getP().equals(""))
+                                a.setFatherId(json.getP());
                             a.setPinYinPrefix(json.getY());
                             a.setCover("");
                             save(a);
@@ -75,7 +93,8 @@ public class TechnicalClassificationService extends BaseService<TechnicalClassif
         return dao.findAllFather();
     }
 
-    public List<TechnicalClassification> findAllSon(Integer fatherId) {
+    public List<TechnicalClassification> findAllSon(String fatherId) {
         return dao.findAllSon(fatherId);
     }
+
 }

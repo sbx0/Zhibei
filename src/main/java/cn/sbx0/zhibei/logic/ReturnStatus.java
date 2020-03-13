@@ -1,7 +1,5 @@
 package cn.sbx0.zhibei.logic;
 
-import lombok.Data;
-
 /**
  * 用于判断执行状态
  */

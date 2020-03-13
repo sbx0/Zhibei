@@ -33,8 +33,8 @@ public class TechnicalRequirements {
     private Double budget; // 预算
 
     @Column(nullable = false)
-    private Integer classificationId; // 分类ID
+    private String classificationId; // 分类ID
 
     @Column(nullable = false)
-    private Integer addressId; // 地区ID
+    private String addressId; // 地区ID
 }

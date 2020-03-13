@@ -320,7 +320,7 @@ public abstract class BaseService<T, ID> {
         if (page == null) page = 1;
         if (size == null) size = 10;
         if (attribute == null) attribute = "id";
-        if (direction == null) direction = "desc";
+        if (direction == null) direction = "DESC";
         Sort sort = buildSort(attribute, direction);
         // 页数控制
         if ((page - 1) >= 0) page = page - 1;
@@ -344,7 +344,7 @@ public abstract class BaseService<T, ID> {
             case "ASC": // 升序
                 return Sort.by(Sort.Direction.ASC, attribute);
             case "DESC": // 降序
-                return Sort.by(Sort.Direction.ASC, attribute);
+                return Sort.by(Sort.Direction.DESC, attribute);
             default: // 默认降序
                 return Sort.by(Sort.Direction.ASC, attribute);
         }

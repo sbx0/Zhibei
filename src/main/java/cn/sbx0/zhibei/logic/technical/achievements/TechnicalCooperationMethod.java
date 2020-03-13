@@ -39,6 +39,16 @@ public enum TechnicalCooperationMethod {
         return list;
     }
 
+    public static String find(int v) {
+        List<TechnicalCooperationMethod> list = list();
+        for (TechnicalCooperationMethod technicalCooperationMethod : list) {
+            if (technicalCooperationMethod.getValue() == v) {
+                return technicalCooperationMethod.getName();
+            }
+        }
+        return "";
+    }
+
     public static boolean judge(int value) {
         switch (value) {
             case 0:

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,6 +32,20 @@ public class AddressBaseService extends BaseService<AddressBase, String> {
     @Override
     public boolean checkDataValidity(AddressBase AddressBase) {
         return true;
+    }
+
+    public List<AddressBase> sonToFather(String sonId) {
+        List<AddressBase> list = new ArrayList<>();
+        AddressBase son = findById(sonId);
+        while (son != null) {
+            list.add(son);
+            if (son.getFatherId() != null) {
+                son = findById(son.getFatherId());
+            } else {
+                son = null;
+            }
+        }
+        return list;
     }
 
     public ReturnStatus init() {
@@ -83,7 +98,7 @@ public class AddressBaseService extends BaseService<AddressBase, String> {
         return dao.findAllFather();
     }
 
-    public List<AddressBase> findAllSon(Integer fatherId) {
+    public List<AddressBase> findAllSon(String fatherId) {
         return dao.findAllSon(fatherId);
     }
 }

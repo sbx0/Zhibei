@@ -1,6 +1,5 @@
 package cn.sbx0.zhibei.logic.technical.classification;
 
-import cn.sbx0.zhibei.logic.address.AddressBase;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
@@ -14,5 +13,5 @@ public interface TechnicalClassificationDao extends PagingAndSortingRepository<T
     List<TechnicalClassification> findAllFather();
 
     @Query(value = "select * from technical_classification where father_id = ?1", nativeQuery = true)
-    List<TechnicalClassification> findAllSon(Integer fatherId);
+    List<TechnicalClassification> findAllSon(String fatherId);
 }

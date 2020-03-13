@@ -31,6 +31,37 @@ public class TechnicalAchievementsController extends BaseController<TechnicalAch
         return service;
     }
 
+    @GetMapping("/count")
+    public ObjectNode count() {
+        ObjectNode json = initJSON();
+        long count = service.count();
+        json.put(jsonOb, count);
+        json.put(statusCode, ReturnStatus.success.getCode());
+        return json;
+    }
+
+    /**
+     * todo
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping("/one")
+    public ObjectNode one(Integer id) {
+        ObjectNode json = initJSON();
+        TechnicalAchievements technicalAchievements = service.findById(id);
+        if (technicalAchievements != null) {
+            ObjectNode objectNode = service.convertToJson(technicalAchievements);
+            objectNode.put("cooperationMethod", TechnicalCooperationMethod.find(technicalAchievements.getCooperationMethod()));
+            objectNode.put("maturity", TechnicalMaturity.find(technicalAchievements.getMaturity()));
+            json.set(jsonOb, objectNode);
+            json.put(statusCode, ReturnStatus.success.getCode());
+        } else {
+            json.put(statusCode, ReturnStatus.invalidValue.getCode());
+        }
+        return json;
+    }
+
     /**
      * todo
      *
