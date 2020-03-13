@@ -13,11 +13,12 @@ import javax.persistence.*;
 @Data
 public class AddressBase {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id; // id
+    private String id; // id
 
-    @Column(nullable = false, unique = true, length = 15)
+    @Column(nullable = false)
     private String name; // 名称
 
-    private Integer fatherId; // 父亲
+    private String fatherId; // 父亲
+
+    private String pinYinPrefix; // 拼音前缀
 }

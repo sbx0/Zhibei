@@ -16,13 +16,21 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/address/base")
-public class AddressBaseController extends BaseController<AddressBase, Integer> {
+public class AddressBaseController extends BaseController<AddressBase, String> {
     @Resource
     private AddressBaseService service;
 
     @Override
-    public BaseService<AddressBase, Integer> getService() {
+    public BaseService<AddressBase, String> getService() {
         return service;
+    }
+
+    @LoginRequired
+    @GetMapping("/init")
+    public ObjectNode init() {
+        ObjectNode json = initJSON();
+        json.put(statusCode, service.init().getCode());
+        return json;
     }
 
     @LoginRequired

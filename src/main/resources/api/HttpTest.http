@@ -1,3 +1,8 @@
+### 初始化
+GET http://localhost:8085/address/base/init
+Accept: application/json
+Cache-Control: no-cache
+
 ### 注册
 POST http://localhost:8085/user/base/register
 Accept: application/json
