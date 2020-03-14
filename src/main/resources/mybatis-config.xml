@@ -8,8 +8,10 @@
     </settings>
     <typeAliases>
         <package name="cn.sbx0.zhibei.logic.user.certification"/>
+        <package name="cn.sbx0.zhibei.logic.technical.achievements"/>
     </typeAliases>
     <mappers>
-        <mapper resource="mybatis/logic/user/certification/UserCertificationMapper.xml"/>
+        <mapper resource="mybatis/UserCertificationMapper.xml"/>
+        <mapper resource="mybatis/TechnicalAchievementsMapper.xml"/>
     </mappers>
 </configuration>

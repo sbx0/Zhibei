@@ -4,7 +4,6 @@ import cn.sbx0.zhibei.annotation.LoginRequired;
 import cn.sbx0.zhibei.logic.BaseController;
 import cn.sbx0.zhibei.logic.BaseService;
 import cn.sbx0.zhibei.logic.ReturnStatus;
-import cn.sbx0.zhibei.logic.user.base.UserBase;
 import cn.sbx0.zhibei.logic.user.base.UserBaseService;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -31,6 +30,41 @@ public class TechnicalAchievementsController extends BaseController<TechnicalAch
         return service;
     }
 
+    /**
+     * todo
+     *
+     * @param classificationId
+     * @param kind
+     * @param status
+     * @param page
+     * @param size
+     * @return
+     */
+    @GetMapping("/mybatis/list")
+    public ObjectNode mybatisList(Integer maturity, Integer cooperationMethod, String addressId, String classificationId, String kind, String status, Integer page, Integer size) {
+        ObjectNode json = initJSON();
+        Integer total = service.countAllComplex(maturity, cooperationMethod, addressId, classificationId);
+        List<TechnicalAchievements> list = service.findAllComplex(maturity, cooperationMethod, addressId, classificationId, page, size, total);
+        if (list != null && list.size() > 0) {
+            ArrayNode jsons = initJSONs();
+            for (TechnicalAchievements technicalAchievements : list) {
+                jsons.add(getMapper().convertValue(technicalAchievements, ObjectNode.class));
+            }
+            json.set("objects", jsons);
+        }
+        json.put("page", page);
+        json.put("size", size);
+        json.put("total", total);
+        json.put("total_pages", total / size);
+        json.put(statusCode, ReturnStatus.success.getCode());
+        return json;
+    }
+
+    /**
+     * todo
+     *
+     * @return
+     */
     @GetMapping("/count")
     public ObjectNode count() {
         ObjectNode json = initJSON();
@@ -103,6 +137,7 @@ public class TechnicalAchievementsController extends BaseController<TechnicalAch
         ObjectNode json = initJSON();
         Integer userId = userBaseService.getLoginUserId();
         if (service.checkDataValidity(achievements)) {
+            achievements.setUserId(userId);
             achievements.setPostTime(new Date());
             service.save(achievements);
             json.put(statusCode, ReturnStatus.success.getCode());

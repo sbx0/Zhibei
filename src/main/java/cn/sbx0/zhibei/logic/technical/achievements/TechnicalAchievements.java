@@ -21,6 +21,9 @@ public class TechnicalAchievements {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id; // id
 
+    @Column(nullable = false)
+    private Integer userId; // 发布者
+
     @Column(nullable = false, unique = true, length = 15)
     private String name; // 名称
 

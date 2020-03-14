@@ -13,7 +13,7 @@ public interface UserCertificationMapper {
     /**
      * 查询所有的认证信息
      *
-     * @param id
+     * @param userId
      * @param kind
      * @param status
      * @param start

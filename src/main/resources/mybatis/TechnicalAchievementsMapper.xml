@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.sbx0.zhibei.logic.technical.achievements.TechnicalAchievementsMapper">
+    <select
+            id="findAllComplex"
+            resultType="cn.sbx0.zhibei.logic.technical.achievements.TechnicalAchievements"
+    >
+        select *
+        from technical_achievements
+        <where>
+            <if test="classificationId != ''">
+                and (classification_id = #{classificationId}
+                or classification_id in (select id from technical_classification where father_id = #{classificationId}))
+            </if>
+            <if test="addressId != ''">
+                and (address_id = #{addressId}
+                or address_id in (select id from address_base where father_id = #{addressId})
+                or address_id in (select id from address_base where father_id in (select id from address_base where
+                father_id = #{addressId})))
+            </if>
+            <if test="maturity != -1">
+                and maturity = #{maturity}
+            </if>
+            <if test="cooperationMethod != -1">
+                and cooperation_method = #{cooperationMethod}
+            </if>
+        </where>
+        limit #{start},#{length}
+    </select>
+
+    <select
+            id="countAllComplex"
+            resultType="java.lang.Integer"
+    >
+        select count(*)
+        from technical_achievements
+        <where>
+            <if test="classificationId != ''">
+                and (classification_id = #{classificationId}
+                or classification_id in (select id from technical_classification where father_id = #{classificationId}))
+            </if>
+            <if test="addressId != ''">
+                and (address_id = #{addressId}
+                or address_id in (select id from address_base where father_id = #{addressId})
+                or address_id in (select id from address_base where father_id in (select id from address_base where
+                father_id = #{addressId})))
+            </if>
+            <if test="maturity != -1">
+                and maturity = #{maturity}
+            </if>
+            <if test="cooperationMethod != -1">
+                and cooperation_method = #{cooperationMethod}
+            </if>
+        </where>
+    </select>
+</mapper>
