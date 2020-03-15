@@ -42,7 +42,6 @@ public class TechnicalClassificationController extends BaseController<TechnicalC
         return json;
     }
 
-    @LoginRequired
     @GetMapping("/father")
     public ObjectNode father() {
         ObjectNode json = initJSON();
@@ -59,7 +58,6 @@ public class TechnicalClassificationController extends BaseController<TechnicalC
         return json;
     }
 
-    @LoginRequired
     @GetMapping("/son")
     public ObjectNode son(String fatherId) {
         ObjectNode json = initJSON();

@@ -5,6 +5,7 @@ import cn.sbx0.zhibei.logic.BaseController;
 import cn.sbx0.zhibei.logic.BaseService;
 import cn.sbx0.zhibei.logic.ReturnStatus;
 import cn.sbx0.zhibei.logic.user.base.UserBaseService;
+import cn.sbx0.zhibei.tool.StringTools;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.data.domain.Page;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/technical/achievements")
@@ -33,6 +35,27 @@ public class TechnicalAchievementsController extends BaseController<TechnicalAch
     /**
      * todo
      *
+     * @return
+     */
+    @GetMapping("/attribute")
+    public ObjectNode attribute() {
+        ObjectNode json = initJSON();
+        List<Map> attributes = getService().getAttribute();
+        ArrayNode jsons = getMapper().createArrayNode();
+        for (Map info : attributes) {
+            ObjectNode objectNode = initJSON();
+            objectNode.put("name", info.get("name").toString());
+            objectNode.put("value", StringTools.humpToLine(info.get("name").toString()));
+            jsons.add(objectNode);
+        }
+        json.set("objects", jsons);
+        json.put(statusCode, ReturnStatus.success.getCode());
+        return json;
+    }
+
+    /**
+     * todo
+     *
      * @param classificationId
      * @param kind
      * @param status
@@ -41,10 +64,10 @@ public class TechnicalAchievementsController extends BaseController<TechnicalAch
      * @return
      */
     @GetMapping("/mybatis/list")
-    public ObjectNode mybatisList(Integer maturity, Integer cooperationMethod, String addressId, String classificationId, String kind, String status, Integer page, Integer size) {
+    public ObjectNode mybatisList(Integer userId, String attribute, String direction, Integer maturity, Integer cooperationMethod, String addressId, String classificationId, String kind, String status, Integer page, Integer size) {
         ObjectNode json = initJSON();
-        Integer total = service.countAllComplex(maturity, cooperationMethod, addressId, classificationId);
-        List<TechnicalAchievements> list = service.findAllComplex(maturity, cooperationMethod, addressId, classificationId, page, size, total);
+        Integer total = service.countAllComplex(userId, maturity, cooperationMethod, addressId, classificationId);
+        List<TechnicalAchievements> list = service.findAllComplex(userId, attribute, direction, maturity, cooperationMethod, addressId, classificationId, page, size, total);
         if (list != null && list.size() > 0) {
             ArrayNode jsons = initJSONs();
             for (TechnicalAchievements technicalAchievements : list) {
@@ -157,7 +180,6 @@ public class TechnicalAchievementsController extends BaseController<TechnicalAch
      *
      * @return json
      */
-    @LoginRequired
     @GetMapping("/maturity/list")
     public ObjectNode maturityList() {
         ObjectNode json = initJSON();
@@ -171,7 +193,6 @@ public class TechnicalAchievementsController extends BaseController<TechnicalAch
      *
      * @return json
      */
-    @LoginRequired
     @GetMapping("/cooperationMethod/list")
     public ObjectNode type() {
         ObjectNode json = initJSON();

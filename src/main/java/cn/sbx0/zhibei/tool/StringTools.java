@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.regex.Matcher;
@@ -15,11 +16,28 @@ import java.util.regex.Pattern;
 public class StringTools {
     private static String KEY; // KEY
     public static final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+    private static Pattern humpPattern = Pattern.compile("[A-Z]");
+
+    /**
+     * 驼峰转下划线
+     *
+     * @param str 驼峰
+     * @return 下划线
+     */
+    public static String humpToLine(String str) {
+        Matcher matcher = humpPattern.matcher(str);
+        StringBuffer stringBuffer = new StringBuffer();
+        while (matcher.find()) {
+            matcher.appendReplacement(stringBuffer, "_" + matcher.group(0).toLowerCase());
+        }
+        matcher.appendTail(stringBuffer);
+        return stringBuffer.toString();
+    }
 
     /**
      * 验证邮箱格式
      *
-     * @param emailStr 邮箱
+     * @param email 邮箱
      * @return 是否正确
      */
     public static boolean checkNotEmail(String email) {
@@ -40,8 +58,8 @@ public class StringTools {
     /**
      * 加密密码
      *
-     * @param password
-     * @return
+     * @param password 密码
+     * @return 加密后的密码
      */
     public static String encryptPassword(String password) {
         return getHash(password + KEY, "MD5");
@@ -75,7 +93,7 @@ public class StringTools {
                 nRead = is.read(bytes, nTotalRead, bytes.length - nTotalRead);
                 if (nRead > 0) nTotalRead = nTotalRead + nRead;
             }
-            str = new String(bytes, 0, nTotalRead, "utf-8");
+            str = new String(bytes, 0, nTotalRead, StandardCharsets.UTF_8);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -111,8 +129,7 @@ public class StringTools {
         if (str.length() == 0) return true;
         if (str.trim().equals("")) return true;
         if (str.trim().length() == 0) return true;
-        if (killHTML(str).trim().length() == 0) return true;
-        return false;
+        return killHTML(str).trim().length() == 0;
     }
 
     /**

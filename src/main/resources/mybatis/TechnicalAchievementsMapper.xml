@@ -24,7 +24,13 @@
             <if test="cooperationMethod != null">
                 and cooperation_method = #{cooperationMethod}
             </if>
+            <if test="userId != 0">
+                and user_id = #{userId}
+            </if>
         </where>
+        <if test="attribute != null and direction != null">
+            order by ${attribute} ${direction}
+        </if>
         limit #{start},#{length}
     </select>
 
@@ -50,6 +56,9 @@
             </if>
             <if test="cooperationMethod != null">
                 and cooperation_method = #{cooperationMethod}
+            </if>
+            <if test="userId != null">
+                and user_id = #{userId}
             </if>
         </where>
     </select>

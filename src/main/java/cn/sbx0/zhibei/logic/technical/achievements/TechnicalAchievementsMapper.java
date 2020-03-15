@@ -12,21 +12,27 @@ public interface TechnicalAchievementsMapper {
     /**
      * todo
      *
+     * @param userId
+     * @param maturity
+     * @param cooperationMethod
      * @param addressId
      * @param classificationId
      * @param start
-     * @param end
+     * @param length
      * @return
      */
-    List<TechnicalAchievements> findAllComplex(Integer maturity, Integer cooperationMethod, String addressId, String classificationId, int start, int length);
+    List<TechnicalAchievements> findAllComplex(Integer userId, String attribute, String direction, Integer maturity, Integer cooperationMethod, String addressId, String classificationId, int start, int length);
 
 
     /**
      * todo
      *
+     * @param userId
+     * @param maturity
+     * @param cooperationMethod
      * @param addressId
      * @param classificationId
      * @return
      */
-    Integer countAllComplex(Integer maturity, Integer cooperationMethod, String addressId, String classificationId);
+    Integer countAllComplex(Integer userId, Integer maturity, Integer cooperationMethod, String addressId, String classificationId);
 }
