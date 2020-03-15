@@ -55,7 +55,10 @@ public class TechnicalAchievementsController extends BaseController<TechnicalAch
         json.put("page", page);
         json.put("size", size);
         json.put("total", total);
-        json.put("total_pages", total / size);
+        if (total > size)
+            json.put("total_pages", total / size);
+        else
+            json.put("total_pages", 1);
         json.put(statusCode, ReturnStatus.success.getCode());
         return json;
     }
@@ -87,7 +90,9 @@ public class TechnicalAchievementsController extends BaseController<TechnicalAch
         if (technicalAchievements != null) {
             ObjectNode objectNode = service.convertToJson(technicalAchievements);
             objectNode.put("cooperationMethod", TechnicalCooperationMethod.find(technicalAchievements.getCooperationMethod()));
+            objectNode.put("cooperationMethodId", technicalAchievements.getCooperationMethod());
             objectNode.put("maturity", TechnicalMaturity.find(technicalAchievements.getMaturity()));
+            objectNode.put("maturityId", technicalAchievements.getMaturity());
             json.set(jsonOb, objectNode);
             json.put(statusCode, ReturnStatus.success.getCode());
         } else {

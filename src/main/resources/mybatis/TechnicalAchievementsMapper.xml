@@ -18,10 +18,10 @@
                 or address_id in (select id from address_base where father_id in (select id from address_base where
                 father_id = #{addressId})))
             </if>
-            <if test="maturity != -1">
+            <if test="maturity != null">
                 and maturity = #{maturity}
             </if>
-            <if test="cooperationMethod != -1">
+            <if test="cooperationMethod != null">
                 and cooperation_method = #{cooperationMethod}
             </if>
         </where>
@@ -45,10 +45,10 @@
                 or address_id in (select id from address_base where father_id in (select id from address_base where
                 father_id = #{addressId})))
             </if>
-            <if test="maturity != -1">
+            <if test="maturity != null">
                 and maturity = #{maturity}
             </if>
-            <if test="cooperationMethod != -1">
+            <if test="cooperationMethod != null">
                 and cooperation_method = #{cooperationMethod}
             </if>
         </where>
