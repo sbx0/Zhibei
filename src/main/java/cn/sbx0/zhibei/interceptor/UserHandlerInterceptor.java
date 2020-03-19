@@ -64,13 +64,13 @@ public class UserHandlerInterceptor implements HandlerInterceptor {
             if (!(user != null && user.getUserId() != null && user.getEmail() != null)) {
                 // 查找是否存在cookie
                 Map<String, Cookie> cookies = CookieTools.getCookiesByName(CookieTools.COOKIE_NAMES, request.getCookies());
-                if (cookies == null) return false;
-                else if (cookies.size() == 0) return false;
+                if (cookies == null) isLogin = false;
+                else if (cookies.size() == 0) isLogin = false;
                 else {
                     // 为空
                     for (int i = 0; i < cookies.size(); i++) {
                         if (StringTools.checkNullStr(cookies.get(CookieTools.COOKIE_NAMES.get(i)).getValue())) {
-                            return false;
+                            isLogin = false;
                         }
                     }
                     // Cookie中的ID
@@ -81,10 +81,10 @@ public class UserHandlerInterceptor implements HandlerInterceptor {
                     String check = StringTools.getKey(userId);
                     // 匹配KEY
                     isLogin = check.equals(key);
-                    if (!isLogin) {
-                        request.getRequestDispatcher("/user/base/notLogin").forward(request, response);
-                        return false;
-                    }
+                }
+                if (!isLogin) {
+                    request.getRequestDispatcher("/user/base/notLogin").forward(request, response);
+                    return false;
                 }
             }
             // 已登录

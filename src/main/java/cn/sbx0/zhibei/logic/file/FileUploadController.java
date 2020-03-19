@@ -1,6 +1,5 @@
 package cn.sbx0.zhibei.logic.file;
 
-import cn.sbx0.zhibei.annotation.LoginRequired;
 import cn.sbx0.zhibei.annotation.RoleCheck;
 import cn.sbx0.zhibei.logic.BaseController;
 import cn.sbx0.zhibei.logic.BaseService;
@@ -9,10 +8,7 @@ import cn.sbx0.zhibei.logic.user.base.UserBase;
 import cn.sbx0.zhibei.logic.user.base.UserBaseService;
 import cn.sbx0.zhibei.logic.user.info.UserInfo;
 import cn.sbx0.zhibei.tool.FileTools;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -63,7 +59,7 @@ public class FileUploadController extends BaseController<FileUpload, Integer> {
             FileUpload fileUpload = fileUploadService.md5Check(md5);
             if (fileUpload != null) {
                 UserBase userBase = userBaseService.findById(user.getUserId());
-                userBase.setAvatar("upload/user" + fileUpload.getUserId() + "/" + fileUpload.getType() + "/" + fileUpload.getName());
+                userBase.setAvatar("/upload/user" + fileUpload.getUserId() + "/" + fileUpload.getType() + "/" + fileUpload.getName());
                 userBase = userBaseService.save(userBase);
                 json.put(statusCode, ReturnStatus.success.getCode());
             } else {
@@ -95,7 +91,7 @@ public class FileUploadController extends BaseController<FileUpload, Integer> {
                     fileUpload = fileUploadService.save(fileUpload);
                     if (fileUpload != null) {
                         UserBase userBase = userBaseService.findById(user.getUserId());
-                        userBase.setAvatar("upload/user" + user.getUserId() + "/" + fileUpload.getType() + "/" + fileUpload.getName());
+                        userBase.setAvatar("/upload/user" + user.getUserId() + "/" + fileUpload.getType() + "/" + fileUpload.getName());
                         userBase = userBaseService.save(userBase);
                         json.put(statusCode, ReturnStatus.success.getCode());
                     } else {

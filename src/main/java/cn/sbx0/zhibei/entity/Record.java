@@ -17,8 +17,7 @@ import java.util.Date;
 @Table(name = "Record")
 @DynamicInsert
 @DynamicUpdate
-public class Record implements Serializable {
-    private static final long serialVersionUID = -4967082363759980300L;
+public class Record {
 
     @JsonView(JsonViewInterface.Simple.class)
     @Id
@@ -56,10 +55,6 @@ public class Record implements Serializable {
                 ", path='" + path + '\'' +
                 ", user=" + user +
                 '}';
-    }
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
     }
 
     public Integer getId() {

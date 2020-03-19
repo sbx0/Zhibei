@@ -16,8 +16,7 @@ import java.util.Date;
 @Table(name = "Projects")
 @DynamicInsert
 @DynamicUpdate
-public class Project implements Serializable {
-    private static final long serialVersionUID = -8129666995197374818L;
+public class Project {
 
     @JsonView(JsonViewInterface.Simple.class)
     @Id
@@ -48,10 +47,6 @@ public class Project implements Serializable {
     @JsonView(JsonViewInterface.Simple.class)
     @ManyToOne(cascade = {CascadeType.MERGE}, targetEntity = Demand.class, optional = false)
     private Demand demand; // 需求
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
 
     public Integer getId() {
         return id;

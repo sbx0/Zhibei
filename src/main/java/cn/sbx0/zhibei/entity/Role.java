@@ -16,8 +16,7 @@ import java.util.List;
 @JsonView(JsonViewInterface.All.class)
 @DynamicInsert
 @DynamicUpdate
-public class Role implements Serializable {
-    private static final long serialVersionUID = -1252665744119242036L;
+public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,10 +47,6 @@ public class Role implements Serializable {
                 ", father=" + father +
                 ", permissions=" + permissions +
                 '}';
-    }
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
     }
 
     public Integer getId() {

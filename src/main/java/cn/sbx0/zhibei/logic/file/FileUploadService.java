@@ -2,7 +2,6 @@ package cn.sbx0.zhibei.logic.file;
 
 import cn.sbx0.zhibei.logic.BaseService;
 import cn.sbx0.zhibei.tool.StringTools;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

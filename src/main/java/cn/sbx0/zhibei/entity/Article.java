@@ -17,8 +17,7 @@ import java.util.List;
 @Table(name = "Articles")
 @DynamicInsert
 @DynamicUpdate
-public class Article implements Serializable {
-    private static final long serialVersionUID = -8099382889784133037L;
+public class Article {
 
     @JsonView(JsonViewInterface.Simple.class)
     @Id
@@ -101,10 +100,6 @@ public class Article implements Serializable {
                 ", author=" + author +
                 ", tags=" + tags +
                 '}';
-    }
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
     }
 
     public Integer getId() {

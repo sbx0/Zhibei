@@ -18,8 +18,7 @@ import java.util.List;
 @Table(name = "Alipay")
 @DynamicInsert
 @DynamicUpdate
-public class Alipay implements Serializable {
-    private static final long serialVersionUID = 855315909328034099L;
+public class Alipay {
 
     @JsonView(JsonViewInterface.All.class)
     @Id
@@ -150,10 +149,6 @@ public class Alipay implements Serializable {
                 ", amount=" + amount +
                 ", finished=" + finished +
                 '}';
-    }
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
     }
 
     public Integer getId() {

@@ -18,8 +18,7 @@ import java.util.List;
 @DynamicInsert
 @DynamicUpdate
 @JsonView(JsonViewInterface.Simple.class)
-public class Demand implements Serializable {
-    private static final long serialVersionUID = 3615247090495607558L;
+public class Demand {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -66,10 +65,6 @@ public class Demand implements Serializable {
                 ", tags=" + tags +
                 ", poster=" + poster +
                 '}';
-    }
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
     }
 
     public Integer getId() {

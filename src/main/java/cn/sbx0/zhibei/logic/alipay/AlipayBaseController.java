@@ -1,26 +1,22 @@
-package cn.sbx0.zhibei.controller;
+package cn.sbx0.zhibei.logic.alipay;
 
+import cn.sbx0.zhibei.annotation.LoginRequired;
 import cn.sbx0.zhibei.config.AlipayConfig;
-import cn.sbx0.zhibei.entity.Alipay;
-import cn.sbx0.zhibei.entity.Product;
-import cn.sbx0.zhibei.entity.User;
-import cn.sbx0.zhibei.entity.Wallet;
-import cn.sbx0.zhibei.service.AlipayService;
-import cn.sbx0.zhibei.service.BaseService;
-import cn.sbx0.zhibei.service.ProductService;
-import cn.sbx0.zhibei.service.WalletService;
+import cn.sbx0.zhibei.logic.BaseController;
+import cn.sbx0.zhibei.logic.BaseService;
+import cn.sbx0.zhibei.logic.ReturnStatus;
+import cn.sbx0.zhibei.logic.user.base.UserBaseService;
+import cn.sbx0.zhibei.logic.user.info.UserInfo;
+import cn.sbx0.zhibei.tool.StringTools;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradePagePayRequest;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -29,86 +25,75 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-/**
- * alipay 控制层
- */
-@Controller
-@RequestMapping(value = "/alipay/old")
-public class AlipayController extends BaseController<Alipay, Integer> {
+@RestController
+@RequestMapping("/alipay")
+public class AlipayBaseController extends BaseController<AlipayBase, Integer> {
     @Resource
-    private AlipayService alipayService;
+    private AlipayBaseService service;
     @Resource
-    private ProductService productService;
+    private UserBaseService userBaseService;
     @Resource
-    private WalletService walletService;
+    private TradeBaseService tradeBaseService;
+    @Resource
+    private WalletBaseService walletBaseService;
     @Resource
     private AlipayConfig alipayConfig;
 
     @Override
-    public BaseService<Alipay, Integer> getService() {
-        return alipayService;
-    }
-
-    @Autowired
-    public AlipayController(ObjectMapper mapper) {
-        this.mapper = mapper;
+    public BaseService<AlipayBase, Integer> getService() {
+        return service;
     }
 
     /**
-     * 付款
+     * 先创建订单 -》 带着订单号来付款
      *
+     * @param tradeNo
      * @return
      */
-    @ResponseBody
-    @PostMapping("/pay")
-    public ObjectNode alipayTradePagePay(Product product) {
-        json = mapper.createObjectNode();
-        User user = userService.getUser();
-        if (user == null) {
-            json.put(STATUS_NAME, STATUS_CODE_NOT_LOGIN);
+    @LoginRequired
+    @PostMapping(value = "/pay")
+    public ObjectNode pay(String tradeNo) {
+        ObjectNode json = initJSON();
+        UserInfo user = userBaseService.getLoginUser();
+        AlipayBase alipayBase = new AlipayBase();
+        if (!StringTools.checkNotEmail(tradeNo)) {
+            json.put(statusCode, ReturnStatus.invalidValue.getCode());
             return json;
         }
-        Alipay alipay = new Alipay();
-        if (product == null || product.getId() == null) {
-            json.put(STATUS_NAME, STATUS_CODE_PARAMETER_ERROR);
-            return json;
-        }
-        product = productService.findById(product.getId());
-        if (product == null) {
-            json.put(STATUS_NAME, STATUS_CODE_PARAMETER_ERROR);
-            return json;
-        }
-        alipay.addProduct(product);
-        alipay.setOutTradeNo(alipayService.createTradeNo());
-        alipay.setCreateTime(new Date());
-        alipay.setBuyer(user);
-        alipay.setCreateTime(new Date());
-        alipay.setType("alipay");
-        // 获得初始化的AlipayClient
+        alipayBase.setOutTradeNo(tradeNo);
+        alipayBase.setCreateTime(new Date());
+        alipayBase.setBuyerId(user.getUserId());
+        alipayBase.setFinished(false);
+        // 通过订单号找到订单与商品的绑定，
+        List<TradeBase> tradeBases = tradeBaseService.findByTradeNo(tradeNo);
+        // 从而计算金额
+        alipayBase.setAmount(tradeBaseService.countAmount(tradeBases));
         AlipayClient alipayClient = new DefaultAlipayClient(alipayConfig.getGatewayUrl(), alipayConfig.getAppId(), alipayConfig.getMerchantPrivateKey(), "json", alipayConfig.getCharset(), alipayConfig.getAlipayPublicKey(), alipayConfig.getSignType());
+
         // 设置请求参数
         AlipayTradePagePayRequest alipayRequest = new AlipayTradePagePayRequest();
         alipayRequest.setReturnUrl(alipayConfig.getReturnUrl());
         alipayRequest.setNotifyUrl(alipayConfig.getNotifyUrl());
         try {
-            alipayRequest.setBizContent("{\"out_trade_no\":\"" + alipay.getOutTradeNo() + "\","
-                    + "\"total_amount\":\"" + alipay.getRealPay() + "\","
-                    + "\"subject\":\"" + alipay.getName() + "\","
-                    + "\"body\":\"" + alipay.getDesc() + "\","
+            alipayRequest.setBizContent("{\"out_trade_no\":\"" + alipayBase.getOutTradeNo() + "\","
+                    + "\"total_amount\":\"" + alipayBase.getAmount() + "\","
+                    + "\"subject\":\"" + alipayBase.getOutTradeNo() + "\","
+                    + "\"body\":\"" + alipayBase.getOutTradeNo() + "\","
                     + "\"product_code\":\"FAST_INSTANT_TRADE_PAY\"}");
             String result = alipayClient.pageExecute(alipayRequest).getBody();
-            if (alipayService.save(alipay)) {
-                json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
+            if (service.save(alipayBase) != null) {
+                json.put(statusCode, ReturnStatus.success.getCode());
             } else {
-                json.put(STATUS_NAME, STATUS_CODE_FILED);
+                json.put(statusCode, ReturnStatus.failed.getCode());
             }
-            json.put("result", result);
+            json.put(jsonOb, result);
         } catch (Exception e) {
-            json.put(STATUS_NAME, STATUS_CODE_EXCEPTION);
-            json.put("msg", e.getMessage());
+            json.put(statusCode, ReturnStatus.exception.getCode());
+            json.put(statusMsg, e.getMessage());
         }
         return json;
     }
@@ -120,7 +105,7 @@ public class AlipayController extends BaseController<Alipay, Integer> {
      */
     @GetMapping("/return")
     public String alipayReturn(Map<String, String> params) {
-        User user = userService.getUser();
+        UserInfo user = userBaseService.getLoginUser();
         if (user == null) {
             return "error";
         }
@@ -150,19 +135,19 @@ public class AlipayController extends BaseController<Alipay, Integer> {
                 String tradeNo = new String(request.getParameter("trade_no").getBytes("ISO-8859-1"), "UTF-8");
                 // 付款金额
                 String totalAmount = new String(request.getParameter("total_amount").getBytes("ISO-8859-1"), "UTF-8");
-                Alipay alipay = alipayService.findByOutTradeNo(outTradeNo);
-                Wallet wallet = new Wallet();
-                if (alipay == null) {
+                AlipayBase alipayBase = service.findByOutTradeNo(outTradeNo);
+                WalletBase wallet = new WalletBase();
+                if (alipayBase == null) {
                     return "error";
-                } else if (!alipay.getFinished()) {
-                    alipay.setTradeNo(tradeNo);
-                    alipay.setAmount(Double.parseDouble(totalAmount));
-                    alipay.setEndTime(new Date());
-                    alipay.setFinished(true);
-                    if (alipayService.save(alipay)) {
-                        wallet = walletService.getUserWallet(user);
-                        wallet.setMoney(wallet.getMoney() + alipay.getRealTotal());
-                        if (walletService.save(wallet)) {
+                } else if (!alipayBase.getFinished()) {
+                    alipayBase.setTradeNo(tradeNo);
+                    alipayBase.setAmount(Double.parseDouble(totalAmount));
+                    alipayBase.setEndTime(new Date());
+                    alipayBase.setFinished(true);
+                    if (service.save(alipayBase) != null) {
+                        wallet = walletBaseService.getUserWallet(user.getUserId());
+                        wallet.setMoney(wallet.getMoney() + alipayBase.getAmount());
+                        if (walletBaseService.save(wallet) != null) {
                             params.put("status", "success");
                         } else {
                             params.put("status", "failed");
@@ -171,17 +156,17 @@ public class AlipayController extends BaseController<Alipay, Integer> {
                         params.put("status", "failed");
                     }
                 } else {
-                    wallet = walletService.getUserWallet(user);
+                    wallet = walletBaseService.getUserWallet(user.getUserId());
                 }
-                params.put("username", user.getName());
-                params.put("nickname", user.getNickname());
-                params.put("out_trade_no", alipay.getOutTradeNo());
-                params.put("trade_no", alipay.getTradeNo());
-                params.put("total_amount", alipay.getAmount().toString());
+                params.put("username", user.getUserId() + "");
+                params.put("nickname", user.getEmail());
+                params.put("out_trade_no", alipayBase.getOutTradeNo());
+                params.put("trade_no", alipayBase.getTradeNo());
+                params.put("total_amount", alipayBase.getAmount().toString());
                 params.put("wallet_money", wallet.getMoney().toString());
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd-HH mm:ss");
-                params.put("create_time", simpleDateFormat.format(alipay.getCreateTime()));
-                params.put("end_time", simpleDateFormat.format(alipay.getEndTime()));
+                params.put("create_time", simpleDateFormat.format(alipayBase.getCreateTime()));
+                params.put("end_time", simpleDateFormat.format(alipayBase.getEndTime()));
                 params.put("status", "success");
             } else {
                 params.put("status", "failed");
@@ -193,16 +178,10 @@ public class AlipayController extends BaseController<Alipay, Integer> {
         return "alipay";
     }
 
-    /**
-     * 支付宝服务器异步通知
-     *
-     * @return
-     */
-    @ResponseBody
     @PostMapping("/notify")
     public ObjectNode alipayNotify(Map<String, String> params) {
         // 获取支付宝POST过来反馈信息
-        json = mapper.createObjectNode();
+        ObjectNode json = initJSON();
         HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
         Map<String, String[]> requestParams = request.getParameterMap();
         for (String name : requestParams.keySet()) {

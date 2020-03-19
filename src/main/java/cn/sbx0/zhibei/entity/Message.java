@@ -16,8 +16,7 @@ import java.util.Date;
 @Table(name = "MESSAGES")
 @DynamicInsert
 @DynamicUpdate
-public class Message implements Serializable {
-    private static final long serialVersionUID = 310841855975160801L;
+public class Message {
 
     @JsonView(JsonViewInterface.Normal.class)
     @Id
@@ -65,10 +64,6 @@ public class Message implements Serializable {
                 ", receiveTime=" + receiveTime +
                 ", type='" + type + '\'' +
                 '}';
-    }
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
     }
 
     public Integer getId() {
