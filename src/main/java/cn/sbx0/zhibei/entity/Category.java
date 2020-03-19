@@ -15,8 +15,7 @@ import java.io.Serializable;
 @DynamicInsert
 @DynamicUpdate
 @JsonView(JsonViewInterface.Simple.class)
-public class Category implements Serializable {
-    private static final long serialVersionUID = -4517711669778910509L;
+public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,10 +42,6 @@ public class Category implements Serializable {
                 ", cover='" + cover + '\'' +
                 ", father=" + father +
                 '}';
-    }
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
     }
 
     public Integer getId() {

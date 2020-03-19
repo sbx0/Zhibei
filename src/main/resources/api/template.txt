@@ -1,0 +1,54 @@
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.PagingAndSortingRepository;
+
+public interface TTTDao extends PagingAndSortingRepository<TTT, Integer> {
+    @Query(value = "select * from trade_base where aaa = ?1", nativeQuery = true)
+    TTT findAllBy(Integer id);
+}
+
+import cn.sbx0.zhibei.logic.BaseService;
+import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+
+@Service
+public class TTTService extends BaseService<TTT, Integer> {
+    @Resource
+    private TTTDao dao;
+
+    @Override
+    public PagingAndSortingRepository<TTT, Integer> getDao() {
+        return dao;
+    }
+
+    @Override
+    public TTT getEntity() {
+        return new TTT();
+    }
+
+    @Override
+    public boolean checkDataValidity(TTT o) {
+        return true;
+    }
+}
+
+import cn.sbx0.zhibei.logic.BaseController;
+import cn.sbx0.zhibei.logic.BaseService;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
+
+@RestController
+@RequestMapping("/TTT")
+public class TTTController extends BaseController<TTT, Integer> {
+    @Resource
+    private TTTService service;
+
+    @Override
+    public BaseService<TTT, Integer> getService() {
+        return service;
+    }
+}
+

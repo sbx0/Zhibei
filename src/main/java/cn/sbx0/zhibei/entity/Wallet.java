@@ -14,8 +14,7 @@ import java.io.Serializable;
 @Table(name = "Wallet")
 @DynamicInsert
 @DynamicUpdate
-public class Wallet implements Serializable {
-    private static final long serialVersionUID = 3522061486300387697L;
+public class Wallet {
 
     @JsonView(JsonViewInterface.Simple.class)
     @Id
@@ -37,10 +36,6 @@ public class Wallet implements Serializable {
                 ", money=" + money +
                 ", owner=" + owner +
                 '}';
-    }
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
     }
 
     public Integer getId() {

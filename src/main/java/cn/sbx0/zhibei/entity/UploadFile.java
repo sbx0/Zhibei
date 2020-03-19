@@ -17,8 +17,7 @@ import java.util.Date;
 @JsonView(JsonViewInterface.All.class)
 @DynamicInsert
 @DynamicUpdate
-public class UploadFile implements Serializable {
-    private static final long serialVersionUID = 7933668333645679234L;
+public class UploadFile {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -62,10 +61,6 @@ public class UploadFile implements Serializable {
                 ", time=" + time +
                 ", banned=" + banned +
                 '}';
-    }
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
     }
 
     public Integer getId() {

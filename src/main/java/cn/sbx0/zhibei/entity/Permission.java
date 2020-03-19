@@ -15,8 +15,7 @@ import java.io.Serializable;
 @JsonView(JsonViewInterface.All.class)
 @DynamicInsert
 @DynamicUpdate
-public class Permission implements Serializable {
-    private static final long serialVersionUID = 8640097004258127319L;
+public class Permission {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -62,10 +61,6 @@ public class Permission implements Serializable {
                 ", available=" + available +
                 ", father=" + father +
                 '}';
-    }
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
     }
 
     public Integer getId() {

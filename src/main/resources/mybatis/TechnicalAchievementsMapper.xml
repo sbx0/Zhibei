@@ -18,13 +18,19 @@
                 or address_id in (select id from address_base where father_id in (select id from address_base where
                 father_id = #{addressId})))
             </if>
-            <if test="maturity != -1">
+            <if test="maturity != null">
                 and maturity = #{maturity}
             </if>
-            <if test="cooperationMethod != -1">
+            <if test="cooperationMethod != null">
                 and cooperation_method = #{cooperationMethod}
             </if>
+            <if test="userId != 0">
+                and user_id = #{userId}
+            </if>
         </where>
+        <if test="attribute != null and direction != null">
+            order by ${attribute} ${direction}
+        </if>
         limit #{start},#{length}
     </select>
 
@@ -45,11 +51,14 @@
                 or address_id in (select id from address_base where father_id in (select id from address_base where
                 father_id = #{addressId})))
             </if>
-            <if test="maturity != -1">
+            <if test="maturity != null">
                 and maturity = #{maturity}
             </if>
-            <if test="cooperationMethod != -1">
+            <if test="cooperationMethod != null">
                 and cooperation_method = #{cooperationMethod}
+            </if>
+            <if test="userId != null">
+                and user_id = #{userId}
             </if>
         </where>
     </select>

@@ -16,8 +16,7 @@ import java.util.Date;
 @Table(name = "Comments")
 @DynamicInsert
 @DynamicUpdate
-public class Comment implements Serializable {
-    private static final long serialVersionUID = -8732404921102344477L;
+public class Comment {
 
     @JsonView(JsonViewInterface.Simple.class)
     @Id
@@ -81,10 +80,6 @@ public class Comment implements Serializable {
                 ", father=" + father +
                 ", poster=" + poster +
                 '}';
-    }
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
     }
 
     public Integer getId() {

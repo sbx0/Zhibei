@@ -16,8 +16,7 @@ import java.util.Date;
 @Table(name = "CERTIFICATIONS")
 @DynamicInsert
 @DynamicUpdate
-public class Certification implements Serializable {
-    private static final long serialVersionUID = -6064596742915995996L;
+public class Certification {
 
     @JsonView(JsonViewInterface.Simple.class)
     @Id
@@ -68,10 +67,6 @@ public class Certification implements Serializable {
                 ", license='" + license + '\'' +
                 ", img='" + img + '\'' +
                 '}';
-    }
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
     }
 
     public Integer getId() {

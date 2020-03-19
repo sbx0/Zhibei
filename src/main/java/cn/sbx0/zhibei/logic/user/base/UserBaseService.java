@@ -2,6 +2,8 @@ package cn.sbx0.zhibei.logic.user.base;
 
 import cn.sbx0.zhibei.logic.BaseService;
 import cn.sbx0.zhibei.logic.ReturnStatus;
+import cn.sbx0.zhibei.logic.alipay.WalletBase;
+import cn.sbx0.zhibei.logic.alipay.WalletBaseService;
 import cn.sbx0.zhibei.logic.user.info.UserInfo;
 import cn.sbx0.zhibei.logic.user.info.UserInfoService;
 import cn.sbx0.zhibei.logic.user.role.UserRoleService;
@@ -30,6 +32,8 @@ public class UserBaseService extends BaseService<UserBase, Integer> {
     private UserInfoService userInfoService;
     @Resource
     private UserRoleService userRoleService;
+    @Resource
+    private WalletBaseService walletBaseService;
 
     @Override
     public boolean checkDataValidity(UserBase userBase) {
@@ -152,6 +156,14 @@ public class UserBaseService extends BaseService<UserBase, Integer> {
             // 绑定初始用户角色
             ReturnStatus returnStatus = userRoleService.bindInit(userBase.getId());
             if (returnStatus != ReturnStatus.success) {
+                return ReturnStatus.failed;
+            }
+            // 初始化用户钱包
+            WalletBase walletBase = new WalletBase();
+            walletBase.setMoney(0.0);
+            walletBase.setFinished(false);
+            walletBase.setUserId(userBase.getId());
+            if (walletBaseService.save(walletBase) == null) {
                 return ReturnStatus.failed;
             }
         } else {
