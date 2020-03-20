@@ -53,18 +53,48 @@ public class TechnicalAchievementsController extends BaseController<TechnicalAch
         return json;
     }
 
-    /**
-     * todo
-     *
-     * @param classificationId
-     * @param kind
-     * @param status
-     * @param page
-     * @param size
-     * @return
-     */
+    @PostMapping("/mybatis/lists")
+    public ObjectNode mybatisLists(Receives receives) {
+        ObjectNode json = initJSON();
+        Integer total = service.countAllComplexs(
+                receives.getUserId(),
+                receives.getMaturity(),
+                receives.getCooperationMethod(),
+                receives.getAddressId(),
+                receives.getClassificationId()
+        );
+        List<TechnicalAchievements> list = service.findAllComplexs(
+                receives.getUserId(),
+                receives.getAttribute(),
+                receives.getDirection(),
+                receives.getMaturity(),
+                receives.getCooperationMethod(),
+                receives.getAddressId(),
+                receives.getClassificationId(),
+                receives.getPage(),
+                receives.getSize(),
+                total
+        );
+        if (list != null && list.size() > 0) {
+            ArrayNode jsons = initJSONs();
+            for (TechnicalAchievements technicalAchievements : list) {
+                jsons.add(getMapper().convertValue(technicalAchievements, ObjectNode.class));
+            }
+            json.set("objects", jsons);
+        }
+        json.put("page", receives.getPage());
+        json.put("size", receives.getSize());
+        json.put("total", total);
+        if (total > receives.getSize())
+            json.put("total_pages", total / receives.getSize());
+        else
+            json.put("total_pages", 1);
+        json.put(statusCode, ReturnStatus.success.getCode());
+        return json;
+    }
+
     @GetMapping("/mybatis/list")
-    public ObjectNode mybatisList(Integer userId, String attribute, String direction, Integer maturity, Integer cooperationMethod, String addressId, String classificationId, String kind, String status, Integer page, Integer size) {
+    public ObjectNode mybatisList(Integer userId, String attribute, String direction, Integer maturity, Integer cooperationMethod, String addressId, String classificationId, String status, Integer page, Integer size) {
         ObjectNode json = initJSON();
         Integer total = service.countAllComplex(userId, maturity, cooperationMethod, addressId, classificationId);
         List<TechnicalAchievements> list = service.findAllComplex(userId, attribute, direction, maturity, cooperationMethod, addressId, classificationId, page, size, total);

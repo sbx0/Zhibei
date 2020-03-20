@@ -33,22 +33,21 @@ public class TechnicalAchievementsService extends BaseService<TechnicalAchieveme
         return true;
     }
 
-    /**
-     * todo
-     *
-     * @param classificationId
-     * @param page
-     * @param size
-     * @param total
-     * @return
-     */
+    public List<TechnicalAchievements> findAllComplexs(Integer userId, String attribute, String direction, Integer maturity, Integer cooperationMethod, String[] addressId, String[] classificationId, Integer page, Integer size, Integer total) {
+        if (page == null || page < 1) return null;
+        if (size == null || size < 1) return null;
+        int begin = (page - 1) * size;
+        if (begin > total) begin = total;
+        return technicalAchievementsMapper.findAllComplexs(userId, attribute, direction, maturity, cooperationMethod, addressId, classificationId, begin, size);
+    }
+
+    public Integer countAllComplexs(Integer userId, Integer maturity, Integer cooperationMethod, String[] addressId, String[] classificationId) {
+        return technicalAchievementsMapper.countAllComplexs(userId, maturity, cooperationMethod, addressId, classificationId);
+    }
+
     public List<TechnicalAchievements> findAllComplex(Integer userId, String attribute, String direction, Integer maturity, Integer cooperationMethod, String addressId, String classificationId, Integer page, Integer size, Integer total) {
-        if (page == null || page < 1) {
-            return null;
-        }
-        if (size == null || size < 1) {
-            return null;
-        }
+        if (page == null || page < 1) return null;
+        if (size == null || size < 1) return null;
         int begin = (page - 1) * size;
         if (begin > total) begin = total;
         return technicalAchievementsMapper.findAllComplex(userId, attribute, direction, maturity, cooperationMethod, addressId, classificationId, begin, size);

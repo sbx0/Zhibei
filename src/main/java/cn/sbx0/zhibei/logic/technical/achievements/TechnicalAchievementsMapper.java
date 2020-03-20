@@ -9,30 +9,8 @@ import java.util.List;
  */
 @Mapper
 public interface TechnicalAchievementsMapper {
-    /**
-     * todo
-     *
-     * @param userId
-     * @param maturity
-     * @param cooperationMethod
-     * @param addressId
-     * @param classificationId
-     * @param start
-     * @param length
-     * @return
-     */
+    List<TechnicalAchievements> findAllComplexs(Integer userId, String attribute, String direction, Integer maturity, Integer cooperationMethod, String[] addressId, String[] classificationId, int start, int length);
+    Integer countAllComplexs(Integer userId, Integer maturity, Integer cooperationMethod, String[] addressId, String[] classificationId);
     List<TechnicalAchievements> findAllComplex(Integer userId, String attribute, String direction, Integer maturity, Integer cooperationMethod, String addressId, String classificationId, int start, int length);
-
-
-    /**
-     * todo
-     *
-     * @param userId
-     * @param maturity
-     * @param cooperationMethod
-     * @param addressId
-     * @param classificationId
-     * @return
-     */
     Integer countAllComplex(Integer userId, Integer maturity, Integer cooperationMethod, String addressId, String classificationId);
 }
