@@ -7,6 +7,7 @@ import cn.sbx0.zhibei.logic.ReturnStatus;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -69,6 +70,26 @@ public class AddressBaseController extends BaseController<AddressBase, String> {
             jsons.add(jsonOb);
         }
         json.set(jsonObs, jsons);
+        json.put(statusCode, ReturnStatus.success.getCode());
+        return json;
+    }
+
+    @PostMapping("/sons")
+    public ObjectNode sons(ReceiveFatherIds receive) {
+        ObjectNode json = initJSON();
+        if (receive != null) {
+            List<AddressBase> list = service.findAllSons(receive.getFatherIds());
+            ArrayNode jsons = initJSONs();
+            for (AddressBase o : list) {
+                ObjectNode jsonOb = initJSON();
+                jsonOb.put("name", o.getName());
+                jsonOb.put("value", o.getId());
+                jsons.add(jsonOb);
+            }
+            json.set(jsonObs, jsons);
+        } else {
+            json.set(jsonObs, initJSONs());
+        }
         json.put(statusCode, ReturnStatus.success.getCode());
         return json;
     }
