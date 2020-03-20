@@ -2,6 +2,104 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.sbx0.zhibei.logic.technical.achievements.TechnicalAchievementsMapper">
     <select
+            id="findAllComplexs"
+            resultType="cn.sbx0.zhibei.logic.technical.achievements.TechnicalAchievements"
+    >
+        select *
+        from technical_achievements
+        <where>
+            <if test="classificationId != null">
+                and (classification_id in
+                    <foreach item="item" index="index" collection="classificationId" open="(" separator="," close=")">
+                        #{item}
+                    </foreach>
+                or classification_id in (select id from technical_classification where father_id in
+                    <foreach item="item" index="index" collection="classificationId" open="(" separator="," close=")">
+                        #{item}
+                    </foreach>
+                ))
+            </if>
+            <if test="addressId != null">
+                and (address_id in
+                    <foreach item="item" index="index" collection="addressId" open="(" separator="," close=")">
+                        #{item}
+                    </foreach>
+                or address_id in (select id from address_base where father_id in
+                    <foreach item="item" index="index" collection="addressId" open="(" separator="," close=")">
+                        #{item}
+                    </foreach>
+                )
+                or address_id in (select id from address_base where father_id in (select id from address_base where
+                father_id in
+                    <foreach item="item" index="index" collection="addressId" open="(" separator="," close=")">
+                        #{item}
+                    </foreach>
+                )))
+            </if>
+            <if test="maturity != null">
+                and maturity = #{maturity}
+            </if>
+            <if test="cooperationMethod != null">
+                and cooperation_method = #{cooperationMethod}
+            </if>
+            <if test="userId != 0">
+                and user_id = #{userId}
+            </if>
+        </where>
+        <if test="attribute != null and direction != null">
+            order by ${attribute} ${direction}
+        </if>
+        limit #{start},#{length}
+    </select>
+
+    <select
+            id="countAllComplexs"
+            resultType="java.lang.Integer"
+    >
+        select count(*)
+        from technical_achievements
+        <where>
+            <if test="classificationId != null">
+                and (classification_id in
+                <foreach item="item" index="index" collection="classificationId" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+                or classification_id in (select id from technical_classification where father_id in
+                <foreach item="item" index="index" collection="classificationId" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+                ))
+            </if>
+            <if test="addressId != null">
+                and (address_id in
+                <foreach item="item" index="index" collection="addressId" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+                or address_id in (select id from address_base where father_id in
+                <foreach item="item" index="index" collection="addressId" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+                )
+                or address_id in (select id from address_base where father_id in (select id from address_base where
+                father_id in
+                <foreach item="item" index="index" collection="addressId" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+                )))
+            </if>
+            <if test="maturity != null">
+                and maturity = #{maturity}
+            </if>
+            <if test="cooperationMethod != null">
+                and cooperation_method = #{cooperationMethod}
+            </if>
+            <if test="userId != 0">
+                and user_id = #{userId}
+            </if>
+        </where>
+    </select>
+
+    <select
             id="findAllComplex"
             resultType="cn.sbx0.zhibei.logic.technical.achievements.TechnicalAchievements"
     >
@@ -57,7 +155,7 @@
             <if test="cooperationMethod != null">
                 and cooperation_method = #{cooperationMethod}
             </if>
-            <if test="userId != null">
+            <if test="userId != 0">
                 and user_id = #{userId}
             </if>
         </where>

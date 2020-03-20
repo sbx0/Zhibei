@@ -101,4 +101,7 @@ public class AddressBaseService extends BaseService<AddressBase, String> {
     public List<AddressBase> findAllSon(String fatherId) {
         return dao.findAllSon(fatherId);
     }
+    public List<AddressBase> findAllSons(String[] fatherIds) {
+        return dao.findAllSons(fatherIds);
+    }
 }

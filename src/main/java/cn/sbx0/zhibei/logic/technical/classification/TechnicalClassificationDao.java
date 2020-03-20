@@ -14,4 +14,7 @@ public interface TechnicalClassificationDao extends PagingAndSortingRepository<T
 
     @Query(value = "select * from technical_classification where father_id = ?1", nativeQuery = true)
     List<TechnicalClassification> findAllSon(String fatherId);
+
+    @Query(value = "select * from technical_classification where father_id in ?1", nativeQuery = true)
+    List<TechnicalClassification> findAllSon(String[] fatherId);
 }
