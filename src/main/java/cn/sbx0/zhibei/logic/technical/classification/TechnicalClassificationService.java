@@ -97,4 +97,8 @@ public class TechnicalClassificationService extends BaseService<TechnicalClassif
         return dao.findAllSon(fatherId);
     }
 
+    public List<TechnicalClassification> findAllSon(String[] fatherId) {
+        return dao.findAllSon(fatherId);
+    }
+
 }
