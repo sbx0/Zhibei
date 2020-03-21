@@ -1,9 +1,12 @@
 package cn.sbx0.zhibei.logic.user.role;
 
+import cn.sbx0.zhibei.annotation.LoginRequired;
 import cn.sbx0.zhibei.annotation.RoleCheck;
 import cn.sbx0.zhibei.logic.BaseController;
 import cn.sbx0.zhibei.logic.BaseService;
 import cn.sbx0.zhibei.logic.ReturnStatus;
+import cn.sbx0.zhibei.logic.user.info.UserInfoService;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,10 +22,29 @@ import javax.annotation.Resource;
 public class UserRoleController extends BaseController<UserRole, Integer> {
     @Resource
     private UserRoleService service;
+    @Resource
+    private UserInfoService userInfoService;
 
     @Override
     public BaseService<UserRole, Integer> getService() {
         return service;
+    }
+
+    @LoginRequired
+    @GetMapping("/whoami")
+    public ObjectNode whoami() {
+        ObjectNode json = initJSON();
+        Integer userId = userInfoService.getLoginUserId();
+        String[] roleType = service.whoami(userId);
+        ArrayNode jsons = getMapper().createArrayNode();
+        if (roleType.length > 0) {
+            for (String role : roleType) {
+                jsons.add(role);
+            }
+        }
+        json.set(jsonObs, jsons);
+        json.put(statusCode, ReturnStatus.success.getCode());
+        return json;
     }
 
     /**

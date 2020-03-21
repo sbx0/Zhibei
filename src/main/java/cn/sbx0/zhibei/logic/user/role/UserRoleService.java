@@ -41,6 +41,15 @@ public class UserRoleService extends BaseService<UserRole, Integer> {
         return userRole.getWeight() != null;
     }
 
+    public String[] whoami(Integer userId) {
+        List<UserRole> allByUser = dao.findAllByUser(userId);
+        String[] roleCodes = new String[allByUser.size()];
+        for (int i = 0; i < allByUser.size(); i++) {
+            roleCodes[i] = allByUser.get(i).getCode();
+        }
+        return roleCodes;
+    }
+
     /**
      * 将用户绑定到初始角色
      *
