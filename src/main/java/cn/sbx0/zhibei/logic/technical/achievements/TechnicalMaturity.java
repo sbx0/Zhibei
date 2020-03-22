@@ -45,6 +45,16 @@ public enum TechnicalMaturity {
         return "";
     }
 
+    public static int findByName(String name) {
+        List<TechnicalMaturity> list = list();
+        for (TechnicalMaturity technicalMaturity : list) {
+            if (technicalMaturity.getName().equals(name)) {
+                return technicalMaturity.getValue();
+            }
+        }
+        return 0;
+    }
+
     public int getValue() {
         return value;
     }

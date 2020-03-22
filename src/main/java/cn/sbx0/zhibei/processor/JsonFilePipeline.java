@@ -5,11 +5,13 @@
 
 package cn.sbx0.zhibei.processor;
 
+import cn.sbx0.zhibei.tool.DateTools;
 import com.alibaba.fastjson.JSON;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
@@ -33,7 +35,10 @@ public class JsonFilePipeline extends FilePersistentBase implements Pipeline {
     public void process(ResultItems resultItems, Task task) {
         String path = this.path + PATH_SEPERATOR + task.getUUID() + PATH_SEPERATOR;
         try {
-            PrintWriter printWriter = new PrintWriter(new FileWriter(this.getFile(path + "data.json"), true));
+            Date now = new Date();
+            PrintWriter printWriter = new PrintWriter(new FileWriter(this.getFile(
+                    path + "data" + DateTools.format(now) + ".json"),
+                    true));
             printWriter.write(JSON.toJSONString(resultItems.getAll()) + ',');
             printWriter.close();
         } catch (IOException var5) {

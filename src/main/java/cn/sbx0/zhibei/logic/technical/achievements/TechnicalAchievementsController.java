@@ -32,6 +32,14 @@ public class TechnicalAchievementsController extends BaseController<TechnicalAch
         return service;
     }
 
+//    @LoginRequired
+    @GetMapping("/init")
+    public ObjectNode init() {
+        ObjectNode json = initJSON();
+        json.put(statusCode, service.init().getCode());
+        return json;
+    }
+
     /**
      * todo
      *
