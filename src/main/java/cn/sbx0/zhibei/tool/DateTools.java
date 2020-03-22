@@ -6,11 +6,16 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
+import java.text.DateFormat;
 
 /**
  * @author sbx0
  */
 public class DateTools {
+
+    public static String format(Date date) {
+        return DateFormat.getDateInstance().format(date);
+    }
 
     /**
      * 判断时间间隔有多少小时
