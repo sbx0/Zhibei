@@ -24,7 +24,7 @@ public class TechnicalAchievements {
     @Column(nullable = false)
     private Integer userId; // 发布者
 
-    @Column(nullable = false, unique = true, length = 15)
+    @Column(nullable = false, unique = true)
     private String name; // 名称
 
     @Column(nullable = false, columnDefinition = "Decimal(10,2) default '0.00'")

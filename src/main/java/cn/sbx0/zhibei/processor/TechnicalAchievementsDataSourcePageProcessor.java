@@ -103,7 +103,7 @@ public class TechnicalAchievementsDataSourcePageProcessor implements PageProcess
                     .get().replaceAll("\\s*", "")
             );
             // 前期应用示范情况
-            page.putField("early_application", page
+            page.putField("earlyApplication", page
                     .getHtml()
                     .xpath("//table[@class='wys_techtable']//tr[" + index++ + "]//td//text()")
                     .get().replaceAll("\\s*", "")

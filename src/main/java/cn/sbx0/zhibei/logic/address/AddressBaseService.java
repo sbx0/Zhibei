@@ -91,7 +91,6 @@ public class AddressBaseService extends BaseService<AddressBase, String> {
         } else {
             return ReturnStatus.failed;
         }
-
     }
 
     public List<AddressBase> findAllFather() {

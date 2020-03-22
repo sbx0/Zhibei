@@ -18,6 +18,9 @@ public interface AddressBaseDao extends PagingAndSortingRepository<AddressBase, 
     @Query(value = "select * from address_base where father_id = ?1", nativeQuery = true)
     List<AddressBase> findAllSon(String fatherId);
 
+    @Query(value = "select * from address_base where length(id) < 5", nativeQuery = true)
+    List<AddressBase> findAll();
+
     @Query(value = "select * from address_base where father_id in ?1", nativeQuery = true)
     List<AddressBase> findAllSons(String[] fatherIds);
 }
