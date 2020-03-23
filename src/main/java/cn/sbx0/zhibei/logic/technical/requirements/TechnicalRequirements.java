@@ -26,7 +26,7 @@ public class TechnicalRequirements {
     @Column(nullable = false)
     private Integer userId; // 发布者
 
-    @Column(nullable = false, unique = true, length = 15)
+    @Column(nullable = false, unique = true)
     private String name; // 名称
 
     @Lob
@@ -46,9 +46,6 @@ public class TechnicalRequirements {
     private String addressId; // 地区ID
 
     @Column(nullable = false)
-    private Integer maturity = TechnicalMaturity.inDevelopment.getValue(); // 成熟度
-
-    @Column(nullable = false)
     private Integer cooperationMethod = TechnicalCooperationMethod.other.getValue(); // 合作方式
 
     @Column(nullable = false)
@@ -57,4 +54,8 @@ public class TechnicalRequirements {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     @Column(nullable = false)
     private Date endTime; // 结束时间
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
+    @Column(nullable = false)
+    private Date postTime; // 发布时间
 }
