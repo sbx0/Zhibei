@@ -64,14 +64,11 @@ public class TechnicalAchievementsService extends BaseService<TechnicalAchieveme
         if (file != null) {
             logger.info(file.getPath());
             ObjectMapper mapper = getMapper();
-
             List<AddressBase> addressBases = addressBaseDao.findAll();
             int addressIndex = 1;
-
             UserBase userBase = userBaseDao.findByName("智贝BOT");
             if (userBase == null)
                 return ReturnStatus.failed;
-
             File finalFile = file;
             try {
                 TechnicalAchievementsJson[] jsons = mapper.readValue(finalFile, TechnicalAchievementsJson[].class);
@@ -139,7 +136,7 @@ public class TechnicalAchievementsService extends BaseService<TechnicalAchieveme
                     technicalAchievementsNew.setPrice(randomPrice);
                     save(technicalAchievementsNew);
                 }
-                logger.info("address base init finish.");
+                logger.info("technical achievements init finish.");
             } catch (IOException e) {
                 e.printStackTrace();
             }
