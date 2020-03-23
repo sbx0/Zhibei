@@ -1,6 +1,5 @@
 package cn.sbx0.zhibei.logic.technical.achievements;
 
-import cn.sbx0.zhibei.logic.user.base.UserBase;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 

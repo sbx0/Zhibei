@@ -53,9 +53,11 @@ public abstract class BaseService<T, ID> {
 
     public ArrayNode convertToJsons(List<T> list) {
         ArrayNode arrayNode = initJSONs();
-        for (T t : list) {
-            ObjectNode objectNode = convertToJson(t);
-            arrayNode.add(objectNode);
+        if (list != null) {
+            for (T t : list) {
+                ObjectNode objectNode = convertToJson(t);
+                arrayNode.add(objectNode);
+            }
         }
         return arrayNode;
     }

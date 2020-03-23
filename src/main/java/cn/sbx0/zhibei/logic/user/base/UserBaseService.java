@@ -117,9 +117,13 @@ public class UserBaseService extends BaseService<UserBase, Integer> {
             // 清除Cookie
             CookieTools.removeCookies(response);
             // 清除session
-            session.removeAttribute(userInfo.getUserId().toString());
+            session.removeAttribute("user");
             return ReturnStatus.wrongPassword;
         } else {
+            // 清除Cookie
+            CookieTools.removeCookies(response);
+            // 清除session
+            session.removeAttribute("user");
             // 登录成功 设置session
             session.setAttribute("user", userInfo);
             // 登录成功 设置cookie
