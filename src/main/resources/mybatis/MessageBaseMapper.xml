@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.sbx0.zhibei.logic.message.MessageBaseMapper">
+    <select id="findYourMsg"
+            resultType="cn.sbx0.zhibei.logic.message.MessageBase">
+        select *
+        from message_base
+        where (send_user_id = #{yourId} or receive_user_id = #{yourId})
+          and receive_time is null
+        limit #{start},#{end}
+    </select>
+
+    <select id="countYourMsg" resultType="java.lang.Integer">
+        select count(*)
+        from message_base
+        where (send_user_id = #{yourId} or receive_user_id = #{yourId})
+          and receive_time is null
+    </select>
+</mapper>

@@ -37,6 +37,5 @@ public class MessageBase {
     @Column(nullable = false)
     private String type; // 私聊 群聊 群发 系统通知
 
-    @Column(nullable = false)
     private String link; // link any object
 }
