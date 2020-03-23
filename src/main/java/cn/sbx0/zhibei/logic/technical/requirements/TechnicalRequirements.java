@@ -1,10 +1,14 @@
 package cn.sbx0.zhibei.logic.technical.requirements;
 
+import cn.sbx0.zhibei.logic.technical.achievements.TechnicalCooperationMethod;
+import cn.sbx0.zhibei.logic.technical.achievements.TechnicalMaturity;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.util.Date;
 
 /**
  * 技术需求
@@ -40,4 +44,17 @@ public class TechnicalRequirements {
 
     @Column(nullable = false)
     private String addressId; // 地区ID
+
+    @Column(nullable = false)
+    private Integer maturity = TechnicalMaturity.inDevelopment.getValue(); // 成熟度
+
+    @Column(nullable = false)
+    private Integer cooperationMethod = TechnicalCooperationMethod.other.getValue(); // 合作方式
+
+    @Column(nullable = false)
+    private Integer status = TechnicalRequirementsStatus.look.getValue(); // 状态
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
+    @Column(nullable = false)
+    private Date endTime; // 结束时间
 }
