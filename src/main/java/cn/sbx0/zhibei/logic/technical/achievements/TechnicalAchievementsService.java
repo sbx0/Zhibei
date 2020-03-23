@@ -54,7 +54,7 @@ public class TechnicalAchievementsService extends BaseService<TechnicalAchieveme
     }
 
     public ReturnStatus init() {
-        ClassPathResource resource = new ClassPathResource("api/technical_achievements_data_source.json");
+        ClassPathResource resource = new ClassPathResource("api/technical_achievements_data_source_part_3.json");
         File file = null;
         try {
             file = resource.getFile();
