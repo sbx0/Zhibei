@@ -4,6 +4,7 @@ import cn.sbx0.zhibei.logic.BaseService;
 import cn.sbx0.zhibei.logic.ReturnStatus;
 import cn.sbx0.zhibei.logic.address.AddressBase;
 import cn.sbx0.zhibei.logic.address.AddressBaseDao;
+import cn.sbx0.zhibei.logic.technical.achievements.TechnicalAchievements;
 import cn.sbx0.zhibei.logic.technical.achievements.TechnicalCooperationMethod;
 import cn.sbx0.zhibei.logic.technical.achievements.TechnicalMaturity;
 import cn.sbx0.zhibei.logic.technical.classification.TechnicalClassification;
@@ -12,6 +13,8 @@ import cn.sbx0.zhibei.logic.user.base.UserBase;
 import cn.sbx0.zhibei.logic.user.base.UserBaseDao;
 import cn.sbx0.zhibei.tool.DateTools;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Service;
@@ -32,6 +35,8 @@ public class TechnicalRequirementsService extends BaseService<TechnicalRequireme
     private UserBaseDao userBaseDao;
     @Resource
     private TechnicalClassificationDao technicalClassificationDao;
+    @Resource
+    private TechnicalRequirementsMapper technicalRequirementsMapper;
 
     @Override
     public PagingAndSortingRepository<TechnicalRequirements, Integer> getDao() {
@@ -64,24 +69,23 @@ public class TechnicalRequirementsService extends BaseService<TechnicalRequireme
             UserBase userBase = userBaseDao.findByName("智贝BOT");
             if (userBase == null)
                 return ReturnStatus.failed;
-            File finalFile = file;
             try {
-                TechnicalRequirementsJson[] jsons = mapper.readValue(finalFile, TechnicalRequirementsJson[].class);
+                TechnicalRequirementsJson[] jsons = mapper.readValue(file, TechnicalRequirementsJson[].class);
                 for (TechnicalRequirementsJson json : jsons) {
                     TechnicalRequirements technicalAchievements = dao.findByName(json.getName());
                     if (technicalAchievements != null) continue;
-                    TechnicalRequirements technicalAchievementsNew = new TechnicalRequirements();
-                    technicalAchievementsNew.setUserId(userBase.getId());
+                    TechnicalRequirements technicalRequirementsNew = new TechnicalRequirements();
+                    technicalRequirementsNew.setUserId(userBase.getId());
                     if (addressIndex > addressBases.size() - 1) addressIndex = 1;
                     String addressId = addressBases.get(addressIndex).getId();
                     addressIndex++;
-                    technicalAchievementsNew.setAddressId(addressId);
-                    technicalAchievementsNew.setCover("https://zb.sbx0.cn/upload/user1/image/20200322133638361.jpg");
-                    technicalAchievementsNew.setPostTime(new Date());
+                    technicalRequirementsNew.setAddressId(addressId);
+                    technicalRequirementsNew.setCover("https://zb.sbx0.cn/upload/user1/image/20200322133638361.jpg");
+                    technicalRequirementsNew.setPostTime(new Date());
                     String industry = json.getClassification();
                     TechnicalClassification technicalClassificationSon = technicalClassificationDao.findSonByName(industry);
                     if (technicalClassificationSon != null) {
-                        technicalAchievementsNew.setClassificationId(technicalClassificationSon.getId());
+                        technicalRequirementsNew.setClassificationId(technicalClassificationSon.getId());
                     } else {
                         TechnicalClassification technicalClassificationFather = technicalClassificationDao.findFatherByName(industry);
                         if (technicalClassificationFather != null) {
@@ -93,7 +97,7 @@ public class TechnicalRequirementsService extends BaseService<TechnicalRequireme
                             technicalClassificationNewSon.setCover("");
                             technicalClassificationNewSon = technicalClassificationDao.save(technicalClassificationNewSon);
                             if (technicalClassificationNewSon.getId() != null) {
-                                technicalAchievementsNew.setClassificationId(technicalClassificationNewSon.getId());
+                                technicalRequirementsNew.setClassificationId(technicalClassificationNewSon.getId());
                             } else {
                                 continue;
                             }
@@ -113,7 +117,7 @@ public class TechnicalRequirementsService extends BaseService<TechnicalRequireme
                                 technicalClassificationNewSon.setCover("");
                                 technicalClassificationNewSon = technicalClassificationDao.save(technicalClassificationNewSon);
                                 if (technicalClassificationNewSon.getId() != null) {
-                                    technicalAchievementsNew.setClassificationId(technicalClassificationNewSon.getId());
+                                    technicalRequirementsNew.setClassificationId(technicalClassificationNewSon.getId());
                                 } else {
                                     continue;
                                 }
@@ -122,18 +126,18 @@ public class TechnicalRequirementsService extends BaseService<TechnicalRequireme
                             }
                         }
                     }
-                    technicalAchievementsNew.setName(json.getName());
-                    technicalAchievementsNew.setCooperationMethod(TechnicalCooperationMethod.findByName(json.getCooperationMethod()));
-                    technicalAchievementsNew.setContext(json.getContext());
+                    technicalRequirementsNew.setName(json.getName());
+                    technicalRequirementsNew.setCooperationMethod(TechnicalCooperationMethod.findByName(json.getCooperationMethod()));
+                    technicalRequirementsNew.setContext(json.getContext());
                     double randomPrice = Math.random() * 1000000 + 1000;
-                    technicalAchievementsNew.setBudget(randomPrice);
+                    technicalRequirementsNew.setBudget(randomPrice);
                     int random = (int) (Math.random() * 4.0 + 1.0);
                     while (!TechnicalRequirementsStatus.judge(random)) {
                         random = (int) (Math.random() * 4.0 + 1.0);
                     }
-                    technicalAchievementsNew.setEndTime(DateTools.addDay(new Date(), random * 10));
-                    technicalAchievementsNew.setStatus(random);
-                    save(technicalAchievementsNew);
+                    technicalRequirementsNew.setEndTime(DateTools.addDay(new Date(), random * 10));
+                    technicalRequirementsNew.setStatus(random);
+                    save(technicalRequirementsNew);
                 }
                 logger.info("technical requirement init finish.");
             } catch (IOException e) {
@@ -143,5 +147,40 @@ public class TechnicalRequirementsService extends BaseService<TechnicalRequireme
         } else {
             return ReturnStatus.failed;
         }
+    }
+
+    public List<TechnicalRequirements> findAllComplexs(Integer userId, String attribute, String direction, Integer cooperationMethod, String[] addressId, String[] classificationId, Integer page, Integer size, Integer total) {
+        if (page == null || page < 1) return null;
+        if (size == null || size < 1) return null;
+        int begin = (page - 1) * size;
+        if (begin > total) begin = total;
+        return technicalRequirementsMapper.findAllComplexs(userId, attribute, direction, cooperationMethod, addressId, classificationId, begin, size);
+    }
+
+    public Integer countAllComplexs(Integer userId, Integer cooperationMethod, String[] addressId, String[] classificationId) {
+        return technicalRequirementsMapper.countAllComplexs(userId, cooperationMethod, addressId, classificationId);
+    }
+
+    public List<TechnicalRequirements> findAllComplex(Integer userId, String attribute, String direction, Integer cooperationMethod, String addressId, String classificationId, Integer page, Integer size, Integer total) {
+        if (page == null || page < 1) return null;
+        if (size == null || size < 1) return null;
+        int begin = (page - 1) * size;
+        if (begin > total) begin = total;
+        return technicalRequirementsMapper.findAllComplex(userId, attribute, direction, cooperationMethod, addressId, classificationId, begin, size);
+    }
+
+    public ArrayNode technicalRequirementsStatusList() {
+        ArrayNode jsons = initJSONs();
+        for (TechnicalRequirementsStatus o : TechnicalRequirementsStatus.list()) {
+            ObjectNode json = initJSON();
+            json.put("name", o.getName());
+            json.put("value", o.getValue());
+            jsons.add(json);
+        }
+        return jsons;
+    }
+
+    public Integer countAllComplex(Integer userId,   Integer cooperationMethod, String addressId, String classificationId) {
+        return technicalRequirementsMapper.countAllComplex(userId,   cooperationMethod, addressId, classificationId);
     }
 }
