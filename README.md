@@ -21,3 +21,4 @@ git clone https://github.com/sbx0/Zhibei.git
 |7|暂无权限|
 |8|发生异常|
 |9|超出限制|
+|10|余额不足|

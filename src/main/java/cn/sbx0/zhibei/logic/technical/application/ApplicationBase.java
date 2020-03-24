@@ -1,4 +1,4 @@
-package cn.sbx0.zhibei.logic.technical.project;
+package cn.sbx0.zhibei.logic.technical.application;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
@@ -9,11 +9,11 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "project_base")
+@Table(name = "application_base")
 @DynamicInsert
 @DynamicUpdate
 @Data
-public class ProjectBase {
+public class ApplicationBase {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id; // 编号
@@ -35,8 +35,13 @@ public class ProjectBase {
     private Integer receiveId; // 接收人
 
     @Column(nullable = false)
+    private String context; // 内容
+
+    @Column(nullable = false)
     private Integer status; // 状态
 
     @Column(nullable = false)
     private Integer achievementId; // 成果ID
+
+    private Double quote; // 报价
 }

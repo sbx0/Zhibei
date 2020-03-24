@@ -14,7 +14,8 @@ public enum ReturnStatus {
     emptyResult(6, "结果为空"),
     noPermission(7, "暂无权限"),
     exception(8, "发生异常"),
-    outRange(9, "超出限制");
+    outRange(9, "超出限制"),
+    noMoney(10, "余额不足");
     int code;
     String msg;
 
