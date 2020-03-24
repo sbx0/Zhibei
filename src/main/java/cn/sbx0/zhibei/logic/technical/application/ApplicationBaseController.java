@@ -74,12 +74,12 @@ public class ApplicationBaseController extends BaseController<ApplicationBase, I
             return json;
         }
 
-        if (walletBase.getMoney() < technicalAchievements.getPrice() || walletBase.getMoney() < 0) {
+        if (walletBase.getMoney() < quote || walletBase.getMoney() < 0) {
             json.put(statusCode, ReturnStatus.noMoney.getCode());
             return json;
         }
 
-        walletBase.setMoney(walletBase.getMoney() - technicalAchievements.getPrice());
+        walletBase.setMoney(walletBase.getMoney() - quote);
         walletBaseService.save(walletBase);
 
         ApplicationBase applicationBase = new ApplicationBase();
@@ -89,7 +89,7 @@ public class ApplicationBaseController extends BaseController<ApplicationBase, I
         applicationBase.setCreateTime(new Date());
         applicationBase.setName(technicalAchievements.getName());
         applicationBase.setReceiveId(technicalAchievements.getUserId());
-        applicationBase.setQuote(technicalAchievements.getPrice());
+        applicationBase.setQuote(quote);
         applicationBase.setContext(context);
         applicationBase = service.save(applicationBase);
 
