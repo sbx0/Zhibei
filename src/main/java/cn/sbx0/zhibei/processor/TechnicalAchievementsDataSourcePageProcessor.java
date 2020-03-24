@@ -20,7 +20,7 @@ public class TechnicalAchievementsDataSourcePageProcessor implements PageProcess
             .setRetryTimes(10)
             .setCycleRetryTimes(10)
             .setTimeOut(1 * 60 * 1000)
-            .setSleepTime(1 * 1000)
+            .setSleepTime(2 * 1000)
             .setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/82.0.4080.0 Safari/537.36 Edg/82.0.453.2");
 
     @Override
@@ -136,7 +136,7 @@ public class TechnicalAchievementsDataSourcePageProcessor implements PageProcess
     public static void main(String[] args) {
         Spider spider = Spider.create(new TechnicalAchievementsDataSourcePageProcessor());
         int startPage = 50;
-        int step = 10 - 1;
+        int step = 500 - 1;
         int endPage = startPage + step;
         for (int i = startPage; i <= endPage; i++) {
             Request request = new Request("http://51jishu.com/bsp/jscg/list.do");
