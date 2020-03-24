@@ -1,0 +1,36 @@
+### 登录
+POST {{serverConfig}}/user/base/login
+Accept: application/json
+Content-Type: application/x-www-form-urlencoded
+
+email={{email}}&password={{password}}
+
+### 发送消息
+
+POST {{serverConfig}}/message/base/send
+Accept: application/json
+Content-Type: application/x-www-form-urlencoded
+
+content=fuckyou&receiveUserId=1
+
+### 管理员广播
+
+POST {{serverConfig}}/message/base/broadcast
+Accept: application/json
+Content-Type: application/x-www-form-urlencoded
+
+content=fuckallofyou
+
+### 接收消息
+GET {{serverConfig}}/message/base/receive?page=1&size=10
+Accept: application/json
+
+### 获取消息条数
+GET {{serverConfig}}/message/base/notice
+Accept: application/json
+
+### 已读消息
+GET {{serverConfig}}/message/base/read?msgId=6
+Accept: application/json
+
+###

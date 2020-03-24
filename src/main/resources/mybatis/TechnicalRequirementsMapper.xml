@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.sbx0.zhibei.logic.technical.requirements.TechnicalRequirementsMapper">
+    <select
+            id="findAllComplexs"
+            resultType="cn.sbx0.zhibei.logic.technical.requirements.TechnicalRequirements"
+    >
+        select *
+        from technical_requirements
+        <where>
+            <if test="classificationId != null">
+                and (classification_id in
+                <foreach item="item" index="index" collection="classificationId" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+                or classification_id in (select id from technical_classification where father_id in
+                <foreach item="item" index="index" collection="classificationId" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+                ))
+            </if>
+            <if test="addressId != null">
+                and (address_id in
+                <foreach item="item" index="index" collection="addressId" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+                or address_id in (select id from address_base where father_id in
+                <foreach item="item" index="index" collection="addressId" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+                )
+                or address_id in (select id from address_base where father_id in (select id from address_base where
+                father_id in
+                <foreach item="item" index="index" collection="addressId" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+                )))
+            </if>
+            <if test="cooperationMethod != null">
+                and cooperation_method = #{cooperationMethod}
+            </if>
+            <if test="userId != 0">
+                and user_id = #{userId}
+            </if>
+        </where>
+        <if test="attribute != null and direction != null">
+            order by ${attribute} ${direction}
+        </if>
+        limit #{start},#{length}
+    </select>
+
+    <select
+            id="countAllComplexs"
+            resultType="java.lang.Integer"
+    >
+        select count(*)
+        from technical_requirements
+        <where>
+            <if test="classificationId != null">
+                and (classification_id in
+                <foreach item="item" index="index" collection="classificationId" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+                or classification_id in (select id from technical_classification where father_id in
+                <foreach item="item" index="index" collection="classificationId" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+                ))
+            </if>
+            <if test="addressId != null">
+                and (address_id in
+                <foreach item="item" index="index" collection="addressId" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+                or address_id in (select id from address_base where father_id in
+                <foreach item="item" index="index" collection="addressId" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+                )
+                or address_id in (select id from address_base where father_id in (select id from address_base where
+                father_id in
+                <foreach item="item" index="index" collection="addressId" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+                )))
+            </if>
+            <if test="cooperationMethod != null">
+                and cooperation_method = #{cooperationMethod}
+            </if>
+            <if test="userId != 0">
+                and user_id = #{userId}
+            </if>
+        </where>
+    </select>
+
+    <select
+            id="findAllComplex"
+            resultType="cn.sbx0.zhibei.logic.technical.requirements.TechnicalRequirements"
+    >
+        select *
+        from technical_requirements
+        <where>
+            <if test="classificationId != ''">
+                and (classification_id = #{classificationId}
+                or classification_id in (select id from technical_classification where father_id = #{classificationId}))
+            </if>
+            <if test="addressId != ''">
+                and (address_id = #{addressId}
+                or address_id in (select id from address_base where father_id = #{addressId})
+                or address_id in (select id from address_base where father_id in (select id from address_base where
+                father_id = #{addressId})))
+            </if>
+            <if test="cooperationMethod != null">
+                and cooperation_method = #{cooperationMethod}
+            </if>
+            <if test="userId != 0">
+                and user_id = #{userId}
+            </if>
+        </where>
+        <if test="attribute != null and direction != null">
+            order by ${attribute} ${direction}
+        </if>
+        limit #{start},#{length}
+    </select>
+
+    <select
+            id="countAllComplex"
+            resultType="java.lang.Integer"
+    >
+        select count(*)
+        from technical_requirements
+        <where>
+            <if test="classificationId != ''">
+                and (classification_id = #{classificationId}
+                or classification_id in (select id from technical_classification where father_id = #{classificationId}))
+            </if>
+            <if test="addressId != ''">
+                and (address_id = #{addressId}
+                or address_id in (select id from address_base where father_id = #{addressId})
+                or address_id in (select id from address_base where father_id in (select id from address_base where
+                father_id = #{addressId})))
+            </if>
+            <if test="cooperationMethod != null">
+                and cooperation_method = #{cooperationMethod}
+            </if>
+            <if test="userId != 0">
+                and user_id = #{userId}
+            </if>
+        </where>
+    </select>
+</mapper>

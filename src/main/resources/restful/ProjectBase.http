@@ -1,0 +1,20 @@
+### 登录
+POST {{serverConfig}}/user/base/login
+Accept: application/json
+Content-Type: application/x-www-form-urlencoded
+
+email={{email}}&password={{password}}
+
+### 查询自己所有的项目，自己为申请人，或自己为处理人
+GET {{serverConfig}}/project/base/my
+Accept: application/json
+
+### 申请与指定技术成果合作
+GET {{serverConfig}}/project/base/apply?id=2
+Accept: application/json
+
+### 处理合作申请 1通过 2拒绝
+GET {{serverConfig}}/project/base/handle?id=2&type=2
+Accept: application/json
+
+###

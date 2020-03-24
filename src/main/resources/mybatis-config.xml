@@ -9,9 +9,13 @@
     <typeAliases>
         <package name="cn.sbx0.zhibei.logic.user.certification"/>
         <package name="cn.sbx0.zhibei.logic.technical.achievements"/>
+        <package name="cn.sbx0.zhibei.logic.technical.requirements"/>
+        <package name="cn.sbx0.zhibei.logic.message"/>
     </typeAliases>
     <mappers>
         <mapper resource="mybatis/UserCertificationMapper.xml"/>
         <mapper resource="mybatis/TechnicalAchievementsMapper.xml"/>
+        <mapper resource="mybatis/TechnicalRequirementsMapper.xml"/>
+        <mapper resource="mybatis/MessageBaseMapper.xml"/>
     </mappers>
 </configuration>

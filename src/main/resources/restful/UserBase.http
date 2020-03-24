@@ -1,0 +1,15 @@
+### 注册
+POST {{serverConfig}}/user/base/register
+Accept: application/json
+Content-Type: application/x-www-form-urlencoded
+
+name={{name}}&email={{email}}&password={{password}}
+
+### 登录
+POST {{serverConfig}}/user/base/login
+Accept: application/json
+Content-Type: application/x-www-form-urlencoded
+
+email={{email}}&password={{password}}
+
+###

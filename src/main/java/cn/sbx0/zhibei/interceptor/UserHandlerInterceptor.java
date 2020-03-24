@@ -56,32 +56,25 @@ public class UserHandlerInterceptor implements HandlerInterceptor {
         RoleCheck roleCheckAnnotation = method.getAnnotation(RoleCheck.class);
         // 有 @LoginRequired 注解，判断是否登录
         if (loginRequiredAnnotation != null || roleCheckAnnotation != null) {
-            HttpSession session = request.getSession(true);
-            UserInfo user = (UserInfo) session.getAttribute("user");
+            HttpSession session = request.getSession(false);
+            UserInfo user = null;
             int userId = -1;
-            if (user != null) userId = user.getUserId();
-            boolean isLogin = false;
+            if (session != null) {
+                user = (UserInfo) session.getAttribute("user");
+                if (user != null) userId = user.getUserId();
+            }
+            boolean isLogin;
             if (!(user != null && user.getUserId() != null && user.getEmail() != null)) {
                 // 查找是否存在cookie
                 Map<String, Cookie> cookies = CookieTools.getCookiesByName(CookieTools.COOKIE_NAMES, request.getCookies());
-                if (cookies == null) isLogin = false;
-                else if (cookies.size() == 0) isLogin = false;
-                else {
-                    // 为空
-                    for (int i = 0; i < cookies.size(); i++) {
-                        if (StringTools.checkNullStr(cookies.get(CookieTools.COOKIE_NAMES.get(i)).getValue())) {
-                            isLogin = false;
-                        }
-                    }
-                    // Cookie中的ID
-                    userId = Integer.parseInt(cookies.get("ID").getValue());
-                    // Cookie中的KEY
-                    String key = cookies.get("KEY").getValue();
-                    // 正确的KEY
-                    String check = StringTools.getKey(userId);
-                    // 匹配KEY
-                    isLogin = check.equals(key);
-                }
+                // Cookie中的ID
+                userId = Integer.parseInt(cookies.get("ID").getValue());
+                // Cookie中的KEY
+                String key = cookies.get("KEY").getValue();
+                // 正确的KEY
+                String check = StringTools.getKey(userId);
+                // 匹配KEY
+                isLogin = check.equals(key);
                 if (!isLogin) {
                     request.getRequestDispatcher("/user/base/notLogin").forward(request, response);
                     return false;
@@ -100,9 +93,11 @@ public class UserHandlerInterceptor implements HandlerInterceptor {
                         if (now.getTime() > userRoleBind.getValidityTime().getTime()) {
                             continue;
                         }
-                        userRoles.add(service.findById(userRoleBind.getRoleId()));
+                        UserRole role = service.findById(userRoleBind.getRoleId());
+                        userRoles.add(role);
                     }
                     for (UserRole userRole : userRoles) {
+                        if (userRole == null) continue;
                         for (String role : roles) {
                             if (userRole.getCode().equals(role)) return true;
                         }

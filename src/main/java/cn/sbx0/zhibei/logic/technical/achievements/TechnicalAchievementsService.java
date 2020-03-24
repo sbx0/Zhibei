@@ -54,7 +54,7 @@ public class TechnicalAchievementsService extends BaseService<TechnicalAchieveme
     }
 
     public ReturnStatus init() {
-        ClassPathResource resource = new ClassPathResource("api/technical_achievements_data_source_part_3.json");
+        ClassPathResource resource = new ClassPathResource("api/technical_achievements_data_source_part_4.json");
         File file = null;
         try {
             file = resource.getFile();
@@ -85,6 +85,7 @@ public class TechnicalAchievementsService extends BaseService<TechnicalAchieveme
                     technicalAchievementsNew.setPostTime(new Date());
                     String industry = json.getIndustry();
                     String[] industries = industry.split("-");
+                    if (industries.length != 2) continue;
                     TechnicalClassification technicalClassificationSon = technicalClassificationDao.findSonByName(industries[1]);
                     if (technicalClassificationSon != null) {
                         technicalAchievementsNew.setClassificationId(technicalClassificationSon.getId());
