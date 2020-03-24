@@ -48,6 +48,7 @@ public class MessageBaseService extends BaseService<MessageBase, Integer> {
         messageBase.setContent(msg);
         messageBase.setLink(link);
         messageBase.setType("notification");
+        messageBase.setSendUserId(userBase.getId());
         dao.save(messageBase);
     }
 
