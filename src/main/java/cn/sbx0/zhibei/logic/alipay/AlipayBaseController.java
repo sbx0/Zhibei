@@ -13,10 +13,8 @@ import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradePagePayRequest;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -29,7 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-@RestController
+@Controller
 @RequestMapping("/alipay")
 public class AlipayBaseController extends BaseController<AlipayBase, Integer> {
     @Resource
@@ -54,6 +52,7 @@ public class AlipayBaseController extends BaseController<AlipayBase, Integer> {
      * @param tradeNo
      * @return
      */
+    @ResponseBody
     @LoginRequired
     @PostMapping(value = "/pay")
     public ObjectNode pay(String tradeNo) {

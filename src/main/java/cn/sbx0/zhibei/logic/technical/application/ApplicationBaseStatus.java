@@ -1,9 +1,9 @@
-package cn.sbx0.zhibei.logic.technical.project;
+package cn.sbx0.zhibei.logic.technical.application;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public enum ProjectStatus {
+public enum ApplicationBaseStatus {
     ing(0, "申请中"),
     corp(1, "合作中"),
     reject(2, "被拒绝")
@@ -11,13 +11,13 @@ public enum ProjectStatus {
     int value;
     String name;
 
-    ProjectStatus(int value, String name) {
+    ApplicationBaseStatus(int value, String name) {
         this.value = value;
         this.name = name;
     }
 
-    public static List<ProjectStatus> list() {
-        List<ProjectStatus> list = new ArrayList<>();
+    public static List<ApplicationBaseStatus> list() {
+        List<ApplicationBaseStatus> list = new ArrayList<>();
         list.add(ing);
         list.add(corp);
         list.add(reject);
@@ -25,8 +25,8 @@ public enum ProjectStatus {
     }
 
     public static String find(int v) {
-        List<ProjectStatus> list = list();
-        for (ProjectStatus projectStatus : list) {
+        List<ApplicationBaseStatus> list = list();
+        for (ApplicationBaseStatus projectStatus : list) {
             if (projectStatus.getValue() == v) {
                 return projectStatus.getName();
             }
@@ -35,8 +35,8 @@ public enum ProjectStatus {
     }
 
     public static int findByName(String name) {
-        List<ProjectStatus> list = list();
-        for (ProjectStatus projectStatus : list) {
+        List<ApplicationBaseStatus> list = list();
+        for (ApplicationBaseStatus projectStatus : list) {
             if (projectStatus.getName().equals(name)) {
                 return projectStatus.getValue();
             }
