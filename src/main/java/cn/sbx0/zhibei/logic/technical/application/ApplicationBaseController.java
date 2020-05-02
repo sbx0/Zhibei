@@ -42,14 +42,44 @@ public class ApplicationBaseController extends BaseController<ApplicationBase, I
     public ObjectNode my() {
         ObjectNode json = initJSON();
         Integer userId = userInfoService.getLoginUserId();
-        List<ApplicationBase> list = service.findAllByUserId(userId);
+        List<ApplicationBase> list = service.findAllByReceive(userId);
+        json.set(jsonObs, service.convertToJsons(list));
+        json.put(statusCode, ReturnStatus.success.getCode());
+        return json;
+    }
+
+    @GetMapping("/applicant")
+    public ObjectNode applicant() {
+        ObjectNode json = initJSON();
+        Integer userId = userInfoService.getLoginUserId();
+        List<ApplicationBase> list = service.findAllByApplicant(userId);
+        json.set(jsonObs, service.convertToJsons(list));
+        json.put(statusCode, ReturnStatus.success.getCode());
+        return json;
+    }
+
+    @GetMapping("/ing")
+    public ObjectNode ing() {
+        ObjectNode json = initJSON();
+        Integer userId = userInfoService.getLoginUserId();
+        List<ApplicationBase> list = service.findAllByIng(userId);
+        json.set(jsonObs, service.convertToJsons(list));
+        json.put(statusCode, ReturnStatus.success.getCode());
+        return json;
+    }
+
+    @GetMapping("/reg")
+    public ObjectNode reg() {
+        ObjectNode json = initJSON();
+        Integer userId = userInfoService.getLoginUserId();
+        List<ApplicationBase> list = service.findAllByReg(userId);
         json.set(jsonObs, service.convertToJsons(list));
         json.put(statusCode, ReturnStatus.success.getCode());
         return json;
     }
 
     @GetMapping("/apply")
-    public ObjectNode apply(Integer id, Double quote,String context) {
+    public ObjectNode apply(Integer id, Double quote, String context) {
         ObjectNode json = initJSON();
         Integer userId = userInfoService.getLoginUserId();
         TechnicalAchievements technicalAchievements = technicalAchievementsService.findById(id);
@@ -124,15 +154,28 @@ public class ApplicationBaseController extends BaseController<ApplicationBase, I
                 json.put(statusCode, ReturnStatus.noPermission.getCode());
                 return json;
             }
+            // 打钱
+            if (applicationBase.getStatus().equals(0)) {
+                Integer receiveUserId = applicationBase.getReceiveId();
+                WalletBase wallet = walletBaseService.getUserWallet(receiveUserId);
+                double money = applicationBase.getQuote();
+                if (money < 0) money = 0;
+                wallet.setMoney(wallet.getMoney() + money);
+                walletBaseService.save(wallet);
+                messageBaseService.notification(
+                        "您的钱包收到打款：" + money + "￥。",
+                        "application|" + applicationBase.getId(),
+                        applicationBase.getReceiveId()
+                );
+            }
             applicationBase.setStatus(1);
-            service.save(applicationBase);
             // send message
             messageBaseService.notification(
                     "你的技术合作申请'" + applicationBase.getName() + "'已通过。",
                     "application|" + applicationBase.getId(),
                     applicationBase.getApplicantId()
             );
-        } else {
+        } else if (type == 2) {
             // reject
             if (!applicationBase.getReceiveId().equals(userId)) {
                 json.put(statusCode, ReturnStatus.noPermission.getCode());
@@ -145,7 +188,29 @@ public class ApplicationBaseController extends BaseController<ApplicationBase, I
                     "application|" + applicationBase.getId(),
                     applicationBase.getApplicantId()
             );
+        } else {
+            // end
+            if (!(applicationBase.getReceiveId().equals(userId) || applicationBase.getApplicantId().equals(userId))) {
+                json.put(statusCode, ReturnStatus.noPermission.getCode());
+                return json;
+            }
+            // 退钱
+            if (applicationBase.getStatus().equals(2)) {
+                Integer applicantUserId = applicationBase.getApplicantId();
+                WalletBase wallet = walletBaseService.getUserWallet(applicantUserId);
+                double money = applicationBase.getQuote();
+                if (money < 0) money = 0;
+                wallet.setMoney(wallet.getMoney() + money);
+                walletBaseService.save(wallet);
+                messageBaseService.notification(
+                        "您的钱包收到退款：" + money + "￥。",
+                        "application|" + applicationBase.getId(),
+                        applicationBase.getApplicantId()
+                );
+            }
+            applicationBase.setStatus(3);
         }
+        service.save(applicationBase);
         json.put(statusCode, ReturnStatus.success.getCode());
         return json;
     }

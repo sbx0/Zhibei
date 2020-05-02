@@ -6,7 +6,8 @@ import java.util.List;
 public enum ApplicationBaseStatus {
     ing(0, "申请中"),
     corp(1, "合作中"),
-    reject(2, "被拒绝")
+    reject(2, "被拒绝"),
+    end(3, "已结束")
     ;
     int value;
     String name;

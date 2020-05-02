@@ -30,4 +30,20 @@ public class ApplicationBaseService extends BaseService<ApplicationBase, Integer
     public List<ApplicationBase> findAllByUserId(Integer userId) {
         return dao.findAllByUserId(userId);
     }
+
+    public List<ApplicationBase> findAllByReceive(Integer userId) {
+        return dao.findAllByReceive(userId);
+    }
+
+    public List<ApplicationBase> findAllByApplicant(Integer userId) {
+        return dao.findAllByApplicant(userId);
+    }
+
+    public List<ApplicationBase> findAllByIng(Integer userId) {
+        return dao.findAllByIng(userId);
+    }
+
+    public List<ApplicationBase> findAllByReg(Integer userId) {
+        return dao.findAllByReg(userId);
+    }
 }
