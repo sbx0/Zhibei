@@ -38,6 +38,15 @@ public class ApplicationBaseController extends BaseController<ApplicationBase, I
         return service;
     }
 
+    @GetMapping("/count")
+    public ObjectNode count() {
+        ObjectNode json = initJSON();
+        long count = service.count();
+        json.put(jsonOb, count);
+        json.put(statusCode, ReturnStatus.success.getCode());
+        return json;
+    }
+
     @GetMapping("/my")
     public ObjectNode my() {
         ObjectNode json = initJSON();

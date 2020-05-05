@@ -180,4 +180,5 @@ public class TechnicalRequirementsController extends BaseController<TechnicalReq
         json.put(statusCode, ReturnStatus.success.getCode());
         return json;
     }
+
 }
