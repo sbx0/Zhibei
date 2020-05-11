@@ -15,6 +15,6 @@ public interface UserRoleDao extends PagingAndSortingRepository<UserRole, Intege
     @Query(value = "select 1 from user_role where id = ?1", nativeQuery = true)
     String existById(Integer roleId);
 
-    @Query(value = "select * from user_role where id in (select role_id from user_role_bind where user_id = 1) order by weight desc", nativeQuery = true)
+    @Query(value = "select * from user_role where id in (select role_id from user_role_bind where user_id = ?1) order by weight desc", nativeQuery = true)
     List<UserRole> findAllByUser(Integer roleId);
 }

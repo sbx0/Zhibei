@@ -94,14 +94,14 @@ public class StatisticalDataService extends BaseService<StatisticalData, Integer
      * 每天统计技术合作数
      */
     @Scheduled(cron = "00 00 00 * * ?")
-    public void applicationBaseService() {
+    public void applicationBaseCount() {
         long count = applicationBaseService.count();
         StatisticalData data = new StatisticalData();
         data.setGroupBy("per_day");
-        data.setType("applicationBaseService");
+        data.setType("applicationBaseCount");
         data.setRecordTime(new Date());
         data.setValue((double) count);
-        logger.info("applicationBaseService = " + count);
+        logger.info("applicationBaseCount = " + count);
         dao.save(data);
     }
 
@@ -109,14 +109,14 @@ public class StatisticalDataService extends BaseService<StatisticalData, Integer
      * 每天统计技术需求数
      */
     @Scheduled(cron = "00 00 00 * * ?")
-    public void technicalRequirementsService() {
+    public void technicalRequirementsCount() {
         long count = technicalRequirementsService.count();
         StatisticalData data = new StatisticalData();
         data.setGroupBy("per_day");
-        data.setType("technicalRequirementsService");
+        data.setType("technicalRequirementsCount");
         data.setRecordTime(new Date());
         data.setValue((double) count);
-        logger.info("technicalRequirementsService = " + count);
+        logger.info("technicalRequirementsCount = " + count);
         dao.save(data);
     }
 
