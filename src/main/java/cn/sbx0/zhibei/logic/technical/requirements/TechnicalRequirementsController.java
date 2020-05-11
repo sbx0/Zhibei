@@ -164,6 +164,7 @@ public class TechnicalRequirementsController extends BaseController<TechnicalReq
         if (service.checkDataValidity(technicalRequirements)) {
             technicalRequirements.setUserId(userId);
             technicalRequirements.setPostTime(new Date());
+            technicalRequirements.setEndTime(new Date());
             service.save(technicalRequirements);
             json.put(statusCode, ReturnStatus.success.getCode());
         } else {
@@ -179,4 +180,5 @@ public class TechnicalRequirementsController extends BaseController<TechnicalReq
         json.put(statusCode, ReturnStatus.success.getCode());
         return json;
     }
+
 }
